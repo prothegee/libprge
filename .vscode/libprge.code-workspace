@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "../example"
+		},
+        {
+			"path": ".."
+		},
+        {
+			"path": "../src/cpp/libprge"
+		},
+        {
+			"path": "../src/cpp/libprge_doc"
+		}
+	],
+    "settings": {}
+}

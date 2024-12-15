@@ -1,0 +1,30 @@
+[configuration]
+entry_symbol            = "libprge_rt"
+compatibility_minimum   = "4.4"
+reloadable              = true
+
+[libraries]
+linux.debug.x86_64      = "bin/linux_amd64/debug/libprge.so"
+linux.release.x86_64    = "bin/linux_amd64/release/libprge.so"
+windows.debug.x86_64    = "bin/windows_amd64/debug/libprge.dll"
+windows.release.x86_64  = "bin/windows_amd64/release/libprge.dll"
+# macos.debug             = "bin/macos/debug/libprge.framework"
+# macos.release           = "bin/macos/release/libprge.framework"
+# android.debug.arm64     = "bin/anroid_arm64/debug/libprge.so"
+# android.release.arm64   = "bin/anroid_arm64/release/libprge.so"
+# android.debug.x86_64    = "bin/anroid_amd64/debug/libprge.so"
+# android.release.x86_64  = "bin/anroid_amd64/release/libprge.so"
+# ios.debug.arm64         = "bin/ios_arm64/debug.libprge.dylib"
+# ios.release.arm64       = "bin/ios_arm64/release/libprge.dylib"
+# ios.debug.x86_64        = "bin/ios_amd64/debug/libprge.dylib"
+# ios.release.x86_64      = "bin/ios_amd64/release/libprge.dylib"
+# html.debug              = "bin/wasm/debug/libprge.wasm"
+# html.release            = "bin/wasm/release/libprge.wasm"
+
+[dependencies]
+linux.debug.x86_64     = { "bin/linux_amd64/debug/libsteam_api.so": "" }
+linux.release.x86_64   = { "bin/linux_amd64/release/libsteam_api.so": "" }
+windows.debug.x86_64   = { "bin/windows_amd64/debug/steam_api64.dll": "" }
+windows.release.x86_64 = { "bin/windows_amd64/release/steam_api64.dll": "" }
+# macos.debug            = { "bin/macos/debug/libsteam_api.dylib": "" }
+# macos.release          = { "bin/macos/release/libsteam_api.dylib": "" }
