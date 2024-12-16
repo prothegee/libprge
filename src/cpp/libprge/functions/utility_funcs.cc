@@ -4,6 +4,7 @@ namespace libprge
 {
 namespace utilityFunctions
 {
+#if LIBPRGE_USING_OPENSSL
     std::string base64encode(const std::string &input)
     {
         BIO *bio, *b64;
@@ -48,6 +49,7 @@ namespace utilityFunctions
 
         return result;
     }
+#endif // LIBPRGE_USING_OPENSSL
 
     namespace find
     {
@@ -365,6 +367,7 @@ namespace utilityFunctions
         }
     } // namespace change
 
+#if LIBPRGE_USING_JSONCPP
     namespace json
     {
         Json::Value fromFile(const std::string &filePath)
@@ -448,7 +451,6 @@ namespace utilityFunctions
         }
 
     } // namespace json
-
-    //
+#endif // LIBPRGE_USING_JSONCPP
 } // namespace utilityFunctions
 } // namespace libprge
