@@ -1,0 +1,4 @@
+[gd_scene format=3 uid="uid://civn4a4yeqyun"]
+
+[node name="core-game" type="CCoreGameNode"]
+info_gameName = "Game Name is Undefined"

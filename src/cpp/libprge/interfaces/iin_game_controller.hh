@@ -1,5 +1,11 @@
 #ifndef LIBPRGE_IIN_GAME_CONTROLLER_HH
 #define LIBPRGE_IIN_GAME_CONTROLLER_HH
+#include <libprge/base/config.hh>
+
+#include <godot_cpp/classes/window.hpp>
+#include <godot_cpp/classes/engine.hpp>
+#include <godot_cpp/classes/object.hpp>
+#include <godot_cpp/classes/node.hpp>
 
 namespace libprge
 {
