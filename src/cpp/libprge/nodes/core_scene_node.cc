@@ -1,11 +1,11 @@
-#include "core_scene.hh"
+#include "core_scene_node.hh"
 
 VARIANT_ENUM_CAST(libprge::SCENE_TYPE);
 
 namespace libprge
 {
 
-void CCoreScene::_bind_methods()
+void CCoreSceneNode::_bind_methods()
 {
     ADD_GROUP("Info", "info_");
     // scene enum
@@ -44,9 +44,9 @@ void CCoreScene::_bind_methods()
         sceneType += SCENE_CODE::SCENE_TYPE_ERROR_OR_VIOLATION;
             sceneType += "";
 
-        ClassDB::bind_method(D_METHOD("setSceneType", "sceneType"), &CCoreScene::setSceneType);
-        ClassDB::bind_method(D_METHOD("getSceneType"), &CCoreScene::getSceneType);
-        ClassDB::add_property(CCORESCENE_CLASS, PropertyInfo(
+        ClassDB::bind_method(D_METHOD("setSceneType", "sceneType"), &CCoreSceneNode::setSceneType);
+        ClassDB::bind_method(D_METHOD("getSceneType"), &CCoreSceneNode::getSceneType);
+        ClassDB::add_property(CCoreSceneNode_CLASS, PropertyInfo(
             Variant::Type::INT, "info_sceneType",
             PropertyHint::PROPERTY_HINT_ENUM, sceneType
         ), "setSceneType", "getSceneType");
@@ -54,49 +54,55 @@ void CCoreScene::_bind_methods()
 
     // IScene
     {
-        ClassDB::bind_method(D_METHOD("setActiveSceneTo", "sceneFilePath"), &CCoreScene::setActiveSceneTo);
+        ClassDB::bind_method(D_METHOD("setActiveSceneTo", "sceneFilePath"), &CCoreSceneNode::setActiveSceneTo);
 
-        ClassDB::bind_method(D_METHOD("getSceneAsFilePath"), &CCoreScene::getSceneAsFilePath);
-        ClassDB::bind_method(D_METHOD("getSceneAsFileName"), &CCoreScene::getSceneAsFileName);
+        ClassDB::bind_method(D_METHOD("getSceneAsFilePath"), &CCoreSceneNode::getSceneAsFilePath);
+        ClassDB::bind_method(D_METHOD("getSceneAsFileName"), &CCoreSceneNode::getSceneAsFileName);
     }
 
     ADD_GROUP("In Game Root", "InGameRoot_");
         ADD_SUBGROUP("Scene Initialize", "InGameRoot_SceneInitialize_");
     // in game root invoke core game
     {
-        ClassDB::bind_method(D_METHOD("setOnInitAddCoreGameNode", "trueOrFalse"), &CCoreScene::setOnInitAddCoreGameNode);
-        ClassDB::bind_method(D_METHOD("getOnInitAddCoreGameNode"), &CCoreScene::getOnInitAddCoreGameNode);
-        ClassDB::add_property(CCORESCENE_CLASS, PropertyInfo(
+        ClassDB::bind_method(D_METHOD("setOnInitAddCoreGameNode", "trueOrFalse"), &CCoreSceneNode::setOnInitAddCoreGameNode);
+        ClassDB::bind_method(D_METHOD("getOnInitAddCoreGameNode"), &CCoreSceneNode::getOnInitAddCoreGameNode);
+        ClassDB::add_property(CCoreSceneNode_CLASS, PropertyInfo(
             Variant::Type::BOOL, "InGameRoot_SceneInitialize_addCoreGame"
         ), "setOnInitAddCoreGameNode", "getOnInitAddCoreGameNode");
+
+        ClassDB::bind_method(D_METHOD("setCoreGameSceneFile", "coreGameNodeSceneFile"), &CCoreSceneNode::setCoreGameSceneFile);
+        ClassDB::bind_method(D_METHOD("getCoreGameSceneFile"), &CCoreSceneNode::getCoreGameSceneFile);
+        ClassDB::add_property(CCoreSceneNode_CLASS, PropertyInfo(
+            Variant::Type::OBJECT, "InGameRoot_SceneInitialize_coreGameNodeFile"
+        ), "setCoreGameSceneFile", "getCoreGameSceneFile");
     }
 
     // virtual functions/methods
     // in-game
     {
-        BIND_VIRTUAL_METHOD(CCoreScene, onReadyInGameRT);
-        BIND_VIRTUAL_METHOD(CCoreScene, onProcessInGameRT);
-        BIND_VIRTUAL_METHOD(CCoreScene, onPhysicsProcessInGameRT);
+        BIND_VIRTUAL_METHOD(CCoreSceneNode, onReadyInGameRT);
+        BIND_VIRTUAL_METHOD(CCoreSceneNode, onProcessInGameRT);
+        BIND_VIRTUAL_METHOD(CCoreSceneNode, onPhysicsProcessInGameRT);
     }
     // in-editor
     {
-        BIND_VIRTUAL_METHOD(CCoreScene, onReadyInEditorRT);
-        BIND_VIRTUAL_METHOD(CCoreScene, onProcessInEditorRT);
-        BIND_VIRTUAL_METHOD(CCoreScene, onPhysicsProcessInEditorRT);
+        BIND_VIRTUAL_METHOD(CCoreSceneNode, onReadyInEditorRT);
+        BIND_VIRTUAL_METHOD(CCoreSceneNode, onProcessInEditorRT);
+        BIND_VIRTUAL_METHOD(CCoreSceneNode, onPhysicsProcessInEditorRT);
     }
 }
 
-CCoreScene::CCoreScene()
+CCoreSceneNode::CCoreSceneNode()
 {
     // lastly
     this->set_name(m_defaultName);
 }
 
-CCoreScene::~CCoreScene()
+CCoreSceneNode::~CCoreSceneNode()
 {
 }
 
-void CCoreScene::_ready()
+void CCoreSceneNode::_ready()
 {
     if (!Engine::get_singleton()->is_editor_hint())
     {
@@ -110,38 +116,38 @@ void CCoreScene::_ready()
 }
 
 #pragma region required interface implementation
-void CCoreScene::onReadyInGameRT()
+void CCoreSceneNode::onReadyInGameRT()
 {
     if (getOnInitAddCoreGameNode())
     {
-        logger::log::debug("TODO IN-GAME: add CCoreGame node under \"/root\" node");
+        logger::log::debug("TODO IN-GAME: add CCoreGameNode node under \"/root\" node");
     }
 }
 
-void CCoreScene::onProcessInGameRT()
+void CCoreSceneNode::onProcessInGameRT()
 {
-    /* NOT IMPLEMENTED*/
+    /* NOT IMPLEMENTED */
 }
 
-void CCoreScene::onPhysicsProcessInGameRT()
+void CCoreSceneNode::onPhysicsProcessInGameRT()
 {
-    /* NOT IMPLEMENTED*/
+    /* NOT IMPLEMENTED */
 }
 #pragma endregion
 
-void CCoreScene::onReadyInEditorRT()
+void CCoreSceneNode::onReadyInEditorRT()
 {
-    /* NOT IMPLEMENTED*/
+    /* NOT IMPLEMENTED */
 }
 
-void CCoreScene::onProcessInEditorRT()
+void CCoreSceneNode::onProcessInEditorRT()
 {
-    /* NOT IMPLEMENTED*/
+    /* NOT IMPLEMENTED */
 }
 
-void CCoreScene::onPhysicsProcessInEditorRT()
+void CCoreSceneNode::onPhysicsProcessInEditorRT()
 {
-    /* NOT IMPLEMENTED*/
+    /* NOT IMPLEMENTED */
 }
 
 } // namespace libprge

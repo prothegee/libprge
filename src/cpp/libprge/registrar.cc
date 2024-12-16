@@ -3,7 +3,8 @@
 #include <libprge/functions/logger_funcs.hh>
 
 #include <libprge/libprge.hh>
-#include <libprge/nodes/core_scene.hh>
+#include <libprge/nodes/core_game_node.hh>
+#include <libprge/nodes/core_scene_node.hh>
 
 using namespace godot;
 
@@ -41,13 +42,14 @@ void initialize(ModuleInitializationLevel pLevel)
         #pragma endregion
 
         #pragma region nodes
+            GDREGISTER_CLASS(CCoreGameNode);
+            GDREGISTER_CLASS(CCoreSceneNode);
         #pragma endregion
 
         #pragma region nodes2d
         #pragma endregion
 
         #pragma region nodes3d
-            GDREGISTER_CLASS(CCoreScene);
         #pragma endregion
 
         #pragma region nodesui
@@ -55,7 +57,7 @@ void initialize(ModuleInitializationLevel pLevel)
 
             GDREGISTER_CLASS(CLibPrGe);
                 pLibPrGe = memnew(CLibPrGe);
-                Engine::get_singleton()->register_singleton(CLIBPRGE_CLASS, pLibPrGe);
+                Engine::get_singleton()->register_singleton(CLibPrGe_CLASS, pLibPrGe);
 
             logger::log::message("scene module initialized");
         }
@@ -118,7 +120,7 @@ void terminateAndExit(ModuleInitializationLevel pLevel)
         #pragma endregion
 
             memdelete(pLibPrGe);
-            Engine::get_singleton()->unregister_singleton(CLIBPRGE_CLASS);
+            Engine::get_singleton()->unregister_singleton(CLibPrGe_CLASS);
 
             logger::log::message("scene module terminated");
         }

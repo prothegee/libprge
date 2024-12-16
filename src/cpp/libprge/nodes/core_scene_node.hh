@@ -1,5 +1,5 @@
-#ifndef LIBPRGE_CORE_SCENE_HH
-#define LIBPRGE_CORE_SCENE_HH
+#ifndef LIBPRGE_CORE_SCENE_NODE_HH
+#define LIBPRGE_CORE_SCENE_NODE_HH
 #include <libprge/base/config.hh>
 #include <libprge/enums/scene_enums.hh>
 #include <libprge/interfaces/iscene_controller.hh>
@@ -8,6 +8,13 @@
 
 #include <godot_cpp/classes/node.hpp>
 #include <godot_cpp/classes/engine.hpp>
+#include <godot_cpp/classes/packed_scene.hpp>
+#include <godot_cpp/classes/ref.hpp>
+#include <godot_cpp/classes/scene_multiplayer.hpp>
+#include <godot_cpp/classes/scene_replication_config.hpp>
+#include <godot_cpp/classes/scene_state.hpp>
+#include <godot_cpp/classes/scene_tree.hpp>
+#include <godot_cpp/classes/scene_tree_timer.hpp>
 #include <godot_cpp/core/binder_common.hpp>
 
 namespace libprge
@@ -15,7 +22,7 @@ namespace libprge
 
 using namespace godot;
 
-// replacement enum scene for CCoreScene
+// replacement enum scene for CCoreSceneNode
 enum SCENE_TYPE : i32
 {
     SCEN_TYPE_UNDEFINED = ESceneType::ENUM::SCENE_TYPE_UNDEFINED,
@@ -28,42 +35,44 @@ enum SCENE_TYPE : i32
     SCENE_TYPE_ERROR_OR_VIOLATION = ESceneType::ENUM::SCENE_TYPE_ERROR_OR_VIOLATION,
 };
 
-// replacement code scene for CCoreScene
+// replacement code scene for CCoreSceneNode
 struct SCENE_CODE : public ESceneType::CODE
 {
     // RESERVED
 };
 
-static const char *CCORESCENE_CLASS = "CCoreScene";
-static const char *CCORESCENE_BRIEF = R"(class CCoreScene final
+static const char *CCoreSceneNode_CLASS = "CCoreSceneNode";
+static const char *CCoreSceneNode_BRIEF = R"(class CCoreSceneNode final
 * @brief libprge core scene node class
 )";
 
 /**
  * @brief libprge core scene node class
  */
-class CCoreScene : public Node
-                 , public ISceneController
-                 , public IInGameController
-                 , public IInEditorController
+class CCoreSceneNode : public Node
+                     , public ISceneController
+                     , public IInGameController
+                     , public IInEditorController
 {
-    GDCLASS(CCoreScene, Node);
+    GDCLASS(CCoreSceneNode, Node);
 private:
     const String m_defaultName = "core-scene";
 
     SCENE_TYPE m_sceneType = SCENE_TYPE::SCEN_TYPE_UNDEFINED;
 
-    bool m_onInitAddCoreGameNode = false;
+    bool             m_onInitAddCoreGameNode = false;
+    i32              m_coreGameNodeSceneFileError = 0;
+    Ref<PackedScene> m_coreGameNodeSceneFile = Ref<PackedScene>();
 
 protected:
     static void _bind_methods();
 
 public:
-    CCoreScene(/* args */);
-    ~CCoreScene();
+    CCoreSceneNode(/* args */);
+    ~CCoreSceneNode();
 
     void       setSceneType(SCENE_TYPE sceneType) { m_sceneType = sceneType; }
-    SCENE_TYPE getSceneType() const { return m_sceneType; }
+    SCENE_TYPE getSceneType() { return m_sceneType; }
 
     void   setActiveSceneTo(String sceneFilePath) { IScene.setActiveSceneTo(this, sceneFilePath); }
 
@@ -73,25 +82,41 @@ public:
     void setOnInitAddCoreGameNode(bool trueOrFalse) { m_onInitAddCoreGameNode = trueOrFalse; }
     bool getOnInitAddCoreGameNode() { return m_onInitAddCoreGameNode; }
 
+    void   setCoreGameSceneFile(Ref<PackedScene> coreGameNodeSceneFile)
+    {
+        if (coreGameNodeSceneFile.is_valid()) { m_coreGameNodeSceneFile = coreGameNodeSceneFile; }
+        else { logger::log::errorAlways("CCoreGameNodeNode param for scene file is null"); }
+    }
+    Ref<PackedScene> getCoreGameSceneFile()
+    {
+        if (!m_coreGameNodeSceneFile.is_valid() && m_coreGameNodeSceneFileError <= 0) { m_coreGameNodeSceneFileError++; logger::log::errorAlways("CCoreGameNodeNode scene file is null"); }
+        return m_coreGameNodeSceneFile;
+    }
+
     void _ready();
 
 #pragma region required interface in-game implementation
     void onReadyInGameRT();
 
+    /* NOT IMPLEMENTED */
     void onProcessInGameRT();
 
+    /* NOT IMPLEMENTED */
     void onPhysicsProcessInGameRT();
 #pragma endregion
 
 #pragma region required interface in-editor implementation
+    /* NOT IMPLEMENTED */
     void onReadyInEditorRT();
 
+    /* NOT IMPLEMENTED */
     void onProcessInEditorRT();
 
+    /* NOT IMPLEMENTED */
     void onPhysicsProcessInEditorRT();
 #pragma endregion
 };
 
 } // namespace libprge
 
-#endif // LIBPRGE_CORE_SCENE_HH
+#endif // LIBPRGE_CORE_SCENE_NODE_HH

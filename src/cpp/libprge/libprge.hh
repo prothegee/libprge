@@ -19,7 +19,7 @@ namespace libprge
 
 using namespace godot;
 
-static const char *CLIBPRGE_CLASS = "CLibPrGe";
+static const char *CLibPrGe_CLASS = "CLibPrGe";
 static const char *CLIBPRGE_BRIEF = R"(class CLibPrGe final
 * @brief core libprge class
 *

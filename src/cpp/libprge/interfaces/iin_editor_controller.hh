@@ -1,11 +1,22 @@
 #ifndef LIBPRGE_IIN_EDITOR_CONTROLLER_HH
 #define LIBPRGE_IIN_EDITOR_CONTROLLER_HH
+#include <libprge/base/config.hh>
+
+#include <godot_cpp/classes/window.hpp>
+#include <godot_cpp/classes/engine.hpp>
+#include <godot_cpp/classes/editor_plugin.hpp>
+#include <godot_cpp/classes/object.hpp>
+#include <godot_cpp/classes/node.hpp>
 
 namespace libprge
 {
 
 /**
  * @brief "in-editor" controller interface class
+ * 
+ * @note there are two node from index of /root when editor:
+ * @note 1. @EditorNode@nnnnn of "EditorNode"
+ * @note 1. @ProgressDialog@nnnnn of "ProgressDialog"
  */
 class IInEditorController
 {
