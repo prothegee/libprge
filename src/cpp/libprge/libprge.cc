@@ -5,6 +5,7 @@ namespace libprge
 
 void CLibPrGe::_bind_methods()
 {
+    // reserved
 }
 
 CLibPrGe::CLibPrGe()

@@ -3,6 +3,7 @@
 #include <libprge/functions/logger_funcs.hh>
 
 #include <libprge/libprge.hh>
+#include <libprge/nodes/core_scene.hh>
 
 using namespace godot;
 
@@ -33,6 +34,12 @@ void initialize(ModuleInitializationLevel pLevel)
         #pragma region object
         #pragma endregion
 
+        #pragma region virtual
+            // GDREGISTER_VIRTUAL_CLASS(IInGameController);
+            // GDREGISTER_VIRTUAL_CLASS(IInEditorController);
+            // GDREGISTER_VIRTUAL_CLASS(ISceneController);
+        #pragma endregion
+
         #pragma region nodes
         #pragma endregion
 
@@ -40,6 +47,7 @@ void initialize(ModuleInitializationLevel pLevel)
         #pragma endregion
 
         #pragma region nodes3d
+            GDREGISTER_CLASS(CCoreScene);
         #pragma endregion
 
         #pragma region nodesui

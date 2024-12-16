@@ -7,7 +7,6 @@ namespace libprge
 
 /**
  * @brief string internal object access collection
- * 
  */
 struct STRINGS_INTERNAL
 {
@@ -20,6 +19,16 @@ struct STRINGS_INTERNAL
     inline static const std::string BASE36_DIGITS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
     inline static const char HEX_DIGITS[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+};
+
+/**
+ * @brief string scenes object access collection
+ * 
+ */
+struct STRINGS_SCENES
+{
+    inline static const char *SCENE_IS_ERROR = "SCENE_IS_ERROR";
+    inline static const char *SCENE_IS_UNDEFINED = "SCENE_IS_UNDEFINED";
 };
 
 } // namespace libprge

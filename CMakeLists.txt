@@ -162,6 +162,8 @@ aux_source_directory(src/cpp/libprge/interfaces LIBPRGE_DIR_INTERFACES)
 aux_source_directory(src/cpp/libprge/nodes LIBPRGE_DIR_NODES)
     aux_source_directory(src/cpp/libprge/nodes/3d LIBPRGE_DIR_NODES_3D)
     aux_source_directory(src/cpp/libprge/nodes/ui LIBPRGE_DIR_NODES_UI)
+aux_source_directory(src/cpp/libprge/objects LIBPRGE_DIR_OBJECTS)
+aux_source_directory(src/cpp/libprge/sdks LIBPRGE_DIR_SDKS)
 aux_source_directory(src/cpp/libprge/tools LIBPRGE_DIR_TOOLS)
 aux_source_directory(src/cpp/libprge/types LIBPRGE_DIR_TYPES)
 
@@ -177,6 +179,8 @@ target_sources(${PROJECT_NAME}
         ${LIBPRGE_DIR_NODES}
             ${LIBPRGE_DIR_NODES_3D}
             ${LIBPRGE_DIR_NODES_UI}
+        ${LIBPRGE_DIR_OBJECTS}
+        ${LIBPRGE_DIR_SDKS}
         ${LIBPRGE_DIR_TOOLS}
         ${LIBPRGE_DIR_TYPES}
 )

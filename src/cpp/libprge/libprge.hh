@@ -9,8 +9,10 @@
 #include <godot_cpp/core/engine_ptrcall.hpp>
 #include <godot_cpp/classes/engine.hpp>
 
-#include <godot_cpp/classes/object.hpp>
 #include <godot_cpp/classes/engine.hpp>
+#include <godot_cpp/classes/object.hpp>
+#include <godot_cpp/classes/ref.hpp>
+#include <godot_cpp/classes/ref_counted.hpp>
 
 namespace libprge
 {
@@ -21,13 +23,13 @@ static const char *CLIBPRGE_CLASS = "CLibPrGe";
 static const char *CLIBPRGE_BRIEF = R"(class CLibPrGe final
 * @brief core libprge class
 *
-* @note not meant to be use internal only
+* @note meant to be use internal only
 )";
 
 /**
  * @brief core libprge class
  * 
- * @note not meant to be use internal only
+ * @note meant to be use internal only
  */
 class CLibPrGe final : public Object
 {
@@ -50,6 +52,12 @@ static CLibPrGe *pLibPrGe;
 
 } // namespace libprge
 
+/**
+ * @brief initialize all pointers for libprge
+ * 
+ * @note mostly important ones
+ * @note also all those pointer meant to be use internally
+ */
 inline static void libprge_initialize_pointers()
 {
     if (!libprge::pLibPrGe) { libprge::pLibPrGe = libprge::CLibPrGe::pGet(); }

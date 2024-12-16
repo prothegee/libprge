@@ -1,5 +1,7 @@
 #ifndef LIBPRGE_UTILITY_FUNCTIONS_HH
 #define LIBPRGE_UTILITY_FUNCTIONS_HH
+#include <libprge/base/config.hh>
+
 #include <string>
 #include <vector>
 #include <random>
@@ -13,11 +15,15 @@
 #include <ostream>
 #include <iostream>
 
+#if LIBPRGE_USING_JSONCPP
 #include <json/json.h>
+#endif // LIBPRGE_USING_JSONCPP
 
+#if LIBPRGE_USING_OPENSSL
 #include <openssl/bio.h>
 #include <openssl/evp.h>
 #include <openssl/buffer.h>
+#endif // LIBPRGE_USING_OPENSSL
 
 #include <libprge/constants/string_const.hh>
 #include <libprge/enums/result_enums.hh>
@@ -26,6 +32,7 @@ namespace libprge
 {
 namespace utilityFunctions
 {
+#if LIBPRGE_USING_OPENSSL
     /**
      * @brief base 64 encoding
      * 
@@ -45,6 +52,7 @@ namespace utilityFunctions
      * @return std::string 
      */
     std::string base64decode(const std::string &input);
+#endif // LIBPRGE_USING_OPENSSL
 
     namespace find
     {
@@ -193,6 +201,7 @@ namespace utilityFunctions
         std::string inputLetterCase(const std::string input, const int letterCase);
     } // namespace change
 
+#if LIBPRGE_USING_JSONCPP
     namespace json
     {
         /**
@@ -223,8 +232,7 @@ namespace utilityFunctions
          */
         std::string toString(const Json::Value &input, const int &indent = 4, const int &precision = 16);
     } // namespace json
-
-    // 
+#endif // LIBPRGE_USING_JSONCPP
 } // namespace utilityFunctions
 } // namespace libprge
 
