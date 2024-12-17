@@ -64,7 +64,7 @@ void CCoreSceneNode::_bind_methods()
 
     ADD_GROUP("In Game Root", "InGameRoot_");
         ADD_SUBGROUP("Scene Initialize", "InGameRoot_SceneInitialize_");
-    // in game root invoke core game
+    // in game root initialize
     {
         ClassDB::bind_method(D_METHOD("setOnInitAddCoreGameNode", "trueOrFalse"), &CCoreSceneNode::setOnInitAddCoreGameNode);
         ClassDB::bind_method(D_METHOD("getOnInitAddCoreGameNode"), &CCoreSceneNode::getOnInitAddCoreGameNode);
@@ -72,11 +72,17 @@ void CCoreSceneNode::_bind_methods()
             Variant::Type::BOOL, "InGameRoot_SceneInitialize_addCoreGame"
         ), "setOnInitAddCoreGameNode", "getOnInitAddCoreGameNode");
 
-        ClassDB::bind_method(D_METHOD("setCoreGameSceneFile", "coreGameNodeSceneFile"), &CCoreSceneNode::setCoreGameSceneFile);
-        ClassDB::bind_method(D_METHOD("getCoreGameSceneFile"), &CCoreSceneNode::getCoreGameSceneFile);
+        ClassDB::bind_method(D_METHOD("setOnInitCoreGameSceneFile", "coreGameNodeSceneFile"), &CCoreSceneNode::setOnInitCoreGameSceneFile);
+        ClassDB::bind_method(D_METHOD("getOnInitCoreGameSceneFile"), &CCoreSceneNode::getOnInitCoreGameSceneFile);
         ClassDB::add_property(CCoreSceneNode_CLASS, PropertyInfo(
             Variant::Type::OBJECT, "InGameRoot_SceneInitialize_coreGameNodeFile"
-        ), "setCoreGameSceneFile", "getCoreGameSceneFile");
+        ), "setOnInitCoreGameSceneFile", "getOnInitCoreGameSceneFile");
+
+        ClassDB::bind_method(D_METHOD("setOnInitNextSceneFile", "nextSceneFile"), &CCoreSceneNode::setOnInitNextSceneFile);
+        ClassDB::bind_method(D_METHOD("getOnInitNextSceneFile"), &CCoreSceneNode::getOnInitNextSceneFile);
+        ClassDB::add_property(CCoreSceneNode_CLASS, PropertyInfo(
+            Variant::Type::OBJECT, "InGameRoot_SceneInitialize_nextScene"
+        ), "setOnInitNextSceneFile", "getOnInitNextSceneFile");
     }
 
     // virtual functions/methods
@@ -108,6 +114,7 @@ void CCoreSceneNode::_ready()
 {
     if (!Engine::get_singleton()->is_editor_hint())
     {
+        logger::log::debug("current scene:\n- name: \"", pIScene->getSceneAsFileName(this), "\"\n- file path: \"", pIScene->getSceneAsFilePath(this), "\"");
         onReadyInGameRT();
     }
 
@@ -125,7 +132,9 @@ void CCoreSceneNode::onReadyInGameRT()
         if (m_sceneType != SCENE_TYPE_INITIALIZE) { return; }
 
         // reference pointer scene of CoreGameNode
-        auto rpCoreGameNode = getCoreGameSceneFile();
+        auto rpCoreGameNode = getOnInitCoreGameSceneFile();
+        // reference pointer next scene for on init type
+        auto rpOnInitNextScene = getOnInitNextSceneFile();
 
         if (rpCoreGameNode.is_null())
         {
@@ -139,10 +148,15 @@ void CCoreSceneNode::onReadyInGameRT()
             return;
         }
 
+        // create & add child on root node since it valid/exists
         auto pCoreGameNode = (CCoreGameNode*)rpCoreGameNode.ptr()->instantiate();
         pIRootNode->addChild(this, pCoreGameNode);
 
-        logger::log::message("TODO: add the next scene after this");
+        if (!rpOnInitNextScene.is_null())
+        {
+            logger::log::debug("using next scene since next scene on init is valid");
+            pIScene->setActiveSceneTo(this, rpOnInitNextScene.ptr()->get_path());
+        }
     }
 }
 

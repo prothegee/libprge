@@ -61,8 +61,10 @@ private:
     SCENE_TYPE m_sceneType = SCENE_TYPE::SCEN_TYPE_UNDEFINED;
 
     bool             m_onInitAddCoreGameNode = false;
-    i32              m_coreGameNodeSceneFileError = 0;
-    Ref<PackedScene> m_coreGameNodeSceneFile = Ref<PackedScene>();
+    i32              m_onInitCoreGameNodeSceneFileError = 0;
+    Ref<PackedScene> m_onInitCoreGameNodeSceneFile = Ref<PackedScene>();
+    i32              m_onInitNextSceneFileError = 0;
+    Ref<PackedScene> m_onInitNextScene = Ref<PackedScene>();
 
 protected:
     static void _bind_methods();
@@ -79,28 +81,50 @@ public:
     String getSceneAsFilePath() { return pIScene->getSceneAsFilePath(this); }
     String getSceneAsFileName() { return pIScene->getSceneAsFileName(this); }
 
+#pragma region scene type on initialize
     void setOnInitAddCoreGameNode(bool trueOrFalse) { m_onInitAddCoreGameNode = trueOrFalse; }
     bool getOnInitAddCoreGameNode() { return m_onInitAddCoreGameNode; }
 
-    void             setCoreGameSceneFile(Ref<PackedScene> coreGameNodeSceneFile) 
+    void             setOnInitCoreGameSceneFile(Ref<PackedScene> coreGameNodeSceneFile) 
     {
         if (coreGameNodeSceneFile.is_valid())
         {
-            m_coreGameNodeSceneFile = coreGameNodeSceneFile;
+            m_onInitCoreGameNodeSceneFile = coreGameNodeSceneFile;
         }
         else
         {
             logger::log::errorAlways("CCoreGameNodeNode param for scene file is null from \"", this->get_name(), "\" of ", this->get_class(), " class!");
         }
     }
-    Ref<PackedScene> getCoreGameSceneFile()
+    Ref<PackedScene> getOnInitCoreGameSceneFile()
     {
-        if (!m_coreGameNodeSceneFile.is_valid() && m_coreGameNodeSceneFile.is_null() && m_coreGameNodeSceneFileError <= 0)
+        if (!m_onInitCoreGameNodeSceneFile.is_valid() && m_onInitCoreGameNodeSceneFile.is_null() && m_onInitCoreGameNodeSceneFileError <= 0)
         {
-            m_coreGameNodeSceneFileError++; logger::log::warningAlways("NOTICE AT FIRST TIME ONLY\nCCoreGameNodeNode scene file is null from \"", this->get_name(), "\" of ", this->get_class(), " class!\nYou can ignore this warning for the first time");
+            m_onInitCoreGameNodeSceneFileError++; logger::log::warningAlways("NOTICE AT FIRST TIME ONLY\nCCoreGameNodeNode scene file is null from \"", this->get_name(), "\" of ", this->get_class(), " class!\nYou can ignore this warning for the first time");
         }
-        return m_coreGameNodeSceneFile;
+        return m_onInitCoreGameNodeSceneFile;
     }
+
+    void             setOnInitNextSceneFile(Ref<PackedScene> nextSceneOnInit)
+    {
+        if (nextSceneOnInit.is_valid())
+        {
+            m_onInitNextScene = nextSceneOnInit;
+        }
+        else
+        {
+            logger::log::errorAlways("CCoreGameNodeNode param for next scene file is null from \"", this->get_name(), "\" of ", this->get_class(), " class!");
+        }
+    }
+    Ref<PackedScene> getOnInitNextSceneFile()
+    {
+        if (!m_onInitNextScene.is_valid() && m_onInitNextScene.is_null() && m_onInitNextSceneFileError <= 0)
+        {
+            m_onInitNextSceneFileError++; logger::log::warningAlways("NOTICE AT FIRST TIME ONLY\nCCoreGameNodeNode next scene file is null from \"", this->get_name(), "\" of ", this->get_class(), " class!\nYou can ignore this warning for the first time");
+        }
+        return m_onInitNextScene;
+    }
+#pragma endregion
 
     void _ready();
 

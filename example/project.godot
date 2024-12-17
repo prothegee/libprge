@@ -11,9 +11,10 @@ config_version=5
 [application]
 
 config/name="libprge"
-run/main_scene="uid://bf803dn0obqpn"
+run/main_scene="res://scenes/sc-initialize.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="prothegee/libprge"
+config/project_settings_override="project.godot.override.cfg"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
 
