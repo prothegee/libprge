@@ -53,7 +53,18 @@ public:
     void setVersionDates(i32 versionDates) { m_versionDates = versionDates; }
     i32  getVersionDates() { return m_versionDates; }
 
-    String getVersionString() { return m_versionString; }
+    String getVersionString()
+    {
+        m_versionString = "";
+        m_versionString += String::num(m_versionMajor);
+            m_versionString += ".";
+        m_versionString += String::num(m_versionMinor);
+            m_versionString += ".";
+        m_versionString += String::num(m_versionPatch);
+            m_versionString += ".";
+        m_versionString += String::num(m_versionDates);
+        return m_versionString;
+    }
 };
 
 } // namespace libprge

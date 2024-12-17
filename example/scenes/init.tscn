@@ -1,8 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://bf803dn0obqpn"]
-
-[ext_resource type="PackedScene" uid="uid://civn4a4yeqyun" path="res://addons/libprge/assets/nodes/core-game.tscn" id="1_wm5da"]
-
-[node name="core-scene" type="CCoreSceneNode"]
-info_sceneType = 3
-InGameRoot_SceneInitialize_addCoreGame = true
-InGameRoot_SceneInitialize_coreGameNodeFile = ExtResource("1_wm5da")
