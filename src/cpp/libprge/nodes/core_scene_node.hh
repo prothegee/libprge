@@ -74,22 +74,31 @@ public:
     void       setSceneType(SCENE_TYPE sceneType) { m_sceneType = sceneType; }
     SCENE_TYPE getSceneType() { return m_sceneType; }
 
-    void   setActiveSceneTo(String sceneFilePath) { IScene.setActiveSceneTo(this, sceneFilePath); }
+    void   setActiveSceneTo(String sceneFilePath) { pIScene->setActiveSceneTo(this, sceneFilePath); }
 
-    String getSceneAsFilePath() { return IScene.getSceneAsFilePath(this); }
-    String getSceneAsFileName() { return IScene.getSceneAsFileName(this); }
+    String getSceneAsFilePath() { return pIScene->getSceneAsFilePath(this); }
+    String getSceneAsFileName() { return pIScene->getSceneAsFileName(this); }
 
     void setOnInitAddCoreGameNode(bool trueOrFalse) { m_onInitAddCoreGameNode = trueOrFalse; }
     bool getOnInitAddCoreGameNode() { return m_onInitAddCoreGameNode; }
 
-    void   setCoreGameSceneFile(Ref<PackedScene> coreGameNodeSceneFile)
+    void             setCoreGameSceneFile(Ref<PackedScene> coreGameNodeSceneFile) 
     {
-        if (coreGameNodeSceneFile.is_valid()) { m_coreGameNodeSceneFile = coreGameNodeSceneFile; }
-        else { logger::log::errorAlways("CCoreGameNodeNode param for scene file is null"); }
+        if (coreGameNodeSceneFile.is_valid())
+        {
+            m_coreGameNodeSceneFile = coreGameNodeSceneFile;
+        }
+        else
+        {
+            logger::log::errorAlways("CCoreGameNodeNode param for scene file is null from \"", this->get_name(), "\" of ", this->get_class(), " class!");
+        }
     }
     Ref<PackedScene> getCoreGameSceneFile()
     {
-        if (!m_coreGameNodeSceneFile.is_valid() && m_coreGameNodeSceneFileError <= 0) { m_coreGameNodeSceneFileError++; logger::log::errorAlways("CCoreGameNodeNode scene file is null"); }
+        if (!m_coreGameNodeSceneFile.is_valid() && m_coreGameNodeSceneFile.is_null() && m_coreGameNodeSceneFileError <= 0)
+        {
+            m_coreGameNodeSceneFileError++; logger::log::warningAlways("NOTICE AT FIRST TIME ONLY\nCCoreGameNodeNode scene file is null from \"", this->get_name(), "\" of ", this->get_class(), " class!\nYou can ignore this warning for the first time");
+        }
         return m_coreGameNodeSceneFile;
     }
 

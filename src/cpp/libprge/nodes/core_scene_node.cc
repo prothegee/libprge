@@ -1,5 +1,7 @@
 #include "core_scene_node.hh"
 
+#include "core_game_node.hh"
+
 VARIANT_ENUM_CAST(libprge::SCENE_TYPE);
 
 namespace libprge
@@ -120,7 +122,27 @@ void CCoreSceneNode::onReadyInGameRT()
 {
     if (getOnInitAddCoreGameNode())
     {
-        logger::log::debug("TODO IN-GAME: add CCoreGameNode node under \"/root\" node");
+        if (m_sceneType != SCENE_TYPE_INITIALIZE) { return; }
+
+        // reference pointer scene of CoreGameNode
+        auto rpCoreGameNode = getCoreGameSceneFile();
+
+        if (rpCoreGameNode.is_null())
+        {
+            logger::log::errorAlways("Initialize scene using add CCoreGameNode class, but the file is null");
+            return;
+        }
+
+        if (rpCoreGameNode.ptr()->instantiate()->get_class() != CCoreGameNode_CLASS)
+        {
+            logger::log::errorAlways("Initialize scene using add CCoreGameNode class, but the class type is not match");
+            return;
+        }
+
+        auto pCoreGameNode = (CCoreGameNode*)rpCoreGameNode.ptr()->instantiate();
+        pIRootNode->addChild(this, pCoreGameNode);
+
+        logger::log::message("TODO: add the next scene after this");
     }
 }
 

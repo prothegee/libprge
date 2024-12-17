@@ -40,6 +40,20 @@ public:
 
     void   setGameName(String gameName) { m_gameName = gameName; }
     String getGameName() { return m_gameName; }
+
+    void setVersionMajor(i32 versionMajor) { m_versionMajor = versionMajor; }
+    i32  getVersionMajor() { return m_versionMajor; }
+
+    void setVersionMinor(i32 versionMinor) { m_versionMinor = versionMinor; }
+    i32  getVersionMinor() { return m_versionMinor; }
+
+    void setVersionPatch(i32 versionPatch) { m_versionPatch = versionPatch; }
+    i32  getVersionPatch() { return m_versionPatch; }
+
+    void setVersionDates(i32 versionDates) { m_versionDates = versionDates; }
+    i32  getVersionDates() { return m_versionDates; }
+
+    String getVersionString() { return m_versionString; }
 };
 
 } // namespace libprge
