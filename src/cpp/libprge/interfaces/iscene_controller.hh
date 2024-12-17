@@ -93,8 +93,8 @@ public:
             return result;
         }
     };
-    // scene interface access
-    SScene IScene = SScene();
+    // pointer scene interface access
+    SScene *pIScene = memnew(SScene);
 
     struct SRootNode
     {
@@ -163,8 +163,8 @@ public:
             return result;
         }
     };
-    // root node interface access
-    SRootNode IRootNode = SRootNode();
+    // pointer root node interface access
+    SRootNode *pIRootNode = memnew(SRootNode);
 
 };
 

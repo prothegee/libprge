@@ -35,6 +35,28 @@ struct ESceneType
         inline static const char *SCENE_TYPE_BAD_APPORGAME_ORIGINALITY = "Bad App/Game Originality";
         inline static const char *SCENE_TYPE_ERROR_OR_VIOLATION = "Error/Violation";
     };
+
+    struct fromEnum
+    {
+        static const char *toString(const ENUM &enumPar)
+        {
+            const char *result = CODE::SCENE_TYPE_UNDEFINED;
+
+            switch (enumPar)
+            {
+                case ENUM::SCENE_TYPE_MENU: { result = CODE::SCENE_TYPE_MENU; } break;
+                case ENUM::SCENE_TYPE_GAMEPLAY: { result = CODE::SCENE_TYPE_GAMEPLAY; } break;
+                case ENUM::SCENE_TYPE_INITIALIZE: { result = CODE::SCENE_TYPE_INITIALIZE; } break;
+                case ENUM::SCENE_TYPE_CHECK_GAME_MODULES: { result = CODE::SCENE_TYPE_CHECK_GAME_MODULES; } break;
+                case ENUM::SCENE_TYPE_VERIFY_APPORGAME_PRODUCT: { result = CODE::SCENE_TYPE_VERIFY_APPORGAME_PRODUCT; } break;
+                case ENUM::SCENE_TYPE_BAD_APPORGAME_ORIGINALITY: { result = CODE::SCENE_TYPE_BAD_APPORGAME_ORIGINALITY; } break;
+                case ENUM::SCENE_TYPE_ERROR_OR_VIOLATION: { result = CODE::SCENE_TYPE_ERROR_OR_VIOLATION; } break;
+                default: { result = CODE::SCENE_TYPE_UNDEFINED; } break;
+            }
+
+            return result;
+        }
+    };
 };
 
 } // namespace libprge

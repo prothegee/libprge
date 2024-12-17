@@ -5,6 +5,8 @@ namespace libprge
 
 ISceneController::~ISceneController()
 {
+    memfree(pIScene);
+    memfree(pIRootNode);
 }
 
 String ISceneController::SScene::getSceneAsFileName(const Node *pParentNode)
