@@ -58,6 +58,8 @@ class CCoreGameNode : public Node
 {
     GDCLASS(CCoreGameNode, Node);
 private:
+    const String m_defaultName = "core-game";
+
     String m_gameName = "";
 
     i32    m_versionMajor = 0;
@@ -71,6 +73,11 @@ private:
 
     DISTRIBUTION_STORE_ENUM m_distributionStoreEnum = DISTRIBUTION_STORE_ENUM::DISTRIBUTION_STORE_UNDEFINED;
     String                  m_distributionStoreCode = "";
+
+    bool m_isDedicatedServer = false;
+
+    String m_bindIp = "127.0.0.1";
+    i32    m_bindPort = 10000;
 
 protected:
     static void _bind_methods();
@@ -136,6 +143,15 @@ public:
 
     void   setDistributionStoreString(String distributionStoreNameString) { m_distributionStoreCode = distributionStoreNameString; }
     String getDistributionStoreString() { return m_distributionStoreCode; }
+
+    void setIsDedicatedServer(bool trueOrFalse) { m_isDedicatedServer = trueOrFalse; }
+    bool getIsDedicatedServer() { return m_isDedicatedServer; }
+
+    void   setBindIp(String ipAddress) { m_bindIp = ipAddress; }
+    String getBindIp() { return m_bindIp; }
+
+    void setBindPort(i32 portNumber) { m_bindPort = portNumber; }
+    i32  getBindPort() { return m_bindPort; }
 };
 
 } // namespace libprge

@@ -6,9 +6,14 @@
 #include <godot_cpp/classes/engine.hpp>
 #include <godot_cpp/classes/object.hpp>
 #include <godot_cpp/classes/node.hpp>
+#include <godot_cpp/classes/ref.hpp>
+#include <godot_cpp/classes/input.hpp>
+#include <godot_cpp/classes/input_event.hpp>
 
 namespace libprge
 {
+
+using namespace godot;
 
 /**
  * @brief "in-game" controller interface class
@@ -27,6 +32,15 @@ public:
      * @note leave it empty body if not implemented
      */
     virtual void onReadyInGameRT() = 0;
+
+    /**
+     * @brief on _input "in-game" 1unction runtime implementation
+     * 
+     * @note leave it empty body if not implemented
+     * 
+     * @param pEvent 
+     */
+    virtual void onInputInGameRT(const Ref<InputEvent> &pEvent) = 0;
 
     /**
      * @brief on _process "in-game" function runtime implementation

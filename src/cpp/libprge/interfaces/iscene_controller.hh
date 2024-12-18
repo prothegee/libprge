@@ -13,6 +13,7 @@
 #include <godot_cpp/classes/node.hpp>
 #include <godot_cpp/classes/tree.hpp>
 #include <godot_cpp/classes/scene_tree.hpp>
+#include <godot_cpp/classes/window.hpp>
 
 namespace libprge
 {
@@ -115,11 +116,22 @@ public:
 
             try
             {
+                bool found = false;
                 auto pRoot = pParentNode->get_node<Node>("/root");
 
                 result = EResult::ENUM::RESULT_FOUND;
 
-                if (!pRoot->get_node_or_null((NodePath)pWhatNode->get_name()))
+                for (int i = 0; i < pParentNode->get_child_count(); i++)
+                {
+                    if (pRoot->get_child(i)->get_class() == pRoot->get_class()) { found = true; }
+                }
+
+                if (found)
+                {
+                    logger::log::warningAlways("core node of \"", pRoot->get_class(), "\" already exists with \"", pRoot->get_name(), "\" name, skipping");
+                }
+
+                if (!pRoot->get_node_or_null((NodePath)pWhatNode->get_name()) && !found)
                 {
                     pRoot->call_deferred(CALL_DEFFERED::ADD_CHILD, pWhatNode);
 
@@ -166,6 +178,21 @@ public:
     // pointer root node interface access
     SRootNode *pIRootNode = memnew(SRootNode);
 
+    /**
+     * @brief get root node pointer
+     * 
+     * @param pParentNode mostly 'this'
+     * @return Node* 
+     */
+    Node *pGetRootNode(Node *pParentNode) { return pParentNode->get_node<Node>("/root"); };
+
+    /**
+     * @brief get root window pointer
+     * 
+     * @param pParentNode mostly 'this'
+     * @return Window* 
+     */
+    Window *pGetRootWindow(Node *pParentNode) { return pParentNode->get_node<Window>("/root"); };
 };
 
 } // namespace libprge

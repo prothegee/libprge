@@ -7,4 +7,5 @@
 info_sceneType = 3
 InGameRoot_SceneInitialize_addCoreGame = true
 InGameRoot_SceneInitialize_coreGameNodeFile = ExtResource("1_iq4ed")
+InGameRoot_SceneInitialize_addCorePlayer = true
 InGameRoot_SceneInitialize_nextScene = ExtResource("1_rgdi7")

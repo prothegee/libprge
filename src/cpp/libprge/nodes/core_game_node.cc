@@ -99,6 +99,32 @@ void CCoreGameNode::_bind_methods()
             Variant::Type::STRING, "distribution_store_string"
         ), "setDistributionStoreString", "getDistributionStoreString");
     }
+
+    ADD_GROUP("Server", "server_");
+        ADD_SUBGROUP("Bind", "server_bind_");
+    // server
+    {
+        // is dedicated server
+        ClassDB::bind_method(D_METHOD("setIsDedicatedServer", "trueOrFalse"), &CCoreGameNode::setIsDedicatedServer);
+        ClassDB::bind_method(D_METHOD("getIsDedicatedServer"), &CCoreGameNode::getIsDedicatedServer);
+        ClassDB::add_property(CCoreGameNode_CLASS, PropertyInfo(
+            Variant::Type::BOOL, "server_isDedicatedServer"
+        ), "setIsDedicatedServer", "getIsDedicatedServer");
+
+        // bind ip
+        ClassDB::bind_method(D_METHOD("setBindIp", "ipAddress"), &CCoreGameNode::setBindIp);
+        ClassDB::bind_method(D_METHOD("getBindIp"), &CCoreGameNode::getBindIp);
+        ClassDB::add_property(CCoreGameNode_CLASS, PropertyInfo(
+            Variant::Type::STRING, "server_bind_ip"
+        ), "setBindIp", "getBindIp");
+
+        // bind port
+        ClassDB::bind_method(D_METHOD("setBindPort", "portNumber"), &CCoreGameNode::setBindPort);
+        ClassDB::bind_method(D_METHOD("getBindPort"), &CCoreGameNode::getBindPort);
+        ClassDB::add_property(CCoreGameNode_CLASS, PropertyInfo(
+            Variant::Type::INT, "server_bind_port"
+        ), "setBindPort", "getBindPort");
+    }
 }
 
 CCoreGameNode::CCoreGameNode()
@@ -118,6 +144,9 @@ CCoreGameNode::CCoreGameNode()
         m_distributionOSCode += " ";
         m_distributionOSCode += OSdistribution;
     }
+
+    // lastly
+    this->set_name(m_defaultName);
 }
 
 CCoreGameNode::~CCoreGameNode()
