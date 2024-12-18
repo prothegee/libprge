@@ -367,9 +367,9 @@ namespace utilityFunctions
         }
     } // namespace change
 
-#if LIBPRGE_USING_JSONCPP
     namespace json
     {
+    #if LIBPRGE_USING_JSONCPP
         Json::Value fromFile(const std::string &filePath)
         {
             Json::Value result;
@@ -449,8 +449,7 @@ namespace utilityFunctions
 
             return std::string(Json::writeString(writer, input));
         }
-
+    #endif // LIBPRGE_USING_JSONCPP
     } // namespace json
-#endif // LIBPRGE_USING_JSONCPP
 } // namespace utilityFunctions
 } // namespace libprge

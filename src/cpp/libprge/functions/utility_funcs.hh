@@ -201,9 +201,9 @@ namespace utilityFunctions
         std::string inputLetterCase(const std::string input, const int letterCase);
     } // namespace change
 
-#if LIBPRGE_USING_JSONCPP
     namespace json
     {
+    #if LIBPRGE_USING_JSONCPP
         /**
          * @brief get json from .json file
          * 
@@ -231,8 +231,8 @@ namespace utilityFunctions
          * @return std::string 
          */
         std::string toString(const Json::Value &input, const int &indent = 4, const int &precision = 16);
+    #endif // LIBPRGE_USING_JSONCPP
     } // namespace json
-#endif // LIBPRGE_USING_JSONCPP
 } // namespace utilityFunctions
 } // namespace libprge
 

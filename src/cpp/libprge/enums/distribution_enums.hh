@@ -21,7 +21,7 @@ namespace libprge
  */
 struct EDistributionOS
 {
-    enum ENUM : int32_t
+    enum ENUM : i32
     {
         DISTRIBUTION_OS_UNDEFINED,
         DISTRIBUTION_OS_LINUX,
@@ -63,22 +63,22 @@ struct EDistributionOS
  */
 struct EDistributionStore
 {
-    enum ENUM : int32_t
+    enum ENUM : i32
     {
         DISTRIBUTION_STORE_UNDEFINED,
-        DISTRIBUTION_STORE_PROTHEGEE,
         DISTRIBUTION_STORE_STEAM,
         DISTRIBUTION_STORE_GOG,
         DISTRIBUTION_STORE_ITCHIO,
+        DISTRIBUTION_STORE_MISC_OR_CUSTOM,
     };
 
     struct CODE
     {
         inline static const char *DISTRIBUTION_STORE_UNDEFINED = "Undefined";
-        inline static const char *DISTRIBUTION_STORE_PROTHEGEE = "ProthegeeGame";
         inline static const char *DISTRIBUTION_STORE_STEAM = "Steam";
         inline static const char *DISTRIBUTION_STORE_GOG = "GoG";
         inline static const char *DISTRIBUTION_STORE_ITCHIO = "ItchIo";
+        inline static const char *DISTRIBUTION_STORE_MISC_OR_CUSTOM = "Misc/Custom";
     };
 
     struct fromEnum
@@ -89,10 +89,10 @@ struct EDistributionStore
 
             switch (distributionStoreEnum)
             {
-                case ENUM::DISTRIBUTION_STORE_PROTHEGEE: { result = CODE::DISTRIBUTION_STORE_PROTHEGEE; } break;
                 case ENUM::DISTRIBUTION_STORE_STEAM: { result = CODE::DISTRIBUTION_STORE_STEAM; } break;
                 case ENUM::DISTRIBUTION_STORE_GOG: { result = CODE::DISTRIBUTION_STORE_GOG; } break;
                 case ENUM::DISTRIBUTION_STORE_ITCHIO: { result = CODE::DISTRIBUTION_STORE_ITCHIO; } break;
+                case ENUM::DISTRIBUTION_STORE_MISC_OR_CUSTOM: { result = CODE::DISTRIBUTION_STORE_MISC_OR_CUSTOM; } break;
                 default: { result = CODE::DISTRIBUTION_STORE_UNDEFINED; } break;
             }
 

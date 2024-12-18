@@ -109,9 +109,11 @@ endif()
 # start: steamworks-sdk
 set(LIBPRGE_USING_STEAMSDK true)
 
-set(LIBPRGE_STEAMWORKS_SDK_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vendors/steamworks-sdk)
+set(LIBPRGE_STEAMWORKS_SDK_DIR_BIN ${CMAKE_CURRENT_SOURCE_DIR}/vendors/steamworks-sdk/redistributable_bin)
 
-if(LIBPRGE_STEAMWORKS_SDK_DIR)
+if(LIBPRGE_STEAMWORKS_SDK_DIR_BIN)
+    set(LIBPRGE_STEAMWORKS_SDK_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vendors/steamworks-sdk)
+
     message(NOTICE "-- ${PROJECT_NAME}:\n   STEAMWORKS_SDK_DIR: ${LIBPRGE_STEAMWORKS_SDK_DIR}")
 
     if(LIBPRGE_SYSTEM_NAME STREQUAL "linux") 
@@ -141,10 +143,12 @@ if(LIBPRGE_STEAMWORKS_SDK_DIR)
             ${LIBPRGE_OUTPUT_DIR}
         )
     else()
-        message(NOTICE "-- ${PROJECT_NAME}:\n   STEAMWORKS-SDK is not implemented for \"${LIBPRGE_SYSTEM_NAME}\" system")
+        message(NOTICE "-- ${PROJECT_NAME}:\n   steamworks-sdk is not implemented for \"${LIBPRGE_SYSTEM_NAME}\" system")
 
         set(LIBPRGE_USING_STEAMSDK false)
     endif()
+else()
+    message(NOTICE "-- ${PROJECT_NAME}:\n   couldn't find LIBPRGE_STEAMWORKS_SDK_DIR_BIN, skipping steamworks-sdk")
 endif()
 
 if(NOT ${LIBPRGE_STEAMWORKS_SDK_DIR} STREQUAL "")
