@@ -31,6 +31,13 @@ struct STRINGS_SCENES
     inline static const char *SCENE_IS_UNDEFINED = "SCENE_IS_UNDEFINED";
 };
 
+struct STRINGS_OS_GODOT
+{
+    inline static const char *LINUX = "Linux";
+    inline static const char *WINDOWS = "Windows";
+    inline static const char *MACOS = "macOS";
+};
+
 } // namespace libprge
 
 #endif // LIBPRGE_STRING_CONST_HH

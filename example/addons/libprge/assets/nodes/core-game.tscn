@@ -2,3 +2,5 @@
 
 [node name="core-game" type="CCoreGameNode"]
 info_gameName = "Game Name is Undefined"
+distribution_store_enum = 1
+distribution_store_string = "Steam"
