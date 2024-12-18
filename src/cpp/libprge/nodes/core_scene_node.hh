@@ -60,9 +60,18 @@ private:
 
     SCENE_TYPE m_sceneType = SCENE_TYPE::SCEN_TYPE_UNDEFINED;
 
-    bool             m_onInitAddCoreGameNode = false;
+    bool             m_onInitCoreNetworkNodeAdd = false;
+    // i32              m_onInitCoreNetworkNodeSceneFileError = 0;
+    // Ref<PackedScene> m_onInitCoreNetworkNodeSceneFile = Ref<PackedScene>();
+
+    bool             m_onInitCoreGameNodeAdd = false;
     i32              m_onInitCoreGameNodeSceneFileError = 0;
     Ref<PackedScene> m_onInitCoreGameNodeSceneFile = Ref<PackedScene>();
+
+    bool             m_onInitCorePlayerNodeAdd = false;
+    // i32              m_onInitCorePlayerNodeSceneFileError = 0;
+    // Ref<PackedScene> m_onInitCorePlayerNodeSceneFile = Ref<PackedScene>();
+
     i32              m_onInitNextSceneFileError = 0;
     Ref<PackedScene> m_onInitNextScene = Ref<PackedScene>();
 
@@ -82,9 +91,11 @@ public:
     String getSceneAsFileName() { return pIScene->getSceneAsFileName(this); }
 
 #pragma region scene type on initialize
-    void setOnInitAddCoreGameNode(bool trueOrFalse) { m_onInitAddCoreGameNode = trueOrFalse; }
-    bool getOnInitAddCoreGameNode() { return m_onInitAddCoreGameNode; }
+    void setOnInitAddCoreNetworkNode(bool trueOrFalse) { m_onInitCoreNetworkNodeAdd = trueOrFalse; }
+    bool getOnInitAddCoreNetworkNode() { return m_onInitCoreNetworkNodeAdd; }
 
+    void             setOnInitAddCoreGameNode(bool trueOrFalse) { m_onInitCoreGameNodeAdd = trueOrFalse; }
+    bool             getOnInitAddCoreGameNode() { return m_onInitCoreGameNodeAdd; }
     void             setOnInitCoreGameSceneFile(Ref<PackedScene> coreGameNodeSceneFile) 
     {
         if (coreGameNodeSceneFile.is_valid())
@@ -104,6 +115,9 @@ public:
         }
         return m_onInitCoreGameNodeSceneFile;
     }
+
+    void setOnInitAddCorePlayerNode(bool trueOrFalse) { m_onInitCorePlayerNodeAdd = trueOrFalse; }
+    bool getOnInitAddCorePlayerNode() { return m_onInitCorePlayerNodeAdd; }
 
     void             setOnInitNextSceneFile(Ref<PackedScene> nextSceneOnInit)
     {
@@ -128,8 +142,13 @@ public:
 
     void _ready();
 
+    void _input(const Ref<InputEvent> &pEvent);
+
 #pragma region required interface in-game implementation
     void onReadyInGameRT();
+
+    /* NOT IMPLEMENTED */
+    void onInputInGameRT(const Ref<InputEvent> &pEvent);
 
     /* NOT IMPLEMENTED */
     void onProcessInGameRT();

@@ -1,6 +1,7 @@
 #include "core_scene_node.hh"
 
 #include "core_game_node.hh"
+#include "core_player_node.hh"
 
 VARIANT_ENUM_CAST(libprge::SCENE_TYPE);
 
@@ -66,6 +67,14 @@ void CCoreSceneNode::_bind_methods()
         ADD_SUBGROUP("Scene Initialize", "InGameRoot_SceneInitialize_");
     // in game root initialize
     {
+        // core network node
+        ClassDB::bind_method(D_METHOD("setOnInitAddCoreNetworkNode", "trueOrFalse"), &CCoreSceneNode::setOnInitAddCoreNetworkNode);
+        ClassDB::bind_method(D_METHOD("getOnInitAddCoreNetworkNode"), &CCoreSceneNode::getOnInitAddCoreNetworkNode);
+        ClassDB::add_property(CCoreSceneNode_CLASS, PropertyInfo(
+            Variant::Type::BOOL, "InGameRoot_SceneInitialize_addCoreNetwork"
+        ), "setOnInitAddCoreNetworkNode", "getOnInitAddCoreNetworkNode");
+
+        // core game node
         ClassDB::bind_method(D_METHOD("setOnInitAddCoreGameNode", "trueOrFalse"), &CCoreSceneNode::setOnInitAddCoreGameNode);
         ClassDB::bind_method(D_METHOD("getOnInitAddCoreGameNode"), &CCoreSceneNode::getOnInitAddCoreGameNode);
         ClassDB::add_property(CCoreSceneNode_CLASS, PropertyInfo(
@@ -78,6 +87,14 @@ void CCoreSceneNode::_bind_methods()
             Variant::Type::OBJECT, "InGameRoot_SceneInitialize_coreGameNodeFile"
         ), "setOnInitCoreGameSceneFile", "getOnInitCoreGameSceneFile");
 
+        // core player node
+        ClassDB::bind_method(D_METHOD("setOnInitAddCorePlayerNode", "trueOrFalse"), &CCoreSceneNode::setOnInitAddCorePlayerNode);
+        ClassDB::bind_method(D_METHOD("getOnInitAddCorePlayerNode"), &CCoreSceneNode::getOnInitAddCorePlayerNode);
+        ClassDB::add_property(CCoreSceneNode_CLASS, PropertyInfo(
+            Variant::Type::BOOL, "InGameRoot_SceneInitialize_addCorePlayer"
+        ), "setOnInitAddCorePlayerNode", "getOnInitAddCorePlayerNode");
+
+        // next scene file
         ClassDB::bind_method(D_METHOD("setOnInitNextSceneFile", "nextSceneFile"), &CCoreSceneNode::setOnInitNextSceneFile);
         ClassDB::bind_method(D_METHOD("getOnInitNextSceneFile"), &CCoreSceneNode::getOnInitNextSceneFile);
         ClassDB::add_property(CCoreSceneNode_CLASS, PropertyInfo(
@@ -120,13 +137,35 @@ void CCoreSceneNode::_ready()
 
     if (Engine::get_singleton()->is_editor_hint())
     {
-        // reserved
+        // reservedd
     }
+}
+
+void CCoreSceneNode::_input(const Ref<InputEvent> &pEvent)
+{
+    if (!Engine::get_singleton()->is_editor_hint())
+    {
+        onInputInGameRT(pEvent);
+    }
+}
+
+void CCoreSceneNode::onInputInGameRT(const Ref<InputEvent> &pEvent)
+{
+    /* NOT IMPLEMENTED */
 }
 
 #pragma region required interface implementation
 void CCoreSceneNode::onReadyInGameRT()
 {
+    // core network node
+    if (getOnInitAddCoreNetworkNode())
+    {
+        if (m_sceneType != SCENE_TYPE_INITIALIZE) { return; }
+
+        logger::log::debug("TODO: add CCoreNetworkNode");
+    }
+
+    // core game node
     if (getOnInitAddCoreGameNode())
     {
         if (m_sceneType != SCENE_TYPE_INITIALIZE) { return; }
@@ -154,9 +193,19 @@ void CCoreSceneNode::onReadyInGameRT()
 
         if (!rpOnInitNextScene.is_null())
         {
-            logger::log::debug("using next scene since next scene on init is valid");
+            logger::log::debug("using next scene since next scene on init is true & valid");
             pIScene->setActiveSceneTo(this, rpOnInitNextScene.ptr()->get_path());
         }
+    }
+
+    // core player node
+    if (getOnInitAddCorePlayerNode())
+    {
+        if (m_sceneType != SCENE_TYPE_INITIALIZE) { return; }
+
+        auto pCorePlayer = memnew(CCorePlayerNode);
+
+        pIRootNode->addChild(this, pCorePlayer);
     }
 }
 
