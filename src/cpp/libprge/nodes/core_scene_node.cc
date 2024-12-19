@@ -1,6 +1,7 @@
 #include "core_scene_node.hh"
 
 #include "core_game_node.hh"
+#include "core_network_node.hh"
 #include "core_player_node.hh"
 
 VARIANT_ENUM_CAST(libprge::SCENE_TYPE);
@@ -106,6 +107,7 @@ void CCoreSceneNode::_bind_methods()
     // in-game
     {
         BIND_VIRTUAL_METHOD(CCoreSceneNode, onReadyInGameRT);
+        BIND_VIRTUAL_METHOD(CCoreSceneNode, onInputInGameRT);
         BIND_VIRTUAL_METHOD(CCoreSceneNode, onProcessInGameRT);
         BIND_VIRTUAL_METHOD(CCoreSceneNode, onPhysicsProcessInGameRT);
     }
@@ -119,6 +121,10 @@ void CCoreSceneNode::_bind_methods()
 
 CCoreSceneNode::CCoreSceneNode()
 {
+    // create .libprge project dirs
+    DirAccess::make_dir_absolute("res://.libprge/cache");
+    DirAccess::make_dir_absolute("res://.libprge/tmp");
+
     // lastly
     this->set_name(m_defaultName);
 }
@@ -137,7 +143,7 @@ void CCoreSceneNode::_ready()
 
     if (Engine::get_singleton()->is_editor_hint())
     {
-        // reservedd
+        // reserved
     }
 }
 
@@ -162,7 +168,9 @@ void CCoreSceneNode::onReadyInGameRT()
     {
         if (m_sceneType != SCENE_TYPE_INITIALIZE) { return; }
 
-        logger::log::debug("TODO: add CCoreNetworkNode");
+        auto pCoreNetwork = memnew(CCoreNetworkNode);
+
+        pIRootNode->addChild(this, pCoreNetwork);
     }
 
     // core game node

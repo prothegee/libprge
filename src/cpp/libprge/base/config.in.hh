@@ -2,6 +2,10 @@
 #define LIBPRGE_CONFIG_HH
 #include "internal/internal_base_types.hh"
 
+#include <future>
+#include <thread>
+#include <memory>
+
 #include <godot_cpp/variant/utility_functions.hpp>
 
 // godot utility functions
