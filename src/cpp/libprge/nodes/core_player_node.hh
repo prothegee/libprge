@@ -13,7 +13,7 @@ namespace libprge
 using namespace godot;
 
 static const char *CCorePlayerNode_CLASS = "CCorePlayerNode";
-static const char *CCorePlayerNode_BRIEF = R"(class CCorePlayerNode final
+static const char *CCorePlayerNode_BRIEF = R"(class CCorePlayerNode
 * @brief libprge core player node class
 )";
 

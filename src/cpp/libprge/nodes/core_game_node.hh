@@ -47,7 +47,7 @@ struct DISTRIBUTION_STORE_CODE : public EDistributionStore::CODE
 };
 
 static const char *CCoreGameNode_CLASS = "CCoreGameNode";
-static const char *CCoreGameNode_BRIEF = R"(class CCoreGameNode final
+static const char *CCoreGameNode_BRIEF = R"(class CCoreGameNode
 * @brief libprge core game node class
 )";
 
