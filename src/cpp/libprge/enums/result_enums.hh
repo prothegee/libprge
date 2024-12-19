@@ -1,6 +1,6 @@
 #ifndef LIBPRGE_RESULT_ENUMS_HH
 #define LIBPRGE_RESULT_ENUMS_HH
-#include <cstdint>
+#include <libprge/base/config.hh>
 
 namespace libprge
 {
@@ -10,7 +10,7 @@ namespace libprge
  */
 struct EResult
 {
-    enum ENUM : int32_t
+    enum ENUM : i32
     {
         RESULT_UNDEFINED,
         RESULT_OK,

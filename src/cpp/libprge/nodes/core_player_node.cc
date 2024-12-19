@@ -5,6 +5,14 @@ namespace libprge
 
 void CCorePlayerNode::_bind_methods()
 {
+    // virtual functions/methods
+    // in-game
+    {
+        BIND_VIRTUAL_METHOD(CCorePlayerNode, onReadyInGameRT);
+        BIND_VIRTUAL_METHOD(CCorePlayerNode, onInputInGameRT);
+        BIND_VIRTUAL_METHOD(CCorePlayerNode, onProcessInGameRT);
+        BIND_VIRTUAL_METHOD(CCorePlayerNode, onPhysicsProcessInGameRT);
+    }
 }
 
 CCorePlayerNode::CCorePlayerNode()
@@ -34,7 +42,7 @@ void CCorePlayerNode::onInputInGameRT(const Ref<InputEvent> &pEvent)
 {
     if (pEvent.is_null()) { return; }
 
-    logger::log::debug("TODO: CCorePlayer onInputInGameRT");
+    #pragma message("TODO: CCorePlayerNode::onInputInGameRT")
 }
 
 void CCorePlayerNode::onProcessInGameRT()

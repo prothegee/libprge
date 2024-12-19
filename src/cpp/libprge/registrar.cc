@@ -4,6 +4,7 @@
 
 #include <libprge/libprge.hh>
 #include <libprge/nodes/core_game_node.hh>
+#include <libprge/nodes/core_network_node.hh>
 #include <libprge/nodes/core_player_node.hh>
 #include <libprge/nodes/core_scene_node.hh>
 
@@ -44,6 +45,7 @@ void initialize(ModuleInitializationLevel pLevel)
 
         #pragma region nodes
             GDREGISTER_CLASS(CCoreGameNode);
+            GDREGISTER_CLASS(CCoreNetworkNode);
             GDREGISTER_CLASS(CCorePlayerNode);
             GDREGISTER_CLASS(CCoreSceneNode);
         #pragma endregion

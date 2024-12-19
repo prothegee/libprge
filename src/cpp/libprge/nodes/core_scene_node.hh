@@ -15,6 +15,8 @@
 #include <godot_cpp/classes/scene_state.hpp>
 #include <godot_cpp/classes/scene_tree.hpp>
 #include <godot_cpp/classes/scene_tree_timer.hpp>
+#include <godot_cpp/classes/dir_access.hpp>
+#include <godot_cpp/classes/file_access.hpp>
 #include <godot_cpp/core/binder_common.hpp>
 
 namespace libprge
