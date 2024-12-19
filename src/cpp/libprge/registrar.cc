@@ -7,6 +7,7 @@
 #include <libprge/nodes/core_network_node.hh>
 #include <libprge/nodes/core_player_node.hh>
 #include <libprge/nodes/core_scene_node.hh>
+#include <libprge/nodes/3d/entity_physic_3d.hh>
 
 using namespace godot;
 
@@ -54,6 +55,7 @@ void initialize(ModuleInitializationLevel pLevel)
         #pragma endregion
 
         #pragma region nodes3d
+            GDREGISTER_CLASS(CEntityPhysic3d);
         #pragma endregion
 
         #pragma region nodesui

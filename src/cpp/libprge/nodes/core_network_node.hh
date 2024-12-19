@@ -46,7 +46,7 @@ enum NETWORK_RESULT : i32
 };
 
 static const char *CCoreNetworkNode_CLASS = "CCoreNetworkNode";
-static const char *CCoreNetworkNode_BRIEF = R"(class CCoreNetworkNode final
+static const char *CCoreNetworkNode_BRIEF = R"(class CCoreNetworkNode
 * @brief libprge core network node class
 )";
 

@@ -44,7 +44,7 @@ struct SCENE_CODE : public ESceneType::CODE
 };
 
 static const char *CCoreSceneNode_CLASS = "CCoreSceneNode";
-static const char *CCoreSceneNode_BRIEF = R"(class CCoreSceneNode final
+static const char *CCoreSceneNode_BRIEF = R"(class CCoreSceneNode
 * @brief libprge core scene node class
 )";
 
