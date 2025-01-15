@@ -86,3 +86,6 @@ node_modules
 
 /cache
 /tmp
+
+*.import
+*.uid

@@ -37,10 +37,10 @@ namespace generate
     /**
      * @brief generate uuid
      * 
-     * @note only support v1 & v2
-     * @note if version not v1/v2 return v1 instead
+     * @note only support v1 & v4
+     * @note if version not v1/v4 return v1 instead
      * 
-     * @param version 1 or 2
+     * @param version 1 or 4
      * @return std::string 
      */
     std::string uuid(const int &version = 1);

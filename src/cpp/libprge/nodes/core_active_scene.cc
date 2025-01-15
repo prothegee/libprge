@@ -67,6 +67,8 @@ void CCoreActiveScene::_bind_methods()
 
     // extend functions
     {
+        ClassDB::bind_method(D_METHOD("isCCoreActiveScene"), &CCoreActiveScene::isCCoreActiveScene);
+
         ClassDB::bind_method(D_METHOD("setActiveScene"), &CCoreActiveScene::setActiveScene);
         ClassDB::bind_method(D_METHOD("getActiveSceneFile"), &CCoreActiveScene::getActiveSceneFile);
         ClassDB::bind_method(D_METHOD("getActiveSceneFilePath"), &CCoreActiveScene::getActiveSceneFilePath);
@@ -146,7 +148,7 @@ Array CCoreActiveScene::getRootNodesToAdd()
 
 void CCoreActiveScene::initRootNodesToAddInGame()
 {
-    if (!Engine::get_singleton()->is_editor_hint()) { return; }
+    if (Engine::get_singleton()->is_editor_hint()) { return; }
 
     if (m_rootNodesToAdd.is_empty())
     {
