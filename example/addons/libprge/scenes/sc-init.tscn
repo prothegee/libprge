@@ -1,4 +1,15 @@
-[gd_scene format=3 uid="uid://bbdrwknfrjtmy"]
+[gd_scene load_steps=4 format=3 uid="uid://bbdrwknfrjtmy"]
 
-[node name="CCoreActiveScene" type="CCoreActiveScene"]
+[ext_resource type="PackedScene" uid="uid://bcftbddb6csda" path="res://addons/libprge/scenes/nodes/core-game_manager.tscn" id="1_m2jb2"]
+[ext_resource type="PackedScene" uid="uid://brihxt4ctbsjq" path="res://addons/libprge/scenes/nodes/core-game_network.tscn" id="2_20qbx"]
+[ext_resource type="PackedScene" uid="uid://dwvkqyk7lw753" path="res://addons/libprge/scenes/nodes/core-local_player.tscn" id="3_pqr0d"]
+
+[node name="core-active_scene" type="CCoreActiveScene"]
 m_sceneType = 1
+m_rootNodesToAdd = [ExtResource("1_m2jb2"), ExtResource("2_20qbx"), ExtResource("3_pqr0d")]
+
+[node name="_initReady" type="Node" parent="."]
+
+[node name="initRootNodesToAddInGame" type="Node" parent="_initReady"]
+
+[connection signal="ready" from="_initReady/initRootNodesToAddInGame" to="." method="initRootNodesToAddInGame"]

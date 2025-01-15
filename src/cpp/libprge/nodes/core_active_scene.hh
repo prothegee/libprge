@@ -29,8 +29,6 @@ inline static const char *CORE_ACTIVE_SCENE_TYPE_GAMEPLAY_MULTIPLAYER_HINT = "Ga
 inline static const char *CORE_ACTIVE_SCENE_TYPE_GAMEPLAY_MULTIPLAYER_SERVER_HINT = "Gameplay Multiplayer Server"; // hint for CORE_ACTIVE_SCENE_TYPE_GAMEPLAY_MULTIPLAYER_SERVER
 inline static const char *CORE_ACTIVE_SCENE_TYPE_ERROR_OR_FAIL_HINT = "Error/Fail"; // hint for CORE_ACTIVE_SCENE_TYPE_ERROR_OR_FAIL
 
-inline static const char *CCoreActiveSceneSignals_sceneType_changed = "sceneType_changed";
-
 /**
  * @brief libprge core active scene
  * 
@@ -41,11 +39,11 @@ class CCoreActiveScene : public Node
 {
     GDCLASS(CCoreActiveScene, Node);
 private:
-    ECoreActiveSceneType m_sceneType; // current scene type
+    ECoreActiveSceneType m_sceneType; // private: current scene type
 
-    Ref<PackedScene> m_sceneNext; // scene next data storage, involve with initSceneNextInGame function
+    Ref<PackedScene> m_sceneNext; // private: scene next data storage, involve with initSceneNextInGame function
 
-    Array m_rootNodesToAdd; // array object node scene to add under "/root"
+    Array m_rootNodesToAdd; // private: array object node scene to add under "/root"
 
 protected:
     static void _bind_methods();
@@ -67,6 +65,8 @@ public:
      */
     ECoreActiveSceneType getSceneType();
 
+    //////////////////////////////////////////////////////
+
     /**
      * @brief set scene next
      * 
@@ -85,6 +85,8 @@ public:
      * @note in-game true
      */
     void             initSceneNextInGame();
+
+    //////////////////////////////////////////////////////
 
     /**
      * @brief set root nodes to add
@@ -105,30 +107,53 @@ public:
      */
     void  initRootNodesToAddInGame();
 
+    //////////////////////////////////////////////////////
+
+    /**
+     * @brief tell if this is a CCoreActiveScene class
+     * 
+     * @return true 
+     * @return false 
+     */
+    bool isCCoreActiveScene() { return true; }
+
+    //////////////////////////////////////////////////////
+
     /**
      * @brief set active scene to sceneFilePath param
      * 
      * @param sceneFilePath 
      */
     void setActiveScene(String sceneFilePath);
+
+    //////////////////////////////////////////////////////
+
     /**
      * @brief get current active scene file
      * 
      * @return String 
      */
     String getActiveSceneFile();
+
+    //////////////////////////////////////////////////////
+
     /**
      * @brief get current active scene file path
      * 
      * @return String 
      */
     String getActiveSceneFilePath();
+
+    //////////////////////////////////////////////////////
+
     /**
      * @brief get current active scene file name only without extension
      * 
      * @return String 
      */
     String getActiveSceneFileNameOnly();
+
+    //////////////////////////////////////////////////////
 
     /**
      * @brief exit game or app
@@ -138,5 +163,8 @@ public:
 
 // default class name for CCoreActiveScene
 inline static const char *CCoreActiveScene_CLASS = "CCoreActiveScene";
+
+// signal sceneType changed for CCoreActiveScene
+inline static const char *CCoreActiveSceneSignals_sceneType_changed = "sceneType_changed";
 
 #endif // LIBPRGE_CORE_ACTIVE_SCENE_HH

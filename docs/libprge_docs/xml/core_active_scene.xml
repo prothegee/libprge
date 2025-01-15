@@ -11,7 +11,7 @@ xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/god
 	<description>
         core active scene node class
 		use for current active scene/level only
-        there should be only one node under "/root" node
+        there should be only one of this node under "/root" node
 	</description>
 	<tutorials>
 	</tutorials>
@@ -43,13 +43,13 @@ xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/god
 	</constants>
 	<members>
         <member name="m_sceneType" type="ECoreActiveSceneType" setter="setSceneType" getter="getSceneType">
-			current scene type, to tell which is current scene type is
+			private: current scene type, to tell which is current scene type is
 		</member>
         <member name="m_sceneNext" type="Ref<PackedScene>" setter="setSceneNext" getter="getSceneNext">
-			scene next data storage, involve with initSceneNextInGame function
+			private: scene next data storage, involve with initSceneNextInGame function
 		</member>
         <member name="m_rootNodesToAdd" type="Array" setter="setRootNodesToAdd" getter="getRootNodesToAdd">
-			array object node scene to add under "/root"
+			private: array object node scene to add under "/root"
 		</member>
 	</members>
     <methods>
@@ -107,6 +107,12 @@ xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/god
                 apply if m_rootNodesToAdd not empty
 			</description>
 			<return type="void" />
+		</method>
+        <method name="isCCoreActiveScene">
+			<description>
+                tell if this is a CCoreActiveScene class
+			</description>
+			<return type="bool" />
 		</method>
         <method name="setActiveScene">
 			<description>
