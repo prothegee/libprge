@@ -58,4 +58,7 @@ typedef float f32;
 // alter type of double
 typedef double f64;
 
+// alter type of const char*
+typedef const char* pConstChar;
+
 #endif // LIBPRGE_TYPES_HH

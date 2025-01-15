@@ -31,6 +31,9 @@ xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/god
         <constant name="CORE_ACTIVE_SCENE_TYPE_GAMEPLAY" value="i32" enum="ECoreActiveSceneType">
 			current scene is for gameplay behaviour implementation
 		</constant>
+        <constant name="CORE_ACTIVE_SCENE_TYPE_GAMEPLAY_TEST" value="i32" enum="ECoreActiveSceneType">
+			current scene is for gameplay test behaviour implementation
+		</constant>
         <constant name="CORE_ACTIVE_SCENE_TYPE_GAMEPLAY_MULTIPLAYER" value="i32" enum="ECoreActiveSceneType">
 			current scene is for gameplay multiplayer behaviour implementation
 		</constant>
@@ -40,17 +43,64 @@ xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/god
         <constant name="CORE_ACTIVE_SCENE_TYPE_ERROR_OR_FAIL" value="i32" enum="ECoreActiveSceneType">
 			current scene is for error or fail behaviour implementation
 		</constant>
+
+        <!-- ////////////////////////////////////////////////////// -->
+
+        <constant name="CORE_ACTIVE_SCENE_DIMENSION_TYPE_UNDEFINED" value="i32" enum="ECoreActiveSceneDimensionType">
+			current scene dimension is for undefined
+		</constant>
+        <constant name="CORE_ACTIVE_SCENE_DIMENSION_TYPE_2D" value="i32" enum="ECoreActiveSceneDimensionType">
+			current scene dimension is for 2D game
+		</constant>
+        <constant name="CORE_ACTIVE_SCENE_DIMENSION_TYPE_3D" value="i32" enum="ECoreActiveSceneDimensionType">
+			current scene dimension is for 3D game
+		</constant>
+        <constant name="CORE_ACTIVE_SCENE_DIMENSION_TYPE_MIX" value="i32" enum="ECoreActiveSceneDimensionType">
+			current scene dimension is for mix game 2D and 3D
+		</constant>
 	</constants>
 	<members>
         <member name="m_sceneType" type="ECoreActiveSceneType" setter="setSceneType" getter="getSceneType">
 			private: current scene type, to tell which is current scene type is
 		</member>
+
+        <!-- ////////////////////////////////////////////////////// -->
+
         <member name="m_sceneNext" type="Ref<PackedScene>" setter="setSceneNext" getter="getSceneNext">
 			private: scene next data storage, involve with initSceneNextInGame function
 		</member>
+
+        <!-- ////////////////////////////////////////////////////// -->
+
+        <member name="m_sceneDimension" type="ECoreActiveSceneDimensionType" setter="setSceneDimension" getter="getSceneDimension">
+			private: scene dimension, mostly for gameplay info
+		</member>
+
+        <!-- ////////////////////////////////////////////////////// -->
+
         <member name="m_rootNodesToAdd" type="Array" setter="setRootNodesToAdd" getter="getRootNodesToAdd">
 			private: array object node scene to add under "/root"
 		</member>
+
+        <!-- ////////////////////////////////////////////////////// -->
+
+        <member name="m_deltaProcess" type="f64" setter="setDeltaProcess" getter="getDeltaProcess">
+			private: delta value from _process, doesn't exists if _process override, so you may set it on somwhere where it process
+		</member>
+
+        <!-- ////////////////////////////////////////////////////// -->
+
+        <member name="m_editorCamera2dTransform" type="Transform2D" setter="setEditorCamera2dTransform" getter="getEditorCamera2dTransform">
+			private: editor camera 2d transform value, doesn't exists if _process override, so you may set it on somwhere where it process
+		</member>
+
+        <!-- ////////////////////////////////////////////////////// -->
+
+        <member name="m_editorCamera3dTransform" type="Transform3D" setter="setEditorCamera3dTransform" getter="getEditorCamera3dTransform">
+			private: editor camera 3d transform value, doesn't exists if _process override, so you may set it on somwhere where it process
+		</member>
+
+        <!-- ////////////////////////////////////////////////////// -->
 	</members>
     <methods>
         <method name="setSceneType">
@@ -66,6 +116,9 @@ xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/god
 			</description>
 			<return type="ECoreActiveSceneType" />
 		</method>
+
+        <!-- ////////////////////////////////////////////////////// -->
+
         <method name="setSceneNext">
 			<description>
 				set scene next
@@ -87,6 +140,25 @@ xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/god
 			</description>
 			<return type="void" />
 		</method>
+
+        <!-- ////////////////////////////////////////////////////// -->
+
+        <method name="setSceneDimension">
+			<description>
+				set scene next
+			</description>
+			<param index="0" name="sceneDimensionEnum" type="ECoreActiveSceneDimensionType" />
+			<return type="void" />
+		</method>
+        <method name="getSceneDimension">
+			<description>
+				get scene next
+			</description>
+			<return type="Ref<PackedScene>" />
+		</method>
+
+        <!-- ////////////////////////////////////////////////////// -->
+
         <method name="setRootNodesToAdd">
 			<description>
 				set root nodes to add
@@ -108,12 +180,99 @@ xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/god
 			</description>
 			<return type="void" />
 		</method>
+
+        <!-- ////////////////////////////////////////////////////// -->
+
+        <method name="setDeltaProcess">
+			<description>
+				set delta process
+                - use to set under _process, even if it's overrided
+			</description>
+			<param index="0" name="deltaProcess" type="f64" />
+			<return type="void" />
+		</method>
+        <method name="getDeltaProcess">
+			<description>
+				get delta process
+                - use to set under _process, even if it's overrided
+			</description>
+			<return type="f64>" />
+		</method>
+        <method name="processDeltaProcess">
+			<description>
+				process delta process
+                - ignore editor or in-game hint
+                - this should be inside _process function
+			</description>
+			<param index="0" name="delta" type="f64" />
+			<return type="void" />
+		</method>
+
+        <!-- ////////////////////////////////////////////////////// -->
+
+        <method name="setEditorCamera2dTransform">
+			<description>
+				set editor camera 2d transform
+                - use to set under _process, even if it's overrided
+			</description>
+			<param index="0" name="editorCamera2dTransform" type="Transform2D" />
+			<return type="void" />
+		</method>
+        <method name="getEditorCamera2dTransform">
+			<description>
+				get editor camera 2d transform
+                - use to set under _process, even if it's overrided
+                - expecting to use editor camera data to apply in-game
+			</description>
+			<return type="Transform2D>" />
+		</method>
+        <method name="processEditorCamera2dTransform">
+			<description>
+				process editor camera 2d transform
+                - ignore editor or in-game hint (for now)
+                - this should be inside _process function
+			</description>
+			<return type="void" />
+		</method>
+
+        <!-- ////////////////////////////////////////////////////// -->
+
+        <method name="setEditorCamera3dTransform">
+			<description>
+				set editor camera 3d transform
+                - use to set under _process, even if it's overrided
+			</description>
+			<param index="0" name="editorCamera3dTransform" type="Transform3D" />
+			<return type="void" />
+		</method>
+        <method name="getEditorCamera3dTransform">
+			<description>
+				get editor camera 3d transform
+                - use to set under _process, even if it's overrided
+                - expecting to use editor camera data to apply in-game
+			</description>
+			<return type="Transform3D>" />
+		</method>
+        <method name="processEditorCamera3dTransform">
+			<description>
+				process editor camera 3d transform
+                - ignore editor or in-game hint (for now)
+                - this should be inside _process function
+			</description>
+			<return type="void" />
+		</method>
+
+        <!-- ////////////////////////////////////////////////////// -->
+
         <method name="isCCoreActiveScene">
 			<description>
                 tell if this is a CCoreActiveScene class
 			</description>
 			<return type="bool" />
 		</method>
+
+        <!-- ////////////////////////////////////////////////////// -->
+
         <method name="setActiveScene">
 			<description>
 				set active scene to sceneFilePath param
@@ -121,24 +280,36 @@ xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/god
 			<param index="0" name="sceneFilePath" type="String" />
 			<return type="void" />
 		</method>
+
+        <!-- ////////////////////////////////////////////////////// -->
+
         <method name="getActiveSceneFile">
 			<description>
 				get current active scene file
 			</description>
 			<return type="String" />
 		</method>
+
+        <!-- ////////////////////////////////////////////////////// -->
+
         <method name="getActiveSceneFilePath">
 			<description>
 				get current active scene file path
 			</description>
 			<return type="String" />
 		</method>
+
+        <!-- ////////////////////////////////////////////////////// -->
+
         <method name="getActiveSceneFileNameOnly">
 			<description>
 				get current active scene file name only without extension
 			</description>
 			<return type="String" />
 		</method>
+
+        <!-- ////////////////////////////////////////////////////// -->
+
         <method name="exitGameOrApp">
 			<description>
 				exit game or app
