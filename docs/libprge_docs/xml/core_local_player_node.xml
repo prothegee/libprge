@@ -28,6 +28,12 @@ xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/god
         <constant name="CORE_LOCAL_PLAYER_NODE_STATE_IN_GAMEPLAY" value="i32" enum="ECoreLocalPlayerNodeState">
 			current state is in gameplay
 		</constant>
+        <constant name="CORE_LOCAL_PLAYER_NODE_STATE_IN_GAMEPLAY_MENU" value="i32" enum="ECoreLocalPlayerNodeState">
+			current state is in gameplay menu
+		</constant>
+        <constant name="CORE_LOCAL_PLAYER_NODE_STATE_IN_GAMEPLAY_INTERACTION" value="i32" enum="ECoreLocalPlayerNodeState">
+			current state is in gameplay interaction
+		</constant>
         <constant name="CORE_LOCAL_PLAYER_NODE_STATE_IN_SOMEWHERE_SINCE_NOT_SURE" value="i32" enum="ECoreLocalPlayerNodeState">
 			current state is in somewhere, since you and I not sure
 		</constant>
@@ -39,7 +45,7 @@ xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/god
 
         <!-- ////////////////////////////////////////////////////// -->
 
-        <member name="m_playerIdString" type="ui64" setter="setPlayerIdString" getter="getPlayerIdString">
+        <member name="m_playerIdString" type="String" setter="setPlayerIdString" getter="getPlayerIdString">
 			public: player string id
 		</member>
 

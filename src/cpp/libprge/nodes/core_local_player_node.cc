@@ -40,6 +40,12 @@ void CCoreLocalPlayerNode::_bind_methods()
             BIND_ENUM_CONSTANT(CORE_LOCAL_PLAYER_NODE_STATE_IN_GAMEPLAY);
                 stateType += CORE_LOCAL_PLAYER_NODE_STATE_IN_GAMEPLAY_HINT;
                 stateType += ",";
+            BIND_ENUM_CONSTANT(CORE_LOCAL_PLAYER_NODE_STATE_IN_GAMEPLAY_MENU);
+                stateType += CORE_LOCAL_PLAYER_NODE_STATE_IN_GAMEPLAY_MENU_HINT;
+                stateType += ",";
+            BIND_ENUM_CONSTANT(CORE_LOCAL_PLAYER_NODE_STATE_IN_GAMEPLAY_INTERACTION);
+                stateType += CORE_LOCAL_PLAYER_NODE_STATE_IN_GAMEPLAY_INTERACTION_HINT;
+                stateType += ",";
             BIND_ENUM_CONSTANT(CORE_LOCAL_PLAYER_NODE_STATE_IN_SOMEWHERE_SINCE_NOT_SURE);
                 stateType += CORE_LOCAL_PLAYER_NODE_STATE_IN_SOMEWHERE_SINCE_NOT_SURE_HINT;
                 stateType += "";
