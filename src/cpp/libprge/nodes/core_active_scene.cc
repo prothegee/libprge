@@ -40,6 +40,24 @@ void CCoreActiveScene::_bind_methods()
             Variant::Type::INT, "m_sceneType",
             PROPERTY_HINT_ENUM, sceneType
         ), "setSceneType", "getSceneType");
+
+        ClassDB::bind_method(D_METHOD("setSceneNext", "refNextScene"), &CCoreActiveScene::setSceneNext);
+        ClassDB::bind_method(D_METHOD("getSceneNext"), &CCoreActiveScene::getSceneNext);
+        ClassDB::add_property(CCoreActiveScene_CLASS, PropertyInfo(
+            Variant::Type::OBJECT, "m_sceneNext"
+        ), "setSceneNext", "getSceneNext");
+        ClassDB::bind_method(D_METHOD("initSceneNextInGame"), &CCoreActiveScene::initSceneNextInGame);
+    }
+
+    // root
+    ADD_GROUP("Root", "m_root");
+    {
+        ClassDB::bind_method(D_METHOD("setRootNodesToAdd", "nodesToAdd"), &CCoreActiveScene::setRootNodesToAdd);
+        ClassDB::bind_method(D_METHOD("getRootNodesToAdd"), &CCoreActiveScene::getRootNodesToAdd);
+        ClassDB::add_property(CCoreActiveScene_CLASS, PropertyInfo(
+            Variant::Type::ARRAY, "m_rootNodesToAdd"
+        ), "setRootNodesToAdd", "getRootNodesToAdd");
+        ClassDB::bind_method(D_METHOD("initRootNodesToAddInGame"), &CCoreActiveScene::initRootNodesToAddInGame);
     }
 
     // signals
@@ -53,12 +71,18 @@ void CCoreActiveScene::_bind_methods()
         ClassDB::bind_method(D_METHOD("getActiveSceneFile"), &CCoreActiveScene::getActiveSceneFile);
         ClassDB::bind_method(D_METHOD("getActiveSceneFilePath"), &CCoreActiveScene::getActiveSceneFilePath);
         ClassDB::bind_method(D_METHOD("getActiveSceneFileNameOnly"), &CCoreActiveScene::getActiveSceneFileNameOnly);
+
+        ClassDB::bind_method(D_METHOD("exitGameOrApp"), &CCoreActiveScene::exitGameOrApp);
     }
 }
 
 CCoreActiveScene::CCoreActiveScene()
 {
     m_sceneType = CORE_ACTIVE_SCENE_TYPE_UNDEFINED;
+
+    m_sceneNext = Ref<PackedScene>();
+
+    m_rootNodesToAdd = Array();
 }
 
 CCoreActiveScene::~CCoreActiveScene()
@@ -76,19 +100,88 @@ ECoreActiveSceneType CCoreActiveScene::getSceneType()
     return m_sceneType;
 }
 
+void CCoreActiveScene::setSceneNext(Ref<PackedScene> refNextScene)
+{
+    m_sceneNext = refNextScene;
+}
+
+Ref<PackedScene> CCoreActiveScene::getSceneNext()
+{
+    return m_sceneNext;
+}
+
+void CCoreActiveScene::initSceneNextInGame()
+{
+    if (Engine::get_singleton()->is_editor_hint()) { return; }
+
+    if (m_sceneNext.is_null())
+    {
+        console::error("attempt to use initSceneNextInGame, but m_sceneNext is null");
+        return;
+    }
+
+    try
+    {
+        auto sourceAsPath = m_sceneNext.ptr()->get_path();
+
+        console::log_debug("\ninit scene next:\n    - scene name: ", sourceAsPath.get_file(), "\n    - scene file: ", sourceAsPath, "\n");
+        call_deferred(GDMETHODS_CALL::CHANGE_SCENE_TO_FILE, sourceAsPath);
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+        console::error(e.what());
+    }
+}
+
+void CCoreActiveScene::setRootNodesToAdd(Array nodesToAdd)
+{
+    m_rootNodesToAdd = nodesToAdd;
+}
+
+Array CCoreActiveScene::getRootNodesToAdd()
+{
+    return m_rootNodesToAdd;
+}
+
+void CCoreActiveScene::initRootNodesToAddInGame()
+{
+    if (!Engine::get_singleton()->is_editor_hint()) { return; }
+
+    if (m_rootNodesToAdd.is_empty())
+    {
+        console::error("attempt to use initRootNodesToAddInGame, but m_rootNodesToAdd is null");
+        return;
+    }
+
+    auto pRoot = get_node<Node>("/root");
+
+    auto nodesToAdd = getRootNodesToAdd();
+
+    for (i32 i = 0; i < nodesToAdd.size(); i++)
+    {
+        auto pNode = nodesToAdd[i];
+
+        if (auto resourceNode = ((Ref<PackedScene>)pNode)->instantiate())
+        {
+            pRoot->call_deferred(GDMETHODS_CALL::ADD_CHILD, resourceNode);
+            console::log_debug("adding child under game /root: ", resourceNode->get_name(), " with ", resourceNode->get_class(), " class type");
+        }
+    }
+}
+
 void CCoreActiveScene::setActiveScene(String sceneFilePath)
 {
     try
     {
         console::log_debug("\nset active scene to:\n    - scene name: ", sceneFilePath.get_file(), "\n    - scene file: ", sceneFilePath, "\n");
 
-        get_tree()->call_deferred(GDMETHODS_CALL::CHANGE_SCENE_TO_FILE, sceneFilePath);
+        call_deferred(GDMETHODS_CALL::CHANGE_SCENE_TO_FILE, sceneFilePath);
     }
     catch(const std::exception& e)
     {
-        String errExcpt = e.what();
-        console::error(errExcpt);
-        std::cerr << errExcpt.ascii() << '\n';
+        std::cerr << e.what() << '\n';
+        console::error(e.what());
     }
 }
 
@@ -126,4 +219,17 @@ String CCoreActiveScene::getActiveSceneFileNameOnly()
     result = tmpName.c_str();
 
     return String(result.c_str());
+}
+
+void CCoreActiveScene::exitGameOrApp()
+{
+    try
+    {
+        get_tree()->quit();
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+        console::error(e.what());
+    }
 }

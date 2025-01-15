@@ -3,6 +3,8 @@
 #include <libprge/libprge.hh>
 
 #include <godot_cpp/classes/node.hpp>
+#include <godot_cpp/classes/ref.hpp>
+#include <godot_cpp/classes/packed_scene.hpp>
 
 /**
  * @brief core active scene type enum
@@ -41,6 +43,10 @@ class CCoreActiveScene : public Node
 private:
     ECoreActiveSceneType m_sceneType; // current scene type
 
+    Ref<PackedScene> m_sceneNext; // scene next data storage, involve with initSceneNextInGame function
+
+    Array m_rootNodesToAdd; // array object node scene to add under "/root"
+
 protected:
     static void _bind_methods();
 
@@ -60,6 +66,44 @@ public:
      * @return ECoreActiveSceneType 
      */
     ECoreActiveSceneType getSceneType();
+
+    /**
+     * @brief set scene next
+     * 
+     * @param refNextScene 
+     */
+    void             setSceneNext(Ref<PackedScene> refNextScene);
+    /**
+     * @brief get scene next
+     * 
+     * @return Ref<PackedScene> 
+     */
+    Ref<PackedScene> getSceneNext();
+    /**
+     * @brief init scene next
+     * 
+     * @note in-game true
+     */
+    void             initSceneNextInGame();
+
+    /**
+     * @brief set root nodes to add
+     * 
+     * @param nodesToAdd 
+     */
+    void  setRootNodesToAdd(Array nodesToAdd);
+    /**
+     * @brief get root nodes to add
+     * 
+     * @return Array 
+     */
+    Array getRootNodesToAdd();
+    /**
+     * @brief init root nodes to add
+     * 
+     * @note apply if m_rootNodesToAdd not empty
+     */
+    void  initRootNodesToAddInGame();
 
     /**
      * @brief set active scene to sceneFilePath param
@@ -85,6 +129,11 @@ public:
      * @return String 
      */
     String getActiveSceneFileNameOnly();
+
+    /**
+     * @brief exit game or app
+     */
+    void exitGameOrApp();
 };
 
 // default class name for CCoreActiveScene
