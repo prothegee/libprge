@@ -12,6 +12,7 @@
         "LIBPRGE_BUILD_AS_STATIC": false,
         "LIBPRGE_CONF_GODOTCPP_FOR_EDITOR": false,
         "LIBPRGE_COPY_GODOTCPP_STATICLIBS": false,
+        "LIBPRGE_OUTPUT_EXAMPLE_DIR_IS": true,
 
         "_": "don't use me"
     }

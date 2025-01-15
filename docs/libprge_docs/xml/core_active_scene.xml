@@ -43,7 +43,13 @@ xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/god
 	</constants>
 	<members>
         <member name="m_sceneType" type="ECoreActiveSceneType" setter="setSceneType" getter="getSceneType">
-			to tell which is current scene type is
+			current scene type, to tell which is current scene type is
+		</member>
+        <member name="m_sceneNext" type="Ref<PackedScene>" setter="setSceneNext" getter="getSceneNext">
+			scene next data storage, involve with initSceneNextInGame function
+		</member>
+        <member name="m_rootNodesToAdd" type="Array" setter="setRootNodesToAdd" getter="getRootNodesToAdd">
+			array object node scene to add under "/root"
 		</member>
 	</members>
     <methods>
@@ -59,6 +65,48 @@ xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/god
 				get current scene type
 			</description>
 			<return type="ECoreActiveSceneType" />
+		</method>
+        <method name="setSceneNext">
+			<description>
+				set scene next
+			</description>
+			<param index="0" name="sceneTypeEnum" type="Ref<PackedScene>" />
+			<return type="void" />
+		</method>
+        <method name="setSceneNext">
+			<description>
+				get scene next
+			</description>
+			<return type="Ref<PackedScene>" />
+		</method>
+        <method name="initSceneNextInGame">
+			<description>
+                in-game only
+				init scene next
+                will fail if m_sceneNext is empty
+			</description>
+			<return type="void" />
+		</method>
+        <method name="setRootNodesToAdd">
+			<description>
+				set root nodes to add
+			</description>
+			<param index="0" name="nodesToAdd" type="Array" />
+			<return type="void" />
+		</method>
+        <method name="getRootNodesToAdd">
+			<description>
+				get root nodes to add
+			</description>
+			<return type="Array" />
+		</method>
+        <method name="initRootNodesToAddInGame">
+			<description>
+                in-game only
+				init root nodes to add
+                apply if m_rootNodesToAdd not empty
+			</description>
+			<return type="void" />
 		</method>
         <method name="setActiveScene">
 			<description>
@@ -85,11 +133,17 @@ xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/god
 			</description>
 			<return type="String" />
 		</method>
+        <method name="exitGameOrApp">
+			<description>
+				exit game or app
+			</description>
+			<return type="void" />
+		</method>
 	</methods>
 	<signals>
         <signal name="sceneType_changed">
 			<description>
-				emitt when m_sceneType changed
+				emit when m_sceneType changed
 			</description>
 		</signal>
 	</signals>
