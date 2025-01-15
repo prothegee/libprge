@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class
+name="CCoreActiveScene"
+inherits="Node"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd"
+>
+	<brief_description>
+        libprge core active scene node class
+	</brief_description>
+	<description>
+        core active scene node class
+		use for current active scene/level only
+        there should be only one node under "/root" node
+	</description>
+	<tutorials>
+	</tutorials>
+	<constants>
+        <constant name="CORE_ACTIVE_SCENE_TYPE_UNDEFINED" value="i32" enum="ECoreActiveSceneType">
+			current scene is for undefined behaviour implementation
+		</constant>
+        <constant name="CORE_ACTIVE_SCENE_TYPE_INIT" value="i32" enum="ECoreActiveSceneType">
+			current scene is for initialize behaviour implementation
+		</constant>
+        <constant name="CORE_ACTIVE_SCENE_TYPE_MENU" value="i32" enum="ECoreActiveSceneType">
+			current scene is for menu behaviour implementation
+		</constant>
+        <constant name="CORE_ACTIVE_SCENE_TYPE_CONFIG" value="i32" enum="ECoreActiveSceneType">
+			current scene is for configuration behaviour implementation
+		</constant>
+        <constant name="CORE_ACTIVE_SCENE_TYPE_GAMEPLAY" value="i32" enum="ECoreActiveSceneType">
+			current scene is for gameplay behaviour implementation
+		</constant>
+        <constant name="CORE_ACTIVE_SCENE_TYPE_GAMEPLAY_MULTIPLAYER" value="i32" enum="ECoreActiveSceneType">
+			current scene is for gameplay multiplayer behaviour implementation
+		</constant>
+        <constant name="CORE_ACTIVE_SCENE_TYPE_GAMEPLAY_MULTIPLAYER_SERVER" value="i32" enum="ECoreActiveSceneType">
+			current scene is for gameplay multiplayer server behaviour implementation (as dedicated server)
+		</constant>
+        <constant name="CORE_ACTIVE_SCENE_TYPE_ERROR_OR_FAIL" value="i32" enum="ECoreActiveSceneType">
+			current scene is for error or fail behaviour implementation
+		</constant>
+	</constants>
+	<members>
+        <member name="m_sceneType" type="ECoreActiveSceneType" setter="setSceneType" getter="getSceneType">
+			to tell which is current scene type is
+		</member>
+	</members>
+    <methods>
+        <method name="setSceneType">
+			<description>
+				set current scene type
+			</description>
+			<param index="0" name="sceneTypeEnum" type="ECoreActiveSceneType" />
+			<return type="void" />
+		</method>
+        <method name="getSceneType">
+			<description>
+				get current scene type
+			</description>
+			<return type="ECoreActiveSceneType" />
+		</method>
+        <method name="setActiveScene">
+			<description>
+				set active scene to sceneFilePath param
+			</description>
+			<param index="0" name="sceneFilePath" type="String" />
+			<return type="void" />
+		</method>
+        <method name="getActiveSceneFile">
+			<description>
+				get current active scene file
+			</description>
+			<return type="String" />
+		</method>
+        <method name="getActiveSceneFilePath">
+			<description>
+				get current active scene file path
+			</description>
+			<return type="String" />
+		</method>
+        <method name="getActiveSceneFileNameOnly">
+			<description>
+				get current active scene file name only without extension
+			</description>
+			<return type="String" />
+		</method>
+	</methods>
+	<signals>
+        <signal name="sceneType_changed">
+			<description>
+				emitt when m_sceneType changed
+			</description>
+		</signal>
+	</signals>
+</class>

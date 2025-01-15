@@ -1,162 +1,40 @@
 #include "libprge.hh"
 
-#include <libprge/functions/logger_funcs.hh>
+#include <libprge/nodes/core_active_scene.hh>
 
-#include <libprge/libprge.hh>
-#include <libprge/nodes/core_game_node.hh>
-#include <libprge/nodes/core_network_node.hh>
-#include <libprge/nodes/core_player_node.hh>
-#include <libprge/nodes/core_scene_node.hh>
-#include <libprge/nodes/3d/entity_physic_3d.hh>
-
-using namespace godot;
+#include <libprge/objects/console.hh>
 
 namespace libprge
 {
 
 void initialize(ModuleInitializationLevel pLevel)
 {
-    switch (pLevel)
-    {
-        case MODULE_INITIALIZATION_LEVEL_CORE:
-        {
-            logger::log::message("core module initialized");
-        }
-        break;
+    if (pLevel != MODULE_INITIALIZATION_LEVEL_SCENE) { return; }
 
-        case MODULE_INITIALIZATION_LEVEL_SERVERS:
-        {
-        #pragma region sdks
-        #pragma endregion
+    GDREGISTER_CLASS(CCoreActiveScene);
 
-            logger::log::message("server module initialized");
-        }
-        break;
+    GDREGISTER_CLASS(console);
+    if (!pConsole) { pConsole = memnew(console); }
+    Engine::get_singleton()->register_singleton(console_CLASS, pConsole);
 
-        case MODULE_INITIALIZATION_LEVEL_SCENE:
-        {
-        #pragma region object
-        #pragma endregion
-
-        #pragma region virtual
-            // GDREGISTER_VIRTUAL_CLASS(IInGameController);
-            // GDREGISTER_VIRTUAL_CLASS(IInEditorController);
-            // GDREGISTER_VIRTUAL_CLASS(ISceneController);
-        #pragma endregion
-
-        #pragma region nodes
-            GDREGISTER_CLASS(CCoreGameNode);
-            GDREGISTER_CLASS(CCoreNetworkNode);
-            GDREGISTER_CLASS(CCorePlayerNode);
-            GDREGISTER_CLASS(CCoreSceneNode);
-        #pragma endregion
-
-        #pragma region nodes2d
-        #pragma endregion
-
-        #pragma region nodes3d
-            GDREGISTER_CLASS(CEntityPhysic3d);
-        #pragma endregion
-
-        #pragma region nodesui
-        #pragma endregion
-
-            GDREGISTER_CLASS(CLibPrGe);
-                pLibPrGe = memnew(CLibPrGe);
-                Engine::get_singleton()->register_singleton(CLibPrGe_CLASS, pLibPrGe);
-
-            logger::log::message("scene module initialized");
-        }
-        break;
-
-        case MODULE_INITIALIZATION_LEVEL_EDITOR:
-        {
-            logger::log::message("editor module initialized");
-        }
-        break;
-
-        case MODULE_INITIALIZATION_LEVEL_MAX:
-        {
-            logger::log::message("max module initialized");
-        }
-        break;
-
-        default:
-        {
-            logger::log::message("default module initialized");
-        }
-        break;
-    }
+    console::log("libprge initialized");
 }
 
 void terminateAndExit(ModuleInitializationLevel pLevel)
 {
-    switch (pLevel)
-    {
-        case MODULE_INITIALIZATION_LEVEL_CORE:
-        {
-            logger::log::message("core module terminated");
-        }
-        break;
+    if (pLevel != MODULE_INITIALIZATION_LEVEL_SCENE) { return; }
 
-        case MODULE_INITIALIZATION_LEVEL_SERVERS:
-        {
-        #pragma region region sdks
-        #pragma endregion
+    if (pConsole) { memdelete(pConsole); }
+    Engine::get_singleton()->unregister_singleton(console_CLASS);
 
-            logger::log::message("level module terminated");
-        }
-        break;
-
-        case MODULE_INITIALIZATION_LEVEL_SCENE:
-        {
-        #pragma region object
-        #pragma endregion
-
-        #pragma region nodes
-        #pragma endregion
-
-        #pragma region nodes2d
-        #pragma endregion
-
-        #pragma region nodes3d
-        #pragma endregion
-
-        #pragma region nodesui
-        #pragma endregion
-
-            memdelete(pLibPrGe);
-            Engine::get_singleton()->unregister_singleton(CLibPrGe_CLASS);
-
-            logger::log::message("scene module terminated");
-        }
-        break;
-
-        case MODULE_INITIALIZATION_LEVEL_EDITOR:
-        {
-            logger::log::message("editor module terminated");
-        }
-        break;
-
-        case MODULE_INITIALIZATION_LEVEL_MAX:
-        {
-            logger::log::message("max module terminated");
-        }
-        break;
-
-        default:
-        {
-            logger::log::message("default module terminated");
-        }
-        break;
-    }
+    console::log("libprge terminated");
 }
 
 } // namespace libprge
 
 extern "C"
 {
-    // libprge runtime
+    // anapra runtime
     GDExtensionBool GDE_EXPORT libprge_rt(GDExtensionInterfaceGetProcAddress p_get_proc_address, GDExtensionClassLibraryPtr p_library, GDExtensionInitialization *r_initialization)
     {
         GDExtensionBinding::InitObject init_obj(p_get_proc_address, p_library, r_initialization);

@@ -4,452 +4,136 @@ namespace libprge
 {
 namespace utilityFunctions
 {
-#if LIBPRGE_USING_OPENSSL
-    std::string base64encode(const std::string &input)
+
+namespace find
+{
+    void andReplaceAll(std::string & source, const std::string & query, const std::string & replacement)
     {
-        BIO *bio, *b64;
-        BUF_MEM *bufferPtr;
+        size_t position = 0;
 
-        b64 = BIO_new(BIO_f_base64());
-        BIO_set_flags(b64, BIO_FLAGS_BASE64_NO_NL);
-        bio = BIO_new(BIO_s_mem());
-        bio = BIO_push(b64, bio);
-
-        BIO_write(bio, input.c_str(), (int)input.length());
-        BIO_flush(bio);
-        BIO_get_mem_ptr(bio, &bufferPtr);
-
-        std::string result(bufferPtr->data, bufferPtr->length);
-
-        BIO_free_all(bio);
-        BIO_free_all(b64);
-
-        return result;
+        while ((position = source.find(query, position)) != std::string::npos)
+        {
+            source.replace(position, query.size(), replacement);
+            position += replacement.size();
+        }
     }
+} // namespace find
 
-    std::string base64decode(const std::string &input)
+namespace generate
+{
+    std::string uuid(const int &version)
     {
-        BIO *bio, *b64;
+        std::string result;
 
-        bio = BIO_new_mem_buf(input.c_str(), -1);
-        b64 = BIO_new(BIO_f_base64());
-        BIO_set_flags(b64, BIO_FLAGS_BASE64_NO_NL);
-        bio = BIO_push(b64, bio);
-
-        char* output = new char[input.size()];
-
-        int decodedLength = BIO_read(bio, output, (int)input.size());
-
-        BIO_free_all(bio);
-        BIO_free_all(b64);
-
-        std::string result(output, decodedLength);
-
-        delete[] output;
-
-        return result;
-    }
-#endif // LIBPRGE_USING_OPENSSL
-
-    namespace find
-    {
-        void libprge::utilityFunctions::find::andReplaceAll(std::string & source, const std::string & query, const std::string & replacement)
+        auto defaultResult = []()
         {
-            size_t position = 0;
+            // current time in milliseconds (for time-based portion)
+            auto now = std::chrono::system_clock::now();
+            auto duration = now.time_since_epoch();
+            auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
 
-            while ((position = source.find(query, position)) != std::string::npos)
-            {
-                source.replace(position, query.size(), replacement);
-                position += replacement.size();
-            }
-        }
+            // split the timestamp into parts (100ns intervals from 15 October 1582) offset from epoch
+            uint64_t timestamp = milliseconds * 10000 + 0x01B21DD213814000;
 
-        int eachKeywords(const std::string &source, const std::vector<std::string> &keywords, std::vector<std::string> &foundKeywords)
-        {
-            int result = 0;
+            uint32_t timeLow = static_cast<uint32_t>(timestamp & 0xFFFFFFFF);
+            uint16_t timeMid = static_cast<uint16_t>((timestamp >> 32) & 0xFFFF);
+            uint16_t timeHiAndVersion = static_cast<uint16_t>((timestamp >> 48) & 0x0FFF);
 
-            for (auto &keyword : keywords)
-            {
-                if (source.find(keyword) != std::string::npos)
-                {
-                    result += 1;
-                    foundKeywords.emplace_back(keyword);
-                }
-            }
+            // set version number (UUIDv1 = 0x1)
+            timeHiAndVersion |= (1 << 12);
 
-            return result;
-        }
-
-        bool keywordBefore(const std::string &source, const std::string &keywordBefore, std::string &extraction)
-        {
-            bool result = false;
-
-            size_t beforePos = source.find(keywordBefore);
-
-            if (beforePos != std::string::npos)
-            {
-                std::string beforeStr = source.substr(0, beforePos);
-
-                if (beforeStr.find(keywordBefore) != std::string::npos)
-                {
-                    extraction = keywordBefore;
-                    result = true;
-                }
-            }
-
-            return result;
-        }
-
-        bool keywordAfter(const std::string &source, const std::string &keywordAfter, std::string &extraction)
-        {
-            bool result = false;
-
-            size_t afterPos = source.find(keywordAfter);
-
-            if (afterPos != std::string::npos)
-            {
-                extraction = source.substr(afterPos + 1);
-                result = true;
-            }
-
-            return result;
-        }
-    } // namespace find
-
-    namespace generate
-    {
-        int randomNumber(const int min, const int max)
-        {
-            int result;
-
-            std::random_device rd;
-            std::default_random_engine re(rd());
-
-            std::uniform_int_distribution<int> distribute(min, max);
-
-            result = distribute(re);
-
-            return result;
-        }
-
-        long randomNumber(const long min, const long max)
-        {
-            long result;
-
-            std::random_device rd;
-            std::mt19937_64 re(rd());
-
-            std::uniform_int_distribution<long> distr(min, max);
-
-            result = distr(re);
-
-            return result;
-        }
-
-        long long randomNumber(const long long min, const long long max)
-        {
-            long long result;
-
-            std::random_device rd;
-            std::mt19937_64 re(rd());
-
-            std::uniform_int_distribution<long long> distr(min, max);
-
-            result = distr(re);
-
-            return result;
-        }
-
-        float randomNumber(const float min, const float max)
-        {
-            float result = 0.0f;
-
-            std::random_device rd;
-            std::default_random_engine re(rd());
-
-            std::uniform_real_distribution<float> distribute(min, max);
-
-            result = distribute(re);
-
-            return result;
-        }
-
-        double randomNumber(const double min, const double max)
-        {
-            double result = 0.0;
-
-            std::random_device rd;
-            std::mt19937_64 re(rd());
-
-            std::uniform_real_distribution<double> distr(min, max);
-
-            result = distr(re);
-
-            return result;
-        }
-
-        std::array<uint8_t, 16> randomBytes()
-        {
-            std::array<uint8_t, 16> bytes;
-
+            // generate a random 48-bit node (simulating MAC address or random node identifier)
             std::random_device rd;
             std::mt19937 gen(rd());
+            std::uniform_int_distribution<uint64_t> dis(0, 0xFFFFFFFFFFFF);  // 48-bit random value
+            uint64_t node = dis(gen);
 
-            std::uniform_int_distribution<int> dis(0, 255);
-
-            for (auto& byte : bytes)
-            {
-                byte = static_cast<uint8_t>(dis(gen));
-            }
-
-            return bytes;
-        }
-
-        std::string uuidV1()
-        {
-            auto now = std::chrono::high_resolution_clock::now();
-            auto duration = now.time_since_epoch();
-            auto timestamp = std::chrono::duration_cast<std::chrono::microseconds>(duration).count();
-
-            // byte sequence
-            std::array<uint8_t, 16> uuid_bytes = randomBytes();
+            // UUID string representation
+            std::ostringstream uuid;
+            uuid << std::hex << std::setfill('0');
             
-            // timestamp
-            uuid_bytes[0] = (timestamp >> 40) & 0xFF;
-            uuid_bytes[1] = (timestamp >> 32) & 0xFF;
-            uuid_bytes[2] = (timestamp >> 24) & 0xFF;
-            uuid_bytes[3] = (timestamp >> 16) & 0xFF;
-            uuid_bytes[4] = (timestamp >> 8) & 0xFF;
-            uuid_bytes[5] = timestamp & 0xFF;
-
-            // version 1
-            uuid_bytes[6] = (uuid_bytes[6] & 0x0F) | 0x10;
-
-            // variant to 10xx
-            uuid_bytes[8] = (uuid_bytes[8] & 0x3F) | 0x80;
-
-            std::ostringstream oss;
-            oss << std::hex << std::setfill('0');
-
-            for (size_t i = 0; i < uuid_bytes.size(); ++i)
-            {
-                if (i == 4 || i == 6 || i == 8 || i == 10)
-                {
-                    oss << '-';
-                }
-                oss << std::setw(2) << static_cast<int>(uuid_bytes[i]);
-            }
-
-            return oss.str();
-        }
-
-        std::string uuidV4()
-        {
-            auto random_bytes = randomBytes();
-
-            // version 4
-            random_bytes[6] = (random_bytes[6] & 0x0F) | 0x40;
-
-            // variant 10xx (RFC4122)
-            random_bytes[8] = (random_bytes[8] & 0x3F) | 0x80;
-
-            std::ostringstream oss;
-            oss << std::hex << std::setfill('0');
-
-            for (size_t i = 0; i < random_bytes.size(); ++i)
-            {
-                if (i == 4 || i == 6 || i == 8 || i == 10)
-                {
-                    oss << '-';
-                }
-                oss << std::setw(2) << static_cast<int>(random_bytes[i]);
-            }
-
-            return oss.str();
-        }
-
-        std::string randomAlphanumeric(int length)
-        {
-            std::string result;
-
-            if (length <= 0) { length = 1; }
-
-            result.reserve(length);
-
-            for (int i = 0; i < length; i++)
-            {
-                int j = randomNumber(0, (int)STRINGS_INTERNAL::alphanumeric.length() - 1);
-                result += STRINGS_INTERNAL::alphanumeric[j];
-            }
-
-            return result;
-        }
-
-        std::string randomAlphanumericWithSpecialCharacter(int length)
-        {
-            std::string result;
-
-            if (length <= 0) { length = 1; }
-
-            result.reserve(length);
-
-            for (int i = 0; i < length; i++)
-            {
-                int j = randomNumber(0, (int)STRINGS_INTERNAL::alphanumeric_with_special_character.length() - 1);
-                result += STRINGS_INTERNAL::alphanumeric_with_special_character[j];
-            }
-
-            return result;
-        }
-    } // namespace generate
-
-    namespace change
-    {
-        std::string inputLetterCase(const std::string input, const int letterCase)
-        {
-            std::string result;
-
-            result.reserve(input.length());
-
-            switch (letterCase)
-            {
-                case 0:
-                {
-                    for (size_t i = 0; i < input.length(); i++)
-                    {
-                        result += tolower(input[i]);
-                    }
-                }
-                break;
-
-                case 1:
-                {
-                    for (size_t i = 0; i < input.length(); i++)
-                    {
-                        result += toupper(input[i]);
-                    }
-                }
-                break;
-
-                case 2:
-                {
-                    // SGenerate gen = SGenerate();
-
-                    for (size_t i = 0; i < input.length(); i++)
-                    {
-                        //  0 is lower, 1 is upper
-                        int mixedcase = generate::randomNumber(0, 1);
-
-                        if (mixedcase == 0 && isalpha(input[i]))
-                        {
-                            result += tolower(input[i]);
-                        }
-                        else if (mixedcase == 1 && isalpha(input[i]))
-                        {
-                            result += toupper(input[i]);
-                        }
-                        else
-                        {
-                            result += input[i];
-                        }
-                    }
-                }
-                break;
-
-                default:
-                {
-                    result = input;
-                }
-                break;
-            }
-
-            return result;
-        }
-    } // namespace change
-
-    namespace json
-    {
-    #if LIBPRGE_USING_JSONCPP
-        Json::Value fromFile(const std::string &filePath)
-        {
-            Json::Value result;
-
-            std::ifstream f(filePath);
-
-            if (f.is_open())
-            {
-                f >> result;
-                f.close();
-            }
-            else
-            {
-                std::cerr << "ERROR: can't find json file from \"" << filePath << "\" in \"CUtilityModule::SJson::fromFile\"\n";
-            }
-
-            return result;
-        }
-
-        Json::Value fromString(const std::string &jsonStringInput, const int &indent, const int &precision)
-        {
-            Json::Value result;
-
-            try
-            {
-                int _indent = indent, _precision = precision;
-
-                if (indent >= 4) { _indent = 4; }
-                if (indent <= 3) { _indent = 0; }
-                if (precision >= 16) { _precision = 16; }
-                if (precision <= 2) { _precision = 2; }
-
-                std::string _indentString = "";
-                for (auto i = 0; i < _indent; i++)
-                {
-                    _indentString += " ";
-                }
-
-                JSONCPP_STRING err;
-                Json::CharReaderBuilder builder;
-
-                builder.settings_["indentation"] = _indentString;
-                builder.settings_["precision"] = _precision;
-
-                const int inputLength = static_cast<int>(jsonStringInput.length());
-
-                const std::unique_ptr<Json::CharReader> reader(builder.newCharReader());
-                reader->parse(jsonStringInput.c_str(), jsonStringInput.c_str() + inputLength, &result, &err);
-            }
-            catch(const std::exception& e)
-            {
-                std::cerr << "EXCEPTION json::fromString: " << e.what() << '\n';
-            }
-
-            return result;
-        }
-
-        std::string toString(const Json::Value &input, const int &indent, const int &precision)
-        {
-            int _indent = indent, _precision = precision;
-
-            if (indent >= 4) { _indent = 4; }
-            if (indent <= 3) { _indent = 0; }
-            if (precision >= 16) { _precision = 16; }
-            if (precision <= 2) { _precision = 2; }
-
-            Json::StreamWriterBuilder writer;
+            uuid << std::setw(8) << timeLow << "-";
+            uuid << std::setw(4) << timeMid << "-";
+            uuid << std::setw(4) << timeHiAndVersion << "-";
             
-            std::string _indentString = "";
-            for (auto i = 0; i < _indent; i++)
+            // generate random 16-bit clock sequence (a value related to time-based UUID uniqueness)
+            uint16_t clockSeq = dis(gen) & 0x3FFF;  // 14 bits for clockSeq
+            
+            uuid << std::setw(4) << clockSeq << "-";
+            uuid << std::setw(12) << (node & 0xFFFFFFFFFFFF);  // 48-bit node as last part
+
+            return uuid.str();
+        };
+
+        switch (version)
+        {
+            case 1:
             {
-                _indentString += " ";
+                result = defaultResult();
             }
+            break;
 
-            writer.settings_["indentation"] = _indentString;
-            writer.settings_["precision"] = _precision;
+            case 4:
+            {
+                // random number generator and distribution
+                std::random_device rd;
+                std::mt19937 gen(rd());
+                std::uniform_int_distribution<int> dis(0, 15);  // random hex digit (0-F)
 
-            return std::string(Json::writeString(writer, input));
+                // create a 16-byte array (128 bits)
+                unsigned char uuid[16];
+
+                // fill the first 15 bytes with random values
+                for (int i = 0; i < 16; ++i) {
+                    uuid[i] = static_cast<unsigned char>(dis(gen));  // random byte [0, 15]
+                }
+
+                // set the version (4) in the 7th byte (bits 6-7)
+                uuid[6] &= 0x0f;  // clear the top 4 bits
+                uuid[6] |= 0x40;   // set the version bits (0100 xxxx)
+
+                // set the variant (RFC 4122) in the 9th byte (bits 4-5)
+                uuid[8] &= 0x3f;  // clear the top 2 bits
+                uuid[8] |= 0x80;   // set the variant bits (10xx xxxx)
+
+                // format the UUID as a string
+                std::ostringstream uuidStr;
+                uuidStr << std::hex << std::setfill('0');
+                uuidStr << std::setw(2) << static_cast<int>(uuid[0]);
+                uuidStr << std::setw(2) << static_cast<int>(uuid[1]);
+                uuidStr << std::setw(2) << static_cast<int>(uuid[2]);
+                uuidStr << std::setw(2) << static_cast<int>(uuid[3]);
+                uuidStr << "-";
+                uuidStr << std::setw(2) << static_cast<int>(uuid[4]);
+                uuidStr << std::setw(2) << static_cast<int>(uuid[5]);
+                uuidStr << "-";
+                uuidStr << std::setw(2) << static_cast<int>(uuid[6]);
+                uuidStr << std::setw(2) << static_cast<int>(uuid[7]);
+                uuidStr << "-";
+                uuidStr << std::setw(2) << static_cast<int>(uuid[8]);
+                uuidStr << std::setw(2) << static_cast<int>(uuid[9]);
+                uuidStr << "-";
+                uuidStr << std::setw(2) << static_cast<int>(uuid[10]);
+                uuidStr << std::setw(2) << static_cast<int>(uuid[11]);
+                uuidStr << std::setw(2) << static_cast<int>(uuid[12]);
+                uuidStr << std::setw(2) << static_cast<int>(uuid[13]);
+                uuidStr << std::setw(2) << static_cast<int>(uuid[14]);
+                uuidStr << std::setw(2) << static_cast<int>(uuid[15]);
+
+                result = uuidStr.str();
+            }
+            break;
+
+            default:
+            {
+                result = defaultResult();
+            }
+            break;
         }
-    #endif // LIBPRGE_USING_JSONCPP
-    } // namespace json
+
+        return result;
+    }
+} // namespace generate
+
 } // namespace utilityFunctions
 } // namespace libprge

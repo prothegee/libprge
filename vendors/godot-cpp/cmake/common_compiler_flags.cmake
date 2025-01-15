@@ -2,12 +2,17 @@
 Common Compiler Flags
 ---------------------
 
-This file contains a single function to configure platform agnostic compiler
-flags like optimization levels, warnings, and features. For platform specific
-flags look to each of the ``cmake/<platform>.cmake`` files.
+This file contains host platform toolchain and target platform agnostic
+configuration. It includes flags like optimization levels, warnings, and
+features. For target platform specific flags look to each of the
+``cmake/<platform>.cmake`` files.
 
 ]=======================================================================]
-#Generator Expression Helpers
+
+#[[ Compiler Configuration, not to be confused with build targets ]]
+set( DEBUG_SYMBOLS "$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>" )
+
+#[[ Compiler Identification ]]
 set( IS_CLANG "$<CXX_COMPILER_ID:Clang>" )
 set( IS_APPLECLANG "$<CXX_COMPILER_ID:AppleClang>" )
 set( IS_GNU "$<CXX_COMPILER_ID:GNU>" )
@@ -20,16 +25,26 @@ set( GNU_GT_V11 "$<VERSION_GREATER_EQUAL:$<CXX_COMPILER_VERSION>,11>" )
 set( GNU_LT_V11 "$<VERSION_LESS:$<CXX_COMPILER_VERSION>,11>" )
 set( GNU_GE_V12 "$<VERSION_GREATER_EQUAL:$<CXX_COMPILER_VERSION>,12>" )
 
-set( HOT_RELOAD-UNSET "$<STREQUAL:${GODOT_USE_HOT_RELOAD},>")
+#[[ Check for clang-cl with MSVC frontend
+The compiler is tested and set when the project command is called.
+The variable CXX_COMPILER_FRONTEND_VARIANT was introduced in 3.14
+The generator expression $<CXX_COMPILER_FRONTEND_VARIANT> wasn't introduced
+until CMake 3.30 so we can't use it yet.
 
-set( DISABLE_EXCEPTIONS "$<BOOL:${GODOT_DISABLE_EXCEPTIONS}>")
+So to support clang downloaded from llvm.org which uses the MSVC frontend
+by default, we need to test for it. ]]
+function( compiler_detection )
+    if( ${CMAKE_CXX_COMPILER_ID} STREQUAL Clang )
+        if( ${CMAKE_CXX_COMPILER_FRONTEND_VARIANT} STREQUAL MSVC )
+            message( "Using clang-cl" )
+            set( IS_CLANG   "0" PARENT_SCOPE )
+            set( IS_MSVC    "1" PARENT_SCOPE )
+            set( NOT_MSVC   "0" PARENT_SCOPE )
+        endif ()
+    endif ()
+endfunction(  )
 
-
-function( common_compiler_flags TARGET_NAME )
-    set( IS_RELEASE "$<STREQUAL:${TARGET_NAME},template_release>")
-    set( DEBUG_FEATURES "$<OR:$<STREQUAL:${TARGET_NAME},template_debug>,$<STREQUAL:${TARGET_NAME},editor>>" )
-    set( HOT_RELOAD "$<IF:${HOT_RELOAD-UNSET},$<NOT:${IS_RELEASE}>,$<BOOL:${GODOT_USE_HOT_RELOAD}>>" )
-    set( DEBUG_SYMBOLS "$<BOOL:${GODOT_DEBUG_SYMBOLS}>" )
+function( common_compiler_flags )
 
     target_compile_features(${TARGET_NAME}
             PUBLIC
@@ -44,24 +59,19 @@ function( common_compiler_flags TARGET_NAME )
             $<${DISABLE_EXCEPTIONS}:
                 $<${NOT_MSVC}:-fno-exceptions>
             >
-            $<$<NOT:${DISABLE_EXCEPTIONS}>:
-                $<${IS_MSVC}:/EHsc>
-            >
 
             # Enabling Debug Symbols
             $<${DEBUG_SYMBOLS}:
-                $<${IS_MSVC}: /Zi /FS>
-
                 # Adding dwarf-4 explicitly makes stacktraces work with clang builds,
                 # otherwise addr2line doesn't understand them.
                 $<${NOT_MSVC}:
                     -gdwarf-4
-                    $<IF:${IS_DEV},-g3,-g2>
+                    $<IF:${IS_DEV_BUILD},-g3,-g2>
                 >
             >
 
-            $<${IS_DEV}:
-                $<${NOT_MSVC}:-fno-omit-frame-pointer -O0 -g>
+            $<${IS_DEV_BUILD}:
+                $<${NOT_MSVC}:-fno-omit-frame-pointer -O0>
             >
 
             $<${HOT_RELOAD}:
@@ -70,7 +80,8 @@ function( common_compiler_flags TARGET_NAME )
 
         # MSVC only
         $<${IS_MSVC}:
-            "/MP ${PROC_N}"
+            # /MP isn't valid for clang-cl with msvc frontend
+            $<$<CXX_COMPILER_ID:MSVC>:/MP${PROC_N}>
             /W4
 
             # Disable warnings which we don't plan to fix.
@@ -136,6 +147,8 @@ function( common_compiler_flags TARGET_NAME )
 
             # features
             $<${DEBUG_FEATURES}:DEBUG_ENABLED DEBUG_METHODS_ENABLED>
+
+            $<${IS_DEV_BUILD}:DEV_ENABLED>
 
             $<${HOT_RELOAD}:HOT_RELOAD_ENABLED>
 

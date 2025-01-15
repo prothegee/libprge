@@ -1,23 +1,37 @@
 #ifndef LIBPRGE_CONFIG_HH
 #define LIBPRGE_CONFIG_HH
-#include "internal/internal_base_types.hh"
+#include <libprge/functions/date_and_times_funcs.hh>
+#include <libprge/functions/utility_funcs.hh>
+#include <libprge/types/libprge_types.hh>
 
-#include <future>
-#include <thread>
-#include <memory>
-
+#include <gdextension_interface.h>
+#include <godot_cpp/godot.hpp>
+#include <godot_cpp/classes/node.hpp>
+#include <godot_cpp/classes/dir_access.hpp>
+#include <godot_cpp/classes/engine.hpp>
+#include <godot_cpp/classes/file_access.hpp>
+#include <godot_cpp/classes/input.hpp>
+#include <godot_cpp/classes/packed_scene.hpp>
+#include <godot_cpp/classes/project_settings.hpp>
+#include <godot_cpp/classes/ref.hpp>
+#include <godot_cpp/classes/resource.hpp>
+#include <godot_cpp/classes/resource_loader.hpp>
+#include <godot_cpp/classes/resource_importer.hpp>
+#include <godot_cpp/classes/scene_tree.hpp>
+#include <godot_cpp/classes/tree.hpp>
+#include <godot_cpp/classes/window.hpp>
+#include <godot_cpp/classes/audio_bus_layout.hpp>
+#include <godot_cpp/classes/audio_server.hpp>
+#include <godot_cpp/core/defs.hpp>
+#include <godot_cpp/core/class_db.hpp>
+#include <godot_cpp/core/engine_ptrcall.hpp>
+#include <godot_cpp/core/binder_common.hpp>
+#include <godot_cpp/core/gdvirtual.gen.inc>
 #include <godot_cpp/variant/utility_functions.hpp>
 
-// godot utility functions
-using gdufunc = godot::UtilityFunctions;
-
-
-#ifndef LIBPRGE_PROJECT_NAME
-    #define LIBPRGE_PROJECT_NAME "@LIBPRGE_PROJECT_NAME@"
-#endif // LIBPRGE_PROJECT_NAME
+using namespace godot;
 
 #ifndef LIBPRGE_IS_DEBUG
-    // libprge is debug mode
     #define LIBPRGE_IS_DEBUG @LIBPRGE_IS_DEBUG@
 #endif // LIBPRGE_IS_DEBUG
 
@@ -27,70 +41,59 @@ using gdufunc = godot::UtilityFunctions;
 #endif // LIBPRGE_BUILD_COMPILER_ID
 
 #ifndef LIBPRGE_COMPILER_IS_GNU
-    // using gnu compiler
+    // current compiler is gnu
     #define LIBPRGE_COMPILER_IS_GNU @LIBPRGE_COMPILER_IS_GNU@
 #endif // LIBPRGE_COMPILER_IS_GNU
 
 #ifndef LIBPRGE_COMPILER_IS_MSVC
-    // using msvc compiler
+    // current compiler is msvc
     #define LIBPRGE_COMPILER_IS_MSVC @LIBPRGE_COMPILER_IS_MSVC@
 #endif // LIBPRGE_COMPILER_IS_MSVC
 
 #ifndef LIBPRGE_COMPILER_IS_CLANG
-    // using clang compiler
+    // current compiler is clang
     #define LIBPRGE_COMPILER_IS_CLANG @LIBPRGE_COMPILER_IS_CLANG@
 #endif // LIBPRGE_COMPILER_IS_CLANG
 
+#ifndef LIBPRGE_CPP_STANDARD
+    #define LIBPRGE_CPP_STANDARD @LIBPRGE_CPP_STANDARD@
+#endif // LIBPRGE_CPP_STANDARD
+
 #ifndef LIBPRGE_VERSION_MAJOR
-    // libprge major version
     #define LIBPRGE_VERSION_MAJOR @LIBPRGE_VERSION_MAJOR@
 #endif // LIBPRGE_VERSION_MAJOR
 
 #ifndef LIBPRGE_VERSION_MINOR
-    // libprge minor version
     #define LIBPRGE_VERSION_MINOR @LIBPRGE_VERSION_MINOR@
 #endif // LIBPRGE_VERSION_MINOR
 
 #ifndef LIBPRGE_VERSION_PATCH
-    // libprge patch version
     #define LIBPRGE_VERSION_PATCH @LIBPRGE_VERSION_PATCH@
 #endif // LIBPRGE_VERSION_PATCH
 
-#ifndef LIBPRGE_VERSION_STRING
-    // libprge string version
-    #define LIBPRGE_VERSION_STRING "@LIBPRGE_VERSION_STRING@"
-#endif // LIBPRGE_VERSION_STRING
+#ifndef LIBPRGE_VERSION_DATES
+    #define LIBPRGE_VERSION_DATES @LIBPRGE_VERSION_DATES@
+#endif // LIBPRGE_VERSION_DATES
 
+#ifndef LIBPRGE_USING_PYTHON3
+    #define LIBPRGE_USING_PYTHON3 @LIBPRGE_USING_PYTHON3@
+#endif // LIBPRGE_USING_PYTHON3
 
-#ifndef LIBPRGE_USING_JSONCPP
-    // libprge using jsoncpp
-    #define LIBPRGE_USING_JSONCPP @LIBPRGE_USING_JSONCPP@
-#endif // LIBPRGE_USING_JSONCPP
+#ifndef LIBPRGE_USING_STEAMWORKS_SDK
+    #define LIBPRGE_USING_STEAMWORKS_SDK @LIBPRGE_USING_STEAMWORKS_SDK@
+#endif // LIBPRGE_USING_STEAMWORKS_SDK
 
-#ifndef LIBPRGE_USING_SDL3
-    // libprge using sdl3
-    #define LIBPRGE_USING_SDL3 @LIBPRGE_USING_SDL3@
-#endif // LIBPRGE_USING_SDL3
+namespace libprge
+{
 
-#ifndef LIBPRGE_USING_OPENCV
-    // libprge using opencv
-    #define LIBPRGE_USING_OPENCV @LIBPRGE_USING_OPENCV@
-#endif // LIBPRGE_USING_OPENCV
+} // namespace libprge
 
-#ifndef LIBPRGE_USING_OPENSSL
-    // libprge using openssl
-    #define LIBPRGE_USING_OPENSSL @LIBPRGE_USING_OPENSSL@
-#endif // LIBPRGE_USING_OPENSSL
+// godot utility functions
+using gdufunc = godot::UtilityFunctions;
 
-#ifndef LIBPRGE_USING_CRYPTOPP
-    // libprge using cryptopp
-    #define LIBPRGE_USING_CRYPTOPP @LIBPRGE_USING_CRYPTOPP@
-#endif // LIBPRGE_USING_CRYPTOPP
-
-#ifndef LIBPRGE_USING_STEAMSDK
-    // libprge using steamworks-sdk
-    #define LIBPRGE_USING_STEAMSDK @LIBPRGE_USING_STEAMSDK@
-#endif // LIBPRGE_USING_STEAMSDK
-
+inline static const double __DOUBLE_ZERO__     =    0.00000000000000000;
+inline static const double __DOUBLE_ZERO_MIN__ =   -0.00000000000000000;
+inline static const double __DOUBLE_360__      =  360.00000000000000000;
+inline static const double __DOUBLE_359__      =  359.99999999999999999;
 
 #endif // LIBPRGE_CONFIG_HH
