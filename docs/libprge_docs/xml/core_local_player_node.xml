@@ -36,9 +36,15 @@ xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/god
         <member name="m_playerId" type="ui64" setter="setPlayerId" getter="getPlayerId">
 			public: player unsigned int id
 		</member>
+
+        <!-- ////////////////////////////////////////////////////// -->
+
         <member name="m_playerIdString" type="ui64" setter="setPlayerIdString" getter="getPlayerIdString">
 			public: player string id
 		</member>
+
+        <!-- ////////////////////////////////////////////////////// -->
+
         <member name="m_stateType" type="ECoreLocalPlayerNodeState" setter="setStateType" getter="getStateType">
 			public: player state type
 		</member>
@@ -57,6 +63,9 @@ xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/god
 			</description>
 			<return type="ui64" />
 		</method>
+
+        <!-- ////////////////////////////////////////////////////// -->
+
         <method name="setPlayerIdString">
 			<description>
 				set player id string
@@ -70,6 +79,9 @@ xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/god
 			</description>
 			<return type="String" />
 		</method>
+
+        <!-- ////////////////////////////////////////////////////// -->
+
         <method name="setStateType">
 			<description>
 				set state type
@@ -83,6 +95,9 @@ xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/god
 			</description>
 			<return type="ECoreLocalPlayerNodeState" />
 		</method>
+
+        <!-- ////////////////////////////////////////////////////// -->
+
         <method name="isCCoreLocalPlayerNode">
 			<description>
 				tell if this is CCoreLocalPlayerNode class
