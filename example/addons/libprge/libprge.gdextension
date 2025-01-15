@@ -3,9 +3,12 @@ entry_symbol            = "libprge_rt"
 compatibility_minimum   = "4.4"
 reloadable              = true
 
+# [icons]
+# CCoreScene = "icons/CCoreScene.svg"
+
 [libraries]
-linux.debug.x86_64      = "bin/linux_amd64/debug/libprge.so"
-linux.release.x86_64    = "bin/linux_amd64/release/libprge.so"
+# linux.debug.x86_64      = "bin/linux_amd64/debug/libprge.so"
+# linux.release.x86_64    = "bin/linux_amd64/release/libprge.so"
 windows.debug.x86_64    = "bin/windows_amd64/debug/libprge.dll"
 windows.release.x86_64  = "bin/windows_amd64/release/libprge.dll"
 # macos.debug             = "bin/macos/debug/libprge.framework"

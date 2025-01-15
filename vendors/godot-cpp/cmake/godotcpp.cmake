@@ -2,6 +2,19 @@
 godotcpp.cmake
 --------------
 
+As godot-cpp is a C++ project, there are no C files, and detection of a C
+compiler is unnecessary. When CMake performs the configure process, if a
+C compiler is specified, like in a toolchain, or from an IDE, then it will
+print a warning stating that the CMAKE_C_COMPILER compiler is unused.
+This if statement simply silences that warning.
+]=======================================================================]
+if( CMAKE_C_COMPILER )
+endif ()
+
+#[=======================================================================[.rst:
+Include Platform Files
+----------------------
+
 Because these files are included into the top level CMakelists.txt before the
 project directive, it means that
 
@@ -17,11 +30,9 @@ include( ${CMAKE_CURRENT_SOURCE_DIR}/cmake/linux.cmake)
 include( ${CMAKE_CURRENT_SOURCE_DIR}/cmake/macos.cmake)
 include( ${CMAKE_CURRENT_SOURCE_DIR}/cmake/web.cmake)
 include( ${CMAKE_CURRENT_SOURCE_DIR}/cmake/windows.cmake)
+include( ${CMAKE_CURRENT_SOURCE_DIR}/cmake/python_callouts.cmake)
 
-#Silence warning from unused CMAKE_C_COMPILER from toolchain
-if( CMAKE_C_COMPILER )
-endif ()
-
+# Detect number of processors
 include(ProcessorCount)
 ProcessorCount(PROC_MAX)
 message( "Auto-detected ${PROC_MAX} CPU cores available for build parallelism." )
@@ -100,7 +111,8 @@ function( godotcpp_options )
     #TODO compiledb
     #TODO compiledb_file
 
-    #NOTE: build_profile's equivalent in cmake is CMakePresets.json
+    set( GODOT_BUILD_PROFILE "" CACHE PATH
+            "Path to a file containing a feature build profile" )
 
     set(GODOT_USE_HOT_RELOAD "" CACHE BOOL
             "Enable the extra accounting required to support hot reload. (ON|OFF)")
@@ -114,17 +126,29 @@ function( godotcpp_options )
     set_property( CACHE GODOT_SYMBOL_VISIBILITY PROPERTY STRINGS "auto;visible;hidden" )
 
     #TODO optimize
-    #TODO debug_symbols
-    option( GODOT_DEBUG_SYMBOLS "" OFF )
+
     option( GODOT_DEV_BUILD "Developer build with dev-only debugging code (DEV_ENABLED)" OFF )
+
+    #[[ debug_symbols
+    Debug symbols are enabled by using the Debug or RelWithDebInfo build configurations.
+    Single Config Generator is set at configure time
+
+        cmake ../ -DCMAKE_BUILD_TYPE=Debug
+
+    Multi-Config Generator is set at build time
+
+        cmake --build . --config Debug
+
+    ]]
 
     # FIXME These options are not present in SCons, and perhaps should be added there.
     option( GODOT_SYSTEM_HEADERS "Expose headers as SYSTEM." OFF )
     option( GODOT_WARNING_AS_ERROR "Treat warnings as errors" OFF )
 
-    # Run options commands on the following to populate cache for all
-    # platforms. This type of thing is typically done conditionally But as
-    # scons shows all options so shall we.
+    # Enable Testing
+    option( GODOT_ENABLE_TESTING "Enable the godot-cpp.test.<target> integration testing targets" OFF )
+
+    #[[ Target Platform Options ]]
     android_options()
     ios_options()
     linux_options()
@@ -136,7 +160,6 @@ endfunction()
 # Function to configure and generate the targets
 function( godotcpp_generate )
     #[[ Multi-Threaded MSVC Compilation
-
     When using the MSVC compiler the build command -j <n> only specifies
     parallel jobs or targets, and not multi-threaded compilation To speed up
     compile times on msvc, the /MP <n> flag can be set. But we need to set it
@@ -157,13 +180,11 @@ function( godotcpp_generate )
 
     #[[ GODOT_SYMBOL_VISIBLITY
     To match the SCons options, the allowed values are "auto", "visible", and "hidden"
-    This effects the compiler flag -fvisibility=[default|internal|hidden|protected]
-    The corresponding CMake option CXX_VISIBILITY_PRESET accepts the compiler values.
+    This effects the compiler flag_ -fvisibility=[default|internal|hidden|protected]
+    The corresponding target option CXX_VISIBILITY_PRESET accepts the compiler values.
 
     TODO: It is probably worth a pull request which changes both to use the compiler values
-    https://gcc.gnu.org/onlinedocs/gcc/Code-Gen-Options.html#index-fvisibility
-
-    This performs the necessary conversion
+    .. _flag:https://gcc.gnu.org/onlinedocs/gcc/Code-Gen-Options.html#index-fvisibility
     ]]
     if( ${GODOT_SYMBOL_VISIBILITY} STREQUAL "auto" OR ${GODOT_SYMBOL_VISIBILITY} STREQUAL "visible" )
         set( GODOT_SYMBOL_VISIBILITY "default" )
@@ -175,45 +196,52 @@ function( godotcpp_generate )
         set(GODOT_SYSTEM_HEADERS_ATTRIBUTE SYSTEM)
     endif ()
 
-    #[[ Generate Bindings ]]
-    if(NOT DEFINED BITS)
-        set(BITS 32)
-        if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-            set(BITS 64)
-        endif(CMAKE_SIZEOF_VOID_P EQUAL 8)
+    #[[ Configure Binding Variables ]]
+    # Generate Binding Parameters (True|False)
+    set( USE_TEMPLATE_GET_NODE "False" )
+    if( GODOT_GENERATE_TEMPLATE_GET_NODE )
+        set( USE_TEMPLATE_GET_NODE "True" )
     endif()
 
+    # Bits (32|64)
+    math( EXPR BITS "${CMAKE_SIZEOF_VOID_P} * 8" ) # CMAKE_SIZEOF_VOID_P refers to target architecture.
+
+    # API json File
     set(GODOT_GDEXTENSION_API_FILE "${GODOT_GDEXTENSION_DIR}/extension_api.json")
-    if (NOT "${GODOT_CUSTOM_API_FILE}" STREQUAL "")  # User-defined override.
+    if( GODOT_CUSTOM_API_FILE )  # User-defined override.
         set(GODOT_GDEXTENSION_API_FILE "${GODOT_CUSTOM_API_FILE}")
     endif()
 
-    # Code Generation option
-    if(GODOT_GENERATE_TEMPLATE_GET_NODE)
-        set(GENERATE_BINDING_PARAMETERS "True")
-    else()
-        set(GENERATE_BINDING_PARAMETERS "False")
+    # Build Profile
+    if( GODOT_BUILD_PROFILE )
+        message( STATUS "Using build profile to trim api file")
+        message(  "\tBUILD_PROFILE = '${GODOT_BUILD_PROFILE}'")
+        message(  "\tAPI_SOURCE = '${GODOT_GDEXTENSION_API_FILE}'")
+        build_profile_generate_trimmed_api(
+                "${GODOT_BUILD_PROFILE}"
+                "${GODOT_GDEXTENSION_API_FILE}"
+                "${CMAKE_CURRENT_BINARY_DIR}/extension_api.json" )
+        set( GODOT_GDEXTENSION_API_FILE "${CMAKE_CURRENT_BINARY_DIR}/extension_api.json" )
     endif()
 
-    execute_process(COMMAND "${Python3_EXECUTABLE}" "-c" "import binding_generator; binding_generator.print_file_list('${GODOT_GDEXTENSION_API_FILE}', '${CMAKE_CURRENT_BINARY_DIR}', headers=True, sources=True)"
-            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-            OUTPUT_VARIABLE GENERATED_FILES_LIST
-            OUTPUT_STRIP_TRAILING_WHITESPACE
-    )
+    message( STATUS "GODOT_GDEXTENSION_API_FILE = '${GODOT_GDEXTENSION_API_FILE}'")
 
-    add_custom_command(OUTPUT ${GENERATED_FILES_LIST}
-            COMMAND "${Python3_EXECUTABLE}" "-c" "import binding_generator; binding_generator.generate_bindings('${GODOT_GDEXTENSION_API_FILE}', '${GENERATE_BINDING_PARAMETERS}', '${BITS}', '${GODOT_PRECISION}', '${CMAKE_CURRENT_BINARY_DIR}')"
-            VERBATIM
-            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-            MAIN_DEPENDENCY ${GODOT_GDEXTENSION_API_FILE}
-            DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/binding_generator.py
-            COMMENT "Generating bindings"
-    )
+    # generate the file list to use
+    binding_generator_get_file_list( GENERATED_FILES_LIST
+            "${GODOT_GDEXTENSION_API_FILE}"
+            "${CMAKE_CURRENT_BINARY_DIR}" )
+
+    binding_generator_generate_bindings(
+            "${GODOT_GDEXTENSION_API_FILE}"
+            "${USE_TEMPLATE_GET_NODE}"
+            "${BITS}"
+            "${GODOT_PRECISION}"
+            "${CMAKE_CURRENT_BINARY_DIR}" )
 
     ### Platform is derived from the toolchain target
     # See GeneratorExpressions PLATFORM_ID and CMAKE_SYSTEM_NAME
     set( SYSTEM_NAME
-            $<$<PLATFORM_ID:Android>:android.${ANDROID_ABI}>
+            $<$<PLATFORM_ID:Android>:android>
             $<$<PLATFORM_ID:iOS>:ios>
             $<$<PLATFORM_ID:Linux>:linux>
             $<$<PLATFORM_ID:Darwin>:macos>
@@ -230,18 +258,34 @@ function( godotcpp_generate )
         godot_arch_map( SYSTEM_ARCH ${CMAKE_SYSTEM_PROCESSOR} )
     endif()
 
-    ### Define our godot-cpp library targets
-    foreach ( TARGET_NAME template_debug template_release editor )
+    # Transform options into generator expressions
+    set( HOT_RELOAD-UNSET "$<STREQUAL:${GODOT_USE_HOT_RELOAD},>")
 
-        # Useful genex snippits used in subsequent genex's
-        set( IS_RELEASE "$<STREQUAL:${TARGET_NAME},template_release>")
-        set( IS_DEV "$<BOOL:${GODOT_DEV_BUILD}>")
-        set( DEBUG_FEATURES "$<OR:$<STREQUAL:${TARGET_NAME},template_debug>,$<STREQUAL:${TARGET_NAME},editor>>" )
-        set( HOT_RELOAD "$<IF:${HOT_RELOAD-UNSET},$<NOT:${IS_RELEASE}>,$<BOOL:${GODOT_USE_HOT_RELOAD}>>" )
+    set( DISABLE_EXCEPTIONS "$<BOOL:${GODOT_DISABLE_EXCEPTIONS}>")
+
+    # GODOT_DEV_BUILD
+    set( RELEASE_TYPES "Release;MinSizeRel")
+    get_property( IS_MULTI_CONFIG GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG )
+    if( IS_MULTI_CONFIG )
+        message( NOTICE "=> Default build type is Debug. For other build types add --config <type> to build command")
+    elseif( GODOT_DEV_BUILD AND CMAKE_BUILD_TYPE IN_LIST RELEASE_TYPES )
+        message( WARNING "=> GODOT_DEV_BUILD implies a Debug-like build but CMAKE_BUILD_TYPE is '${CMAKE_BUILD_TYPE}'")
+    endif ()
+    set( IS_DEV_BUILD "$<BOOL:${GODOT_DEV_BUILD}>")
+    # The .dev portion of the name if GODOT_DEV_BUILD is true.
+    set( DEV_TAG "$<${IS_DEV_BUILD}:.dev>" )
+
+    ### Define our godot-cpp library targets
+    foreach ( TARGET_ALIAS template_debug template_release editor )
+        set( TARGET_NAME "godot-cpp.${TARGET_ALIAS}" )
+
+        # Generator Expressions that rely on the target
+        set( DEBUG_FEATURES "$<NOT:$<STREQUAL:${TARGET_NAME},template_release>>" )
+        set( HOT_RELOAD "$<IF:${HOT_RELOAD-UNSET},${DEBUG_FEATURES},$<BOOL:${GODOT_USE_HOT_RELOAD}>>" )
 
         # the godot-cpp.* library targets
-        add_library( ${TARGET_NAME} STATIC ${EXCLUDE} )
-        add_library( godot-cpp::${TARGET_NAME} ALIAS ${TARGET_NAME} )
+        add_library( ${TARGET_NAME} STATIC EXCLUDE_FROM_ALL )
+        add_library( godot-cpp::${TARGET_ALIAS} ALIAS ${TARGET_NAME} )
 
         file( GLOB_RECURSE GODOTCPP_SOURCES LIST_DIRECTORIES NO CONFIGURE_DEPENDS src/*.cpp )
 
@@ -268,33 +312,36 @@ function( godotcpp_generate )
                 BUILD_RPATH_USE_ORIGIN ON
 
                 PREFIX lib
-                OUTPUT_NAME "${PROJECT_NAME}.${SYSTEM_NAME}.${TARGET_NAME}.${SYSTEM_ARCH}"
+                OUTPUT_NAME "${PROJECT_NAME}.${SYSTEM_NAME}.${TARGET_ALIAS}${DEV_TAG}.${SYSTEM_ARCH}"
                 ARCHIVE_OUTPUT_DIRECTORY "$<1:${CMAKE_BINARY_DIR}/bin>"
 
                 # Things that are handy to know for dependent targets
                 GODOT_PLATFORM "${SYSTEM_NAME}"
-                GODOT_TARGET "${TARGET_NAME}"
+                GODOT_TARGET "${TARGET_ALIAS}"
                 GODOT_ARCH "${SYSTEM_ARCH}"
+
+                # Some IDE's respect this property to logically group targets
+                FOLDER "godot-cpp"
         )
 
         if( CMAKE_SYSTEM_NAME STREQUAL Android )
-            android_generate( ${TARGET_NAME} )
+            android_generate()
         elseif ( CMAKE_SYSTEM_NAME STREQUAL iOS )
-            ios_generate( ${TARGET_NAME} )
+            ios_generate()
         elseif ( CMAKE_SYSTEM_NAME STREQUAL Linux )
-            linux_generate( ${TARGET_NAME} )
+            linux_generate()
         elseif ( CMAKE_SYSTEM_NAME STREQUAL Darwin )
-            macos_generate( ${TARGET_NAME} )
+            macos_generate()
         elseif ( CMAKE_SYSTEM_NAME STREQUAL Emscripten )
-            web_generate( ${TARGET_NAME} )
+            web_generate()
         elseif ( CMAKE_SYSTEM_NAME STREQUAL Windows )
-            windows_generate( ${TARGET_NAME} )
+            windows_generate()
         endif ()
 
     endforeach ()
 
     # Added for backwards compatibility with prior cmake solution so that builds dont immediately break
     # from a missing target.
-    add_library( godot::cpp ALIAS template_debug )
+    add_library( godot::cpp ALIAS godot-cpp.template_debug )
 
 endfunction()

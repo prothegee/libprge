@@ -27,9 +27,6 @@ node_modules
 ##
 ## extension
 ##
-*.exp
-*.ilk
-*.pdb
 *.bak
 *.bak.*
 *.lib
@@ -66,14 +63,11 @@ node_modules
 
 /.tmp.md
 
-!/example/addons/libprge
+/*.code-workspace
 
-/vendors/steamworks-sdk/*
-!/vendors/steamworks-sdk/NOTE.txt
+/project-build-staging.sh
+/project-build-demo.sh
+/project-build-release.sh
 
-project-build-debug.*
-project-build-release.*
-
-!project-cleanup.sh
-
-.sconsign.dblite
+/deno.lock
+/package-lock.json

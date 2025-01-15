@@ -1,0 +1,17 @@
+{
+    "configurations":
+    [
+        {
+            "name": "EDITOR: libprge example",
+            "type": "cppvsdbg", // windows=cppvsdbg else=cppdbg
+            "request": "launch",
+            "cwd": "${fileDirname}",
+            "program": "/path/to/your_godot_executeable",
+            "stopAtEntry": false,
+            "args": [
+                "-e", "--path", "${workspaceFolder}/example"
+            ],
+            "environment": []
+        }
+    ]
+}

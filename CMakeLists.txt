@@ -1,55 +1,43 @@
 cmake_minimum_required(VERSION 3.15...3.30)
-project(libprge LANGUAGES CXX)
+project(libprge
+    VERSION "${LIBPRGE_VERSION_STRING}"
+    DESCRIPTION "an addons/extension for godot game engine"
+    HOMEPAGE_URL "https://github.com/prothegee/libprge"
+    LANGUAGES CXX
+)
 
 include(CheckIncludeFileCXX)
 include(CMakeDependentOption)
 include(GenerateExportHeader)
 include(FindPackageHandleStandardArgs)
-include(cmake/project-00-setup.cmake)
-include(cmake/project-01-packages.cmake)
-
-if(NOT CMAKE_CXX_STANDARD)
-    set(CMAKE_CXX_STANDARD 17)
-endif()
-
-if(NOT ${CMAKE_CXX_STANDARD} STREQUAL "")
-    message(NOTICE "-- ${PROJECT_NAME}:\n   using c++${CMAKE_CXX_STANDARD}")
-else()
-    message(NOTICE "-- ${PROJECT_NAME}:\n   cxx standard is not set")
-endif()
+include(cmake/project-00-lib.cmake)
+include(cmake/project-01-config.cmake)
+include(cmake/project-02-post_build.cmake)
 
 set(PREFIX        "")
 set(IMPORT_PREFIX "")
 set(CMAKE_STATIC_LIBRARY_PREFIX "")
 set(CMAKE_SHARED_LIBRARY_PREFIX "")
 
-# reserved: pre-build
-
-# start: project include
-if(LIBPRGE_ADD_DIR_INCLUDE)
-    include_directories(${LIBPRGE_ADD_DIR_INCLUDE})
+if(LIBPRGE_BUILD_AS_STATIC)
+    add_library(${PROJECT_NAME} STATIC 
+        src/cpp/libprge/registrar.cc src/cpp/libprge/libprge.hh
+        src/cpp/libprge/libprge.cc
+    )
+    message(NOTICE "-- ${PROJECT_NAME}:\n   build as static library")
+else()
+    add_library(${PROJECT_NAME} SHARED
+        src/cpp/libprge/registrar.cc src/cpp/libprge/libprge.hh
+        src/cpp/libprge/libprge.cc
+    )
+    message(NOTICE "-- ${PROJECT_NAME}:\n   build as shared library")
 endif()
-    
-if(LIBPRGE_ADD_DIR_LIB)
-    include_directories(${LIBPRGE_ADD_DIR_LIB})
-endif()
-
-if(LIBPRGE_ADD_DIR_SHARE)
-    include_directories(${LIBPRGE_ADD_DIR_SHARE})
-endif()
-# end: project include
-
-add_library(${PROJECT_NAME} SHARED
-    src/cpp/libprge/libprge.hh src/cpp/libprge/libprge.cc
-    src/cpp/libprge/registrar.cc
-)
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    set(LIBPRGE_COMPILER_IS_GNU true)
-    set(LIBPRGE_COMPILER_IS_MSVC false)
-    set(LIBPRGE_COMPILER_IS_CLANG false)
-
     set(LIBPRGE_BUILD_COMPILER_ID 1)
+    set(LIBPRGE_COMPILER_IS_GNU   true)
+    set(LIBPRGE_COMPILER_IS_MSVC  false)
+    set(LIBPRGE_COMPILER_IS_CLANG false)
 
     target_compile_options(${PROJECT_NAME} PRIVATE
         -Wall
@@ -68,21 +56,19 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
         -Wno-unused-function
     )
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-    set(LIBPRGE_COMPILER_IS_GNU false)
-    set(LIBPRGE_COMPILER_IS_MSVC true)
-    set(LIBPRGE_COMPILER_IS_CLANG false)
-
     set(LIBPRGE_BUILD_COMPILER_ID 2)
+    set(LIBPRGE_COMPILER_IS_GNU   false)
+    set(LIBPRGE_COMPILER_IS_MSVC  true)
+    set(LIBPRGE_COMPILER_IS_CLANG false)
 
     target_compile_options(${PROJECT_NAME} PRIVATE
         /W4
     )
 elseif(CMAKE_CXX_COMPILER_ID MATCHES "[Cc]lang")
-    set(LIBPRGE_COMPILER_IS_GNU false)
-    set(LIBPRGE_COMPILER_IS_MSVC false)
-    set(LIBPRGE_COMPILER_IS_CLANG true)
-
     set(LIBPRGE_BUILD_COMPILER_ID 3)
+    set(LIBPRGE_COMPILER_IS_GNU   false)
+    set(LIBPRGE_COMPILER_IS_MSVC  false)
+    set(LIBPRGE_COMPILER_IS_CLANG true)
 
     target_compile_options(${PROJECT_NAME} PRIVATE
         -Wall
@@ -106,42 +92,37 @@ elseif(CMAKE_CXX_COMPILER_ID MATCHES "[Cc]lang")
         -Wno-tautological-constant-out-of-range-compare
     )
 else()
-    set(LIBPRGE_COMPILER_IS_GNU false)
-    set(LIBPRGE_COMPILER_IS_MSVC false)
+    set(LIBPRGE_BUILD_COMPILER_ID 0)
+    set(LIBPRGE_COMPILER_IS_GNU   false)
+    set(LIBPRGE_COMPILER_IS_MSVC  false)
     set(LIBPRGE_COMPILER_IS_CLANG false)
 
-    set(LIBPRGE_BUILD_COMPILER_ID 0)
-
-    message(NOTICE "${PROJECT_NAME}:\n   -DCMAKE_CXX_COMPILER_ID is not implemented for ${CMAKE_CXX_COMPILER_ID}")
+    message(NOTICE "-- ${PROJECT_NAME}:\n   -DCMAKE_CXX_COMPILER_ID is not supported as ${CMAKE_CXX_COMPILER_ID}")
 endif()
 
-# start: link libraries
-target_link_libraries(${PROJECT_NAME} PRIVATE godot-cpp::${LIBPRGE_GODOTCPP_BUILD_PROPS})
+if(LIBPRGE_IS_DEBUG AND LIBPRGE_USING_PYTHON3)
+    set(LIBPRGE_DOC_DATA_SOURCE "${CMAKE_CURRENT_BINARY_DIR}/src/cpp/libprge/documentations.gen.cc")
 
-if(LIBPRGE_USING_JSONCPP)
-    target_link_libraries(${PROJECT_NAME} PRIVATE JsonCpp::JsonCpp)
+    file(REMOVE "${LIBPRGE_DOC_DATA_SOURCE}")
+
+    file(GLOB_RECURSE LIBPRGE_DOC_XML
+        LIST_DIRECTORIES NO
+        CONFIGURE_DEPENDS
+        "${CMAKE_CURRENT_SOURCE_DIR}/docs/libprge_docs/xml/*.xml"
+    )
+
+    generate_doc_source("${LIBPRGE_DOC_DATA_SOURCE}" "${LIBPRGE_DOC_XML}")
+
+    target_sources(${PROJECT_NAME} PRIVATE "${LIBPRGE_DOC_DATA_SOURCE}")
 endif()
 
-if(LIBPRGE_USING_OPENSSL)
-    target_link_libraries(${PROJECT_NAME} PRIVATE OpenSSL::SSL OpenSSL::Crypto)
-endif()
+# godot-cpp
+target_link_libraries(${PROJECT_NAME} PRIVATE ${LIBPRGE_GODOTCPP_TARGETS})
 
-if(LIBPRGE_USING_SDL3)
-    target_link_libraries(${PROJECT_NAME} PRIVATE SDL3::SDL3)
+# steamworks-sdk
+if(LIBPRGE_USING_STEAMWORKS_SDK)
+    # reserved
 endif()
-
-if(LIBPRGE_USING_OPENCV)
-    target_link_libraries(${PROJECT_NAME} PRIVATE ${OpenCV_LIBS})
-endif()
-
-if(LIBPRGE_USING_CRYPTOPP)
-    target_link_libraries(${PROJECT_NAME} PRIVATE cryptopp::cryptopp)
-endif()
-
-if(LIBPRGE_USING_STEAMSDK)
-    target_link_libraries(${PROJECT_NAME} PRIVATE "${LIBPRGE_STEAMWORKS_SDK_LIB_FILE}")
-endif()
-# end: link libraries
 
 generate_export_header(${PROJECT_NAME}
     EXPORT_FILE_NAME
@@ -156,15 +137,12 @@ configure_file(
 aux_source_directory(src/cpp/libprge LIBPRGE_DIR)
 aux_source_directory(src/cpp/libprge/base LIBPRGE_DIR_BASE)
 aux_source_directory(src/cpp/libprge/constants LIBPRGE_DIR_CONSTANTS)
-aux_source_directory(src/cpp/libprge/enums LIBPRGE_DIR_ENUMS)
 aux_source_directory(src/cpp/libprge/functions LIBPRGE_DIR_FUNCTIONS)
 aux_source_directory(src/cpp/libprge/interfaces LIBPRGE_DIR_INTERFACES)
 aux_source_directory(src/cpp/libprge/nodes LIBPRGE_DIR_NODES)
-    aux_source_directory(src/cpp/libprge/nodes/3d LIBPRGE_DIR_NODES_3D)
-    aux_source_directory(src/cpp/libprge/nodes/ui LIBPRGE_DIR_NODES_UI)
+    aux_source_directory(src/cpp/libprge/nodes/components LIBPRGE_DIR_NODES_COMPONENTS)
 aux_source_directory(src/cpp/libprge/objects LIBPRGE_DIR_OBJECTS)
-aux_source_directory(src/cpp/libprge/sdks LIBPRGE_DIR_SDKS)
-aux_source_directory(src/cpp/libprge/tools LIBPRGE_DIR_TOOLS)
+aux_source_directory(src/cpp/libprge/refs LIBPRGE_DIR_REFS)
 aux_source_directory(src/cpp/libprge/types LIBPRGE_DIR_TYPES)
 
 target_sources(${PROJECT_NAME}
@@ -173,22 +151,17 @@ target_sources(${PROJECT_NAME}
         ${LIBPRGE_DIR}
         ${LIBPRGE_DIR_BASE}
         ${LIBPRGE_DIR_CONSTANTS}
-        ${LIBPRGE_DIR_ENUMS}
         ${LIBPRGE_DIR_FUNCTIONS}
+        # 
         ${LIBPRGE_DIR_INTERFACES}
         ${LIBPRGE_DIR_NODES}
-            ${LIBPRGE_DIR_NODES_3D}
-            ${LIBPRGE_DIR_NODES_UI}
+            ${LIBPRGE_DIR_NODES_COMPONENTS}
         ${LIBPRGE_DIR_OBJECTS}
-        ${LIBPRGE_DIR_SDKS}
-        ${LIBPRGE_DIR_TOOLS}
+        ${LIBPRGE_DIR_REFS}
         ${LIBPRGE_DIR_TYPES}
 )
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>/src/cpp
-        $<BUILD_INTERFACE:${LIBPRGE_STEAMWORKS_SDK_DIR}>/public
 )
-
-include(cmake/project-02-post_build.cmake)
