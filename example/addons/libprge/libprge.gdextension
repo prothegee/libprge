@@ -4,9 +4,10 @@ compatibility_minimum   = "4.4"
 reloadable              = true
 
 [icons]
-CCoreActiveScene     = "icons/nodes/CCoreActiveScene.svg"
 CCoreGameManager     = "icons/nodes/CCoreGameManager.svg"
+CCoreNetworkManager  = "icons/nodes/CCoreNetworkManager.svg"
 CCoreLocalPlayer     = "icons/nodes/CCoreLocalPlayer.svg"
+CCoreActiveScene     = "icons/nodes/CCoreActiveScene.svg"
 
 [libraries]
 linux.debug.x86_64      = "bin/linux_amd64/debug/libprge.so"

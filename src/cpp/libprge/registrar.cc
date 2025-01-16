@@ -1,8 +1,9 @@
 #include "libprge.hh"
 
-#include <libprge/nodes/core_active_scene.hh>
 #include <libprge/nodes/core_game_manager.hh>
+#include <libprge/nodes/core_network_manager.hh>
 #include <libprge/nodes/core_local_player.hh>
+#include <libprge/nodes/core_active_scene.hh>
 
 #include <libprge/objects/console.hh>
 
@@ -13,9 +14,10 @@ void initialize(ModuleInitializationLevel pLevel)
 {
     if (pLevel != MODULE_INITIALIZATION_LEVEL_SCENE) { return; }
 
-    GDREGISTER_CLASS(CCoreActiveScene);
     GDREGISTER_CLASS(CCoreGameManager);
+    GDREGISTER_CLASS(CCoreNetworkManager);
     GDREGISTER_CLASS(CCoreLocalPlayer);
+    GDREGISTER_CLASS(CCoreActiveScene);
 
     GDREGISTER_CLASS(console);
     if (!pConsole) { pConsole = memnew(console); }

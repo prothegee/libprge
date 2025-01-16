@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class
+name="CCoreNetworkManager"
+inherits="Node"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd"
+>
+	<brief_description>
+        libprge core network manager
+	</brief_description>
+	<description>
+        core network manager
+		use for managing project network
+        there should be only one of this node under "/root" node
+	</description>
+	<tutorials>
+	</tutorials>
+	<constants>
+        <constant name="NETWORK_RESULT_UNDEFINED" value="i32" enum="ENetworkResult">
+            network result is undefined
+        </constant>
+        <constant name="NETWORK_RESULT_OK" value="i32" enum="ENetworkResult">
+            network result is ok
+        </constant>
+        <constant name="NETWORK_RESULT_ERROR" value="i32" enum="ENetworkResult">
+            network result is error
+        </constant>
+        <constant name="NETWORK_RESULT_DOESNT_EXISTS" value="i32" enum="ENetworkResult">
+            network result is doesn't exists
+        </constant>
+        <constant name="NETWORK_RESULT_FOUND" value="i32" enum="ENetworkResult">
+            network result is found
+        </constant>
+        <constant name="NETWORK_RESULT_NOT_FOUND" value="i32" enum="ENetworkResult">
+            network result is not found
+        </constant>
+        <constant name="NETWORK_RESULT_SIZE_IS_OK" value="i32" enum="ENetworkResult">
+            network result is size is ok
+        </constant>
+        <constant name="NETWORK_RESULT_SIZE_IS_EMPTY" value="i32" enum="ENetworkResult">
+            network result is size is empty
+        </constant>
+        <constant name="NETWORK_RESULT_RESPONSE_IS_OK" value="i32" enum="ENetworkResult">
+            network result is response is ok
+        </constant>
+        <constant name="NETWORK_RESULT_RESPONSE_IS_FAIL" value="i32" enum="ENetworkResult">
+            network result is response is fail
+        </constant>
+        <constant name="NETWORK_RESULT_REQUEST_OK" value="i32" enum="ENetworkResult">
+            network result is request ok
+        </constant>
+        <constant name="NETWORK_RESULT_REQUEST_ERROR_OR_FAIL" value="i32" enum="ENetworkResult">
+            network result is request error/fail
+        </constant>
+        <constant name="NETWORK_RESULT_CONNECTION_OK" value="i32" enum="ENetworkResult">
+            network result is connection ok
+        </constant>
+        <constant name="NETWORK_RESULT_CONNECTION_FAIL" value="i32" enum="ENetworkResult">
+            network result is connection fail
+        </constant>
+        <constant name="NETWORK_RESULT_CONNECTING_AND_RESOLVING_OK" value="i32" enum="ENetworkResult">
+            network result is connecting & resolving ok
+        </constant>
+        <constant name="NETWORK_RESULT_CONNECTING_AND_RESOLVING_FAIL" value="i32" enum="ENetworkResult">
+            network result is connecting & resolving fail
+        </constant>
+	</constants>
+	<members>
+	</members>
+    <methods>
+        <method name="makeHttpRequest">
+			<description>
+				make http request
+                @param url e.g. http://domain.tld ( do not include endpoint as slash, i.e. http://domain.tld/ )
+                @param endpoint e.g. /v1/sign-in
+                @param method 
+                @param headers e.g. {"content-type: multipart/form-data"}
+                @param byteData byte data to pass
+                @param stringData string response result to pass
+                @param delay delay when make poll, default 90 ms
+			</description>
+			<param index="0" name="url" type="String" />
+			<param index="1" name="endpoint" type="String" />
+			<param index="2" name="method" type="HTTPClient::Method" />
+			<param index="3" name="headers" type="PackedStringArray" />
+			<param index="4" name="byteData" type="PackedByteArray" />
+			<param index="5" name="stringData" type="String" />
+			<param index="6" name="delay" type="i32" default="90" />
+			<return type="ENetworkResult" />
+		</method>
+
+        <!-- ////////////////////////////////////////////////////// -->
+
+        <method name="isCCoreNetworkManager">
+			<description>
+				tell if this is CCoreNetworkManager class
+			</description>
+			<return type="bool" />
+		</method>
+	</methods>
+	<signals>
+	</signals>
+</class>
