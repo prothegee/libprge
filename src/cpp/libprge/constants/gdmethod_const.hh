@@ -6,8 +6,8 @@
  */
 struct GDMETHODS_CALL
 {
-    inline static const char *ADD_CHILD = "add_child";
-    inline static const char *CHANGE_SCENE_TO_FILE = "change_scene_to_file";
+    inline static cchar *ADD_CHILD = "add_child";
+    inline static cchar *CHANGE_SCENE_TO_FILE = "change_scene_to_file";
 };
 
 #endif // LIBPRGE_GDMETHODS_CONST_HH

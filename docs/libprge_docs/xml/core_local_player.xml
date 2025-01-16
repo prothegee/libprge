@@ -1,40 +1,40 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class
-name="CCoreLocalPlayerNode"
+name="CCoreLocalPlayer"
 inherits="Node"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd"
 >
 	<brief_description>
-        libprge core local player node
+        libprge core local player
 	</brief_description>
 	<description>
-        core local player node
+        core local player
 		user for game local player
         there should be only one of this node under "/root" node
 	</description>
 	<tutorials>
 	</tutorials>
 	<constants>
-        <constant name="CORE_LOCAL_PLAYER_NODE_STATE_UNDEFINED" value="i32" enum="ECoreLocalPlayerNodeState">
+        <constant name="CORE_LOCAL_PLAYER_STATE_UNDEFINED" value="i32" enum="ECoreLocalPlayerState">
 			current state is undefined
 		</constant>
-        <constant name="CORE_LOCAL_PLAYER_NODE_STATE_LOADING" value="i32" enum="ECoreLocalPlayerNodeState">
+        <constant name="CORE_LOCAL_PLAYER_STATE_LOADING" value="i32" enum="ECoreLocalPlayerState">
 			current state is in loading
 		</constant>
-        <constant name="CORE_LOCAL_PLAYER_NODE_STATE_IN_MENU" value="i32" enum="ECoreLocalPlayerNodeState">
+        <constant name="CORE_LOCAL_PLAYER_STATE_IN_MENU" value="i32" enum="ECoreLocalPlayerState">
 			current state is in menu
 		</constant>
-        <constant name="CORE_LOCAL_PLAYER_NODE_STATE_IN_GAMEPLAY" value="i32" enum="ECoreLocalPlayerNodeState">
+        <constant name="CORE_LOCAL_PLAYER_STATE_IN_GAMEPLAY" value="i32" enum="ECoreLocalPlayerState">
 			current state is in gameplay
 		</constant>
-        <constant name="CORE_LOCAL_PLAYER_NODE_STATE_IN_GAMEPLAY_MENU" value="i32" enum="ECoreLocalPlayerNodeState">
+        <constant name="CORE_LOCAL_PLAYER_STATE_IN_GAMEPLAY_MENU" value="i32" enum="ECoreLocalPlayerState">
 			current state is in gameplay menu
 		</constant>
-        <constant name="CORE_LOCAL_PLAYER_NODE_STATE_IN_GAMEPLAY_INTERACTION" value="i32" enum="ECoreLocalPlayerNodeState">
+        <constant name="CORE_LOCAL_PLAYER_STATE_IN_GAMEPLAY_INTERACTION" value="i32" enum="ECoreLocalPlayerState">
 			current state is in gameplay interaction
 		</constant>
-        <constant name="CORE_LOCAL_PLAYER_NODE_STATE_IN_SOMEWHERE_SINCE_NOT_SURE" value="i32" enum="ECoreLocalPlayerNodeState">
+        <constant name="CORE_LOCAL_PLAYER_STATE_IN_SOMEWHERE_SINCE_NOT_SURE" value="i32" enum="ECoreLocalPlayerState">
 			current state is in somewhere, since you and I not sure
 		</constant>
 	</constants>
@@ -51,7 +51,7 @@ xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/god
 
         <!-- ////////////////////////////////////////////////////// -->
 
-        <member name="m_stateType" type="ECoreLocalPlayerNodeState" setter="setStateType" getter="getStateType">
+        <member name="m_stateType" type="ECoreLocalPlayerState" setter="setStateType" getter="getStateType">
 			public: player state type
 		</member>
 	</members>
@@ -92,21 +92,21 @@ xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/god
 			<description>
 				set state type
 			</description>
-			<param index="0" name="stateType" type="ECoreLocalPlayerNodeState" />
+			<param index="0" name="stateType" type="ECoreLocalPlayerState" />
 			<return type="void" />
 		</method>
         <method name="getStateType">
 			<description>
 				get state type
 			</description>
-			<return type="ECoreLocalPlayerNodeState" />
+			<return type="ECoreLocalPlayerState" />
 		</method>
 
         <!-- ////////////////////////////////////////////////////// -->
 
-        <method name="isCCoreLocalPlayerNode">
+        <method name="isCCoreLocalPlayer">
 			<description>
-				tell if this is CCoreLocalPlayerNode class
+				tell if this is CCoreLocalPlayer class
 			</description>
 			<return type="bool" />
 		</method>

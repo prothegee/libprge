@@ -31,15 +31,15 @@ enum ECoreActiveSceneType : i32
     CORE_ACTIVE_SCENE_TYPE_GAMEPLAY_MULTIPLAYER_SERVER,
     CORE_ACTIVE_SCENE_TYPE_ERROR_OR_FAIL,
 };
-inline static pConstChar CORE_ACTIVE_SCENE_TYPE_UNDEFINED_HINT = "Undefined"; // hint for CORE_ACTIVE_SCENE_TYPE_UNDEFINED
-inline static pConstChar CORE_ACTIVE_SCENE_TYPE_INIT_HINT = "Init"; // hint for CORE_ACTIVE_SCENE_TYPE_INIT
-inline static pConstChar CORE_ACTIVE_SCENE_TYPE_MENU_HINT = "Menu"; // hint for CORE_ACTIVE_SCENE_TYPE_MENU
-inline static pConstChar CORE_ACTIVE_SCENE_TYPE_CONFIG_HINT = "Config"; // hint for CORE_ACTIVE_SCENE_TYPE_CONFIG
-inline static pConstChar CORE_ACTIVE_SCENE_TYPE_GAMEPLAY_HINT = "Gameplay"; // hint for CORE_ACTIVE_SCENE_TYPE_GAMEPLAY
-inline static pConstChar CORE_ACTIVE_SCENE_TYPE_GAMEPLAY_TEST_HINT = "Gameplay Test"; // hint for CORE_ACTIVE_SCENE_TYPE_GAMEPLAY_TEST
-inline static pConstChar CORE_ACTIVE_SCENE_TYPE_GAMEPLAY_MULTIPLAYER_HINT = "Gameplay Multiplayer"; // hint for CORE_ACTIVE_SCENE_TYPE_GAMEPLAY_MULTIPLAYER
-inline static pConstChar CORE_ACTIVE_SCENE_TYPE_GAMEPLAY_MULTIPLAYER_SERVER_HINT = "Gameplay Multiplayer Server"; // hint for CORE_ACTIVE_SCENE_TYPE_GAMEPLAY_MULTIPLAYER_SERVER
-inline static pConstChar CORE_ACTIVE_SCENE_TYPE_ERROR_OR_FAIL_HINT = "Error/Fail"; // hint for CORE_ACTIVE_SCENE_TYPE_ERROR_OR_FAIL
+inline static cchar *CORE_ACTIVE_SCENE_TYPE_UNDEFINED_HINT = "Undefined"; // hint for CORE_ACTIVE_SCENE_TYPE_UNDEFINED
+inline static cchar *CORE_ACTIVE_SCENE_TYPE_INIT_HINT = "Init"; // hint for CORE_ACTIVE_SCENE_TYPE_INIT
+inline static cchar *CORE_ACTIVE_SCENE_TYPE_MENU_HINT = "Menu"; // hint for CORE_ACTIVE_SCENE_TYPE_MENU
+inline static cchar *CORE_ACTIVE_SCENE_TYPE_CONFIG_HINT = "Config"; // hint for CORE_ACTIVE_SCENE_TYPE_CONFIG
+inline static cchar *CORE_ACTIVE_SCENE_TYPE_GAMEPLAY_HINT = "Gameplay"; // hint for CORE_ACTIVE_SCENE_TYPE_GAMEPLAY
+inline static cchar *CORE_ACTIVE_SCENE_TYPE_GAMEPLAY_TEST_HINT = "Gameplay Test"; // hint for CORE_ACTIVE_SCENE_TYPE_GAMEPLAY_TEST
+inline static cchar *CORE_ACTIVE_SCENE_TYPE_GAMEPLAY_MULTIPLAYER_HINT = "Gameplay Multiplayer"; // hint for CORE_ACTIVE_SCENE_TYPE_GAMEPLAY_MULTIPLAYER
+inline static cchar *CORE_ACTIVE_SCENE_TYPE_GAMEPLAY_MULTIPLAYER_SERVER_HINT = "Gameplay Multiplayer Server"; // hint for CORE_ACTIVE_SCENE_TYPE_GAMEPLAY_MULTIPLAYER_SERVER
+inline static cchar *CORE_ACTIVE_SCENE_TYPE_ERROR_OR_FAIL_HINT = "Error/Fail"; // hint for CORE_ACTIVE_SCENE_TYPE_ERROR_OR_FAIL
 
 /**
  * @brief core active scene dimension type
@@ -51,10 +51,10 @@ enum ECoreActiveSceneDimensionType : i32
     CORE_ACTIVE_SCENE_DIMENSION_TYPE_3D,
     CORE_ACTIVE_SCENE_DIMENSION_TYPE_MIX,
 };
-inline static pConstChar CORE_ACTIVE_SCENE_DIMENSION_TYPE_UNDEFINED_HINT = "Undefined"; // hint for CORE_ACTIVE_SCENE_DIMENSION_TYPE_UNDEFINED
-inline static pConstChar CORE_ACTIVE_SCENE_DIMENSION_TYPE_2D_HINT = "2D"; // hint for CORE_ACTIVE_SCENE_DIMENSION_TYPE_2D
-inline static pConstChar CORE_ACTIVE_SCENE_DIMENSION_TYPE_3D_HINT = "3D"; // hint for CORE_ACTIVE_SCENE_DIMENSION_TYPE_3D
-inline static pConstChar CORE_ACTIVE_SCENE_DIMENSION_TYPE_MIX_HINT = "MIX"; // hint for CORE_ACTIVE_SCENE_DIMENSION_TYPE_MIX
+inline static cchar *CORE_ACTIVE_SCENE_DIMENSION_TYPE_UNDEFINED_HINT = "Undefined"; // hint for CORE_ACTIVE_SCENE_DIMENSION_TYPE_UNDEFINED
+inline static cchar *CORE_ACTIVE_SCENE_DIMENSION_TYPE_2D_HINT = "2D"; // hint for CORE_ACTIVE_SCENE_DIMENSION_TYPE_2D
+inline static cchar *CORE_ACTIVE_SCENE_DIMENSION_TYPE_3D_HINT = "3D"; // hint for CORE_ACTIVE_SCENE_DIMENSION_TYPE_3D
+inline static cchar *CORE_ACTIVE_SCENE_DIMENSION_TYPE_MIX_HINT = "MIX"; // hint for CORE_ACTIVE_SCENE_DIMENSION_TYPE_MIX
 
 /**
  * @brief libprge core active scene
@@ -302,9 +302,9 @@ public:
 };
 
 // default class name for CCoreActiveScene
-inline static const char *CCoreActiveScene_CLASS = "CCoreActiveScene";
+inline static cchar *CCoreActiveScene_CLASS = "CCoreActiveScene";
 
 // signal sceneType changed for CCoreActiveScene
-inline static const char *CCoreActiveSceneSignals_sceneType_changed = "sceneType_changed";
+inline static cchar *CCoreActiveSceneSignals_sceneType_changed = "sceneType_changed";
 
 #endif // LIBPRGE_CORE_ACTIVE_SCENE_HH

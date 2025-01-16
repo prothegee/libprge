@@ -1,4 +1,3 @@
 [gd_scene format=3 uid="uid://dwvkqyk7lw753"]
 
-[node name="core-local_player" type="CCoreLocalPlayerNode"]
-m_playerIdString = "0204060a-030b-4006-8307-0a0f0e010201"
+[node name="core-local_player" type="CCoreLocalPlayer"]

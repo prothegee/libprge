@@ -1,7 +1,7 @@
 #include "libprge.hh"
 
 #include <libprge/nodes/core_active_scene.hh>
-#include <libprge/nodes/core_local_player_node.hh>
+#include <libprge/nodes/core_local_player.hh>
 
 #include <libprge/objects/console.hh>
 
@@ -13,7 +13,7 @@ void initialize(ModuleInitializationLevel pLevel)
     if (pLevel != MODULE_INITIALIZATION_LEVEL_SCENE) { return; }
 
     GDREGISTER_CLASS(CCoreActiveScene);
-    GDREGISTER_CLASS(CCoreLocalPlayerNode);
+    GDREGISTER_CLASS(CCoreLocalPlayer);
 
     GDREGISTER_CLASS(console);
     if (!pConsole) { pConsole = memnew(console); }
