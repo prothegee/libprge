@@ -250,7 +250,7 @@ public:
 };
 
 // default class name for console
-inline static const char *console_CLASS = "console";
+inline static cchar *console_CLASS = "console";
 
 // global console pointer
 static console *pConsole;
