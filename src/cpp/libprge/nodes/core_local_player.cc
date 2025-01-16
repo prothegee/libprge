@@ -55,6 +55,10 @@ void CCoreLocalPlayer::_bind_methods()
         ), "setStateType", "getStateType");
     }
 
+    // none editor property
+    {
+    }
+
     // signals
     {
         ADD_SIGNAL(MethodInfo(CCoreLocalPlayerSignals_stateType_changed));

@@ -56,7 +56,7 @@ xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/god
 			current scene dimension is for 3D game
 		</constant>
         <constant name="CORE_ACTIVE_SCENE_DIMENSION_TYPE_MIX" value="i32" enum="ECoreActiveSceneDimensionType">
-			current scene dimension is for mix game 2D and 3D
+			current scene dimension is for mix game 2D & 3D
 		</constant>
 	</constants>
 	<members>
