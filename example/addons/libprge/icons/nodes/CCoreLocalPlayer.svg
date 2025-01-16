@@ -22,8 +22,8 @@
      inkscape:pagecheckerboard="1"
      inkscape:deskcolor="#505050"
      inkscape:zoom="3.1523437"
-     inkscape:cx="87.236681"
-     inkscape:cy="70.582405"
+     inkscape:cx="87.23668"
+     inkscape:cy="70.265181"
      inkscape:window-width="1920"
      inkscape:window-height="1009"
      inkscape:window-x="-8"
@@ -33,7 +33,8 @@
   <g
      id="g1"
      inkscape:label="circle_base-grp"
-     transform="matrix(-0.55242718,-0.55242718,0.55242718,-0.55242718,62.340818,136.36986)">
+     transform="matrix(-0.53409547,-0.53409491,0.53409491,-0.53409547,64.000065,132.36415)"
+     style="display:inline">
     <path
        id="ellipse1"
        style="display:inline;fill:#fdc90f;fill-opacity:1;stroke-width:1.28582;stroke-linejoin:round"
@@ -49,7 +50,7 @@
   </g>
   <g
      id="g5"
-     transform="matrix(-0.55242718,-0.55242718,0.55242718,-0.55242718,3.600301,74.66428)"
+     transform="matrix(-0.53409547,-0.53409491,0.53409491,-0.53409547,7.2087776,72.706257)"
      style="display:inline">
     <circle
        style="display:inline;fill:#1e1e1e;fill-opacity:1;stroke:none;stroke-width:16.5949;stroke-linejoin:round"

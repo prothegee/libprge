@@ -35,7 +35,7 @@ xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/god
 			current state is in gameplay interaction
 		</constant>
         <constant name="CORE_LOCAL_PLAYER_STATE_IN_SOMEWHERE_SINCE_NOT_SURE" value="i32" enum="ECoreLocalPlayerState">
-			current state is in somewhere, since you and I not sure
+			current state is in somewhere, since you & I not sure
 		</constant>
 	</constants>
 	<members>

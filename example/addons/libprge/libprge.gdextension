@@ -5,7 +5,8 @@ reloadable              = true
 
 [icons]
 CCoreActiveScene     = "icons/nodes/CCoreActiveScene.svg"
-CCoreLocalPlayer = "icons/nodes/CCoreLocalPlayer.svg"
+CCoreGameManager     = "icons/nodes/CCoreGameManager.svg"
+CCoreLocalPlayer     = "icons/nodes/CCoreLocalPlayer.svg"
 
 [libraries]
 linux.debug.x86_64      = "bin/linux_amd64/debug/libprge.so"
