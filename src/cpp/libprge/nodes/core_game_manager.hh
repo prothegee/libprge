@@ -24,7 +24,7 @@ inline static cchar *GAME_DISTRIBUTION_TARGET_WEB_HINT = "Web"; // hint for GAME
 /**
  * @brief libprge core game manager node class
  * 
- * @note user for managing game project externally
+ * @note use for managing game project externally
  * @note there should be only one node under "/root" node
  */
 class CCoreGameManager : public Node
