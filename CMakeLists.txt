@@ -119,6 +119,11 @@ endif()
 # godot-cpp
 target_link_libraries(${PROJECT_NAME} PRIVATE ${LIBPRGE_GODOTCPP_TARGETS})
 
+# cryptopp-cmake
+if(LIBPRGE_USING_CRYPTOPP_CMAKE)
+    target_link_libraries(${PROJECT_NAME} PRIVATE cryptopp::cryptopp)
+endif()
+
 # steamworks-sdk
 if(LIBPRGE_USING_STEAMWORKS_SDK)
     # reserved

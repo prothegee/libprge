@@ -42,6 +42,7 @@ private:
 
     EGameDistributionTarget m_distributionTarget; // private: distribution target e.g. Desktop, Mobile, & etc.
     String                  m_distributionStore; // private: distribution store, e.g. Steam, itch.io, GoG, or custom
+    String                  m_distributionSystem; // private: distribution system, e.g. Linux, Windows, Xbox, PS, not related with getDistributionSystemDefault function
 
 protected:
     static void _bind_methods();
@@ -182,11 +183,28 @@ public:
     //////////////////////////////////////////////////////
 
     /**
-     * @brief get distribution system, i.e. Windows, Linux Debian, etc.
+     * @brief set distribution system
+     * 
+     * @param distributionSystem 
+     */
+    void   setDistributionSystem(String distributionSystem);
+    /**
+     * @brief get distribution system
      * 
      * @return String 
      */
     String getDistributionSystem();
+
+    //////////////////////////////////////////////////////
+
+    /**
+     * @brief get distribution system default, i.e. Windows, Linux Debian, etc.
+     * 
+     * @note not involve with m_distributionSystem
+     * 
+     * @return String 
+     */
+    String getDistributionSystemDefault();
 
     //////////////////////////////////////////////////////
 
