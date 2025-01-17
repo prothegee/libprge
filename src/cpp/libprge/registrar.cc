@@ -6,6 +6,7 @@
 #include <libprge/nodes/core_active_scene.hh>
 
 #include <libprge/objects/console.hh>
+#include <libprge/objects/cryptography.hh>
 
 namespace libprge
 {
@@ -20,8 +21,11 @@ void initialize(ModuleInitializationLevel pLevel)
     GDREGISTER_CLASS(CCoreActiveScene);
 
     GDREGISTER_CLASS(console);
-    if (!pConsole) { pConsole = memnew(console); }
-    Engine::get_singleton()->register_singleton(console_CLASS, pConsole);
+        if (!pConsole) { pConsole = memnew(console); }
+        Engine::get_singleton()->register_singleton(console_CLASS, pConsole);
+    GDREGISTER_CLASS(CCryptography);
+        if (!pCryptography) { pCryptography = memnew(CCryptography); }
+        Engine::get_singleton()->register_singleton(CCryptography_CLASS, pCryptography);
 
     console::log("libprge initialized");
 }
@@ -31,7 +35,9 @@ void terminateAndExit(ModuleInitializationLevel pLevel)
     if (pLevel != MODULE_INITIALIZATION_LEVEL_SCENE) { return; }
 
     if (pConsole) { memdelete(pConsole); }
-    Engine::get_singleton()->unregister_singleton(console_CLASS);
+        Engine::get_singleton()->unregister_singleton(console_CLASS);
+    if (pCryptography) { memdelete(pCryptography); }
+        Engine::get_singleton()->unregister_singleton(CCryptography_CLASS);
 
     console::log("libprge terminated");
 }
