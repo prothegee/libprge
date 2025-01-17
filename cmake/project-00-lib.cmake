@@ -61,6 +61,17 @@ else()
     endif()
 endif()
 # end: python3
+
+# start: cryptopp
+set(LIBPRGE_USING_CRYPTOPP_CMAKE false)
+
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/vendors/cryptopp-cmake)
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/vendors/cryptopp-cmake)
+    set(LIBPRGE_USING_CRYPTOPP_CMAKE true)
+else()
+    message(NOTICE "-- ${PROJECT_NAME}:\n   cryptopp-cmake inside vendor doesn't exists")
+endif()
+# end: cryptopp
 # end: REQUIRED
 
 # start: steamworks-sdk

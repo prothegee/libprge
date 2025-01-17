@@ -70,6 +70,10 @@ xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/god
         <member name="m_distributionStore" type="String" setter="setDistributionStore" getter="getDistributionStore">
 			private: distribution store, e.g. Steam, itch.io, GoG, or custom
 		</member>
+
+        <member name="m_distributionSystem" type="String" setter="setDistributionSystem" getter="getDistributionSystem">
+			private: distribution system, e.g. Linux, Windows, Xbox, PS, not related with getDistributionSystemDefault function
+		</member>
 	</members>
     <methods>
         <method name="setGameLongName">
@@ -209,9 +213,26 @@ xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/god
 
         <!-- ////////////////////////////////////////////////////// -->
 
+        <method name="setDistributionSystem">
+			<description>
+				set distribution system
+			</description>
+			<param index="0" name="distributionSystem" type="String" />
+			<return type="void" />
+        </method>
         <method name="getDistributionSystem">
 			<description>
-				get distribution system, i.e. Windows, Linux Debian, etc.
+				get distribution system
+			</description>
+			<return type="String" />
+        </method>
+
+        <!-- ////////////////////////////////////////////////////// -->
+
+        <method name="getDistributionSystemDefault">
+			<description>
+				get distribution system default, i.e. Windows, Linux Debian, etc.
+                not involve with m_distributionSystem
 			</description>
 			<return type="String" />
         </method>

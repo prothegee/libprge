@@ -88,4 +88,4 @@ node_modules
 /tmp
 
 *.import
-*.uid
+# *.uid

@@ -80,8 +80,14 @@ void CCoreGameManager::_bind_methods()
         ClassDB::add_property(CCoreGameManager_CLASS, PropertyInfo(
             Variant::Type::STRING, "m_distributionStore"
         ), "setDistributionStore", "getDistributionStore");
-        
+
+        ClassDB::bind_method(D_METHOD("setDistributionSystem", "distributionSystem"), &CCoreGameManager::setDistributionSystem);
         ClassDB::bind_method(D_METHOD("getDistributionSystem"), &CCoreGameManager::getDistributionSystem);
+        ClassDB::add_property(CCoreGameManager_CLASS, PropertyInfo(
+            Variant::Type::STRING, "m_distributionSystem"
+        ), "setDistributionSystem", "getDistributionSystem");
+        
+        ClassDB::bind_method(D_METHOD("getDistributionSystemDefault"), &CCoreGameManager::getDistributionSystemDefault);
     }
 
     // none editor property
@@ -111,6 +117,8 @@ CCoreGameManager::CCoreGameManager()
     m_distributionTarget = GAME_DISTRIBUTION_TARGET_UNDEFINED;
 
     m_distributionStore = "Steam/itch.io/GoG/etc.";
+
+    m_distributionSystem = OS::get_singleton()->get_name();
 }
 
 CCoreGameManager::~CCoreGameManager()
@@ -202,7 +210,17 @@ String CCoreGameManager::getDistributionStore()
     return m_distributionStore;
 }
 
+void CCoreGameManager::setDistributionSystem(String distributionSystem)
+{
+    m_distributionSystem = distributionSystem;
+}
+
 String CCoreGameManager::getDistributionSystem()
+{
+    return m_distributionSystem;
+}
+
+String CCoreGameManager::getDistributionSystemDefault()
 {
     String result;
 

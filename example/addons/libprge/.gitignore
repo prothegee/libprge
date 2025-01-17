@@ -1,0 +1,16 @@
+##
+## libprge exclude
+##
+# !/bin
+# !*libprge*
+
+##
+## libprge include
+##
+# ~libprge*
+
+##
+## specific
+## you may comment this later
+##
+/libprge.gdextension.uid
