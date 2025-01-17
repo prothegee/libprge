@@ -143,7 +143,7 @@ namespace streamCipher
      * @brief encrypt input using XChaCha20 stream cipher
      * 
      * @param input 
-     * @param iv iv recomendation length is 24
+     * @param iv iv recomendation length is 16 to 24
      * @param ik ik recomendation length is 32
      * @return std::string 
      */
@@ -152,7 +152,7 @@ namespace streamCipher
      * @brief decrypt input using XChaCha20 stream cipher
      * 
      * @param input 
-     * @param iv iv recomendation length is 24
+     * @param iv iv recomendation length is 16 to 24
      * @param ik ik recomendation length is 32
      * @return std::string 
      */

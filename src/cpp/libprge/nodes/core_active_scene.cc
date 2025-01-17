@@ -279,13 +279,17 @@ void CCoreActiveScene::processEditorCamera2dTransform()
     if camera transform can't load when in-game
     perhaps it should be stored as a file
     */
-    if (Engine::get_singleton()->is_editor_hint())
+    if (auto pCamera2d = m_pEditorInterface->get_editor_viewport_2d()->get_camera_2d())
     {
-        if (auto pCamera2d = m_pEditorInterface->get_editor_viewport_2d()->get_camera_2d())
-        {
-            m_editorCamera2dTransform = pCamera2d->get_transform();
-        }
+        m_editorCamera2dTransform = pCamera2d->get_transform();
     }
+    // if (Engine::get_singleton()->is_editor_hint())
+    // {
+    //     if (auto pCamera2d = m_pEditorInterface->get_editor_viewport_2d()->get_camera_2d())
+    //     {
+    //         m_editorCamera2dTransform = pCamera2d->get_transform();
+    //     }
+    // }
 }
 
 void CCoreActiveScene::setEditorCamera3dTransform(Transform3D editorCamera3dTransform)
@@ -311,13 +315,17 @@ void CCoreActiveScene::processEditorCamera3dTransform()
     if camera transform can't load when in-game
     perhaps it should be stored as a file
     */
-    if (Engine::get_singleton()->is_editor_hint())
+    if (auto pCamera3d = m_pEditorInterface->get_editor_viewport_3d()->get_camera_3d())
     {
-        if (auto pCamera3d = m_pEditorInterface->get_editor_viewport_3d()->get_camera_3d())
-        {
-            m_editorCamera3dTransform = pCamera3d->get_transform();
-        }
+        m_editorCamera3dTransform = pCamera3d->get_transform();
     }
+    // if (Engine::get_singleton()->is_editor_hint())
+    // {
+    //     if (auto pCamera3d = m_pEditorInterface->get_editor_viewport_3d()->get_camera_3d())
+    //     {
+    //         m_editorCamera3dTransform = pCamera3d->get_transform();
+    //     }
+    // }
 }
 
 void CCoreActiveScene::setActiveScene(String sceneFilePath)

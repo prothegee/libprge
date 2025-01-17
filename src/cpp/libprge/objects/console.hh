@@ -16,8 +16,9 @@ namespace libprge
  */
 class console : public Object
 {
-private:
     GDCLASS(console, Object);
+private:
+    /* data */
 
 protected:
     static void _bind_methods();
@@ -60,6 +61,8 @@ public:
         }
     }
 
+    //////////////////////////////////////////////////////
+
     /**
      * @brief show args to console as log in debug
      * 
@@ -99,6 +102,8 @@ public:
             }
         }
     }
+    
+    //////////////////////////////////////////////////////
 
     /**
      * @brief show args to console as warning
@@ -133,6 +138,8 @@ public:
             warning(message);
         }
     }
+
+    //////////////////////////////////////////////////////
 
     /**
      * @brief show args to console as log in debug
@@ -174,6 +181,8 @@ public:
         }
     }
 
+    //////////////////////////////////////////////////////
+
     /**
      * @brief show args to console as error
      * 
@@ -207,6 +216,8 @@ public:
             error(message);
         }
     }
+
+    //////////////////////////////////////////////////////
 
     /**
      * @brief show args to console as error in debug
