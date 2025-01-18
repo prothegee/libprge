@@ -86,20 +86,6 @@ void CCoreActiveScene::_bind_methods()
 
     // none editor property
     {
-        ClassDB::bind_method(D_METHOD("setDeltaProcess", "deltaProcess"), &CCoreActiveScene::setDeltaProcess);
-        ClassDB::bind_method(D_METHOD("getDeltaProcess"), &CCoreActiveScene::getDeltaProcess);
-        // SKIPPED: m_deltaProcess property
-        ClassDB::bind_method(D_METHOD("processDeltaProcess", "delta"), &CCoreActiveScene::processDeltaProcess);
-
-        ClassDB::bind_method(D_METHOD("setEditorCamera2dTransform", "editorCamera2dTransform"), &CCoreActiveScene::setEditorCamera2dTransform);
-        ClassDB::bind_method(D_METHOD("getEditorCamera2dTransform"), &CCoreActiveScene::getEditorCamera2dTransform);
-        // SKIPPED: m_editorCamera2dTransform property
-        ClassDB::bind_method(D_METHOD("processEditorCamera2dTransform"), &CCoreActiveScene::processEditorCamera2dTransform);
-
-        ClassDB::bind_method(D_METHOD("setEditorCamera3dTransform", "editorCamera3dTransform"), &CCoreActiveScene::setEditorCamera3dTransform);
-        ClassDB::bind_method(D_METHOD("getEditorCamera3dTransform"), &CCoreActiveScene::getEditorCamera3dTransform);
-        // SKIPPED: m_editorCamera3dTransform property
-        ClassDB::bind_method(D_METHOD("processEditorCamera3dTransform"), &CCoreActiveScene::processEditorCamera3dTransform);
     }
 
     // signals
@@ -122,10 +108,6 @@ void CCoreActiveScene::_bind_methods()
 
 CCoreActiveScene::CCoreActiveScene()
 {
-    m_pEditorInterface = EditorInterface::get_singleton();
-
-    //////////////////////////////////////////////////////
-
     m_sceneType = CORE_ACTIVE_SCENE_TYPE_UNDEFINED;
 
     m_sceneNext = Ref<PackedScene>();
@@ -133,21 +115,10 @@ CCoreActiveScene::CCoreActiveScene()
     m_sceneDimension = CORE_ACTIVE_SCENE_DIMENSION_TYPE_UNDEFINED;
 
     m_rootNodesToAdd = Array();
-
-    //////////////////////////////////////////////////////
-
-    m_deltaProcess = 0.0;
 }
 
 CCoreActiveScene::~CCoreActiveScene()
 {
-}
-
-void CCoreActiveScene::_process(f64 delta)
-{
-    processDeltaProcess(delta);
-    processEditorCamera2dTransform();
-    processEditorCamera3dTransform();
 }
 
 void CCoreActiveScene::setSceneType(ECoreActiveSceneType sceneTypeEnum)
@@ -239,93 +210,6 @@ void CCoreActiveScene::initRootNodesToAddInGame()
             console::log_debug("adding child under game /root: ", resourceNode->get_name(), " with ", resourceNode->get_class(), " class type");
         }
     }
-}
-
-void CCoreActiveScene::setDeltaProcess(f64 deltaProcess)
-{
-    m_deltaProcess = deltaProcess;
-}
-
-f64 CCoreActiveScene::getDeltaProcess()
-{
-    return m_deltaProcess;
-}
-
-void CCoreActiveScene::processDeltaProcess(f64 delta)
-{
-    m_deltaProcess = delta;
-}
-
-void CCoreActiveScene::setEditorCamera2dTransform(Transform2D editorCamera2dTransform)
-{
-    m_editorCamera2dTransform = editorCamera2dTransform;
-}
-
-Transform2D CCoreActiveScene::getEditorCamera2dTransform()
-{
-    return m_editorCamera2dTransform;
-}
-
-void CCoreActiveScene::processEditorCamera2dTransform()
-{
-    /*
-    CCoreActiveScene::processEditorCamera2dTransform:
-
-    "I'm still not sure
-    does viewport camera transform still exists if not editor
-    since Window or /root pointer node may behave difer"
-    - @prothegee
-
-    if camera transform can't load when in-game
-    perhaps it should be stored as a file
-    */
-    if (auto pCamera2d = m_pEditorInterface->get_editor_viewport_2d()->get_camera_2d())
-    {
-        m_editorCamera2dTransform = pCamera2d->get_transform();
-    }
-    // if (Engine::get_singleton()->is_editor_hint())
-    // {
-    //     if (auto pCamera2d = m_pEditorInterface->get_editor_viewport_2d()->get_camera_2d())
-    //     {
-    //         m_editorCamera2dTransform = pCamera2d->get_transform();
-    //     }
-    // }
-}
-
-void CCoreActiveScene::setEditorCamera3dTransform(Transform3D editorCamera3dTransform)
-{
-    m_editorCamera3dTransform = editorCamera3dTransform;
-}
-
-Transform3D CCoreActiveScene::getEditorCamera3dTransform()
-{
-    return m_editorCamera3dTransform;
-}
-
-void CCoreActiveScene::processEditorCamera3dTransform()
-{
-    /*
-    CCoreActiveScene::processEditorCamera3dTransform:
-
-    "I'm still not sure
-    does viewport camera transform still exists if not editor
-    since Window or /root pointer node may behave difer"
-    - @prothegee
-
-    if camera transform can't load when in-game
-    perhaps it should be stored as a file
-    */
-    if (auto pCamera3d = m_pEditorInterface->get_editor_viewport_3d()->get_camera_3d())
-    {
-        m_editorCamera3dTransform = pCamera3d->get_transform();
-    }
-    // if (Engine::get_singleton()->is_editor_hint())
-    // {
-    //     if (auto pCamera3d = m_pEditorInterface->get_editor_viewport_3d()->get_camera_3d())
-    //     {
-    //         m_editorCamera3dTransform = pCamera3d->get_transform();
-    //     }
-    // }
 }
 
 void CCoreActiveScene::setActiveScene(String sceneFilePath)

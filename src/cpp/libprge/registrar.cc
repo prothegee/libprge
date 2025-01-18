@@ -8,12 +8,16 @@
 #include <libprge/objects/console.hh>
 #include <libprge/objects/cryptography.hh>
 
+#include <godot_cpp/classes/scene_tree.hpp>
+
 namespace libprge
 {
 
 void initialize(ModuleInitializationLevel pLevel)
 {
     if (pLevel != MODULE_INITIALIZATION_LEVEL_SCENE) { return; }
+
+    auto pEngine = Engine::get_singleton();
 
     GDREGISTER_CLASS(CCoreGameManager);
     GDREGISTER_CLASS(CCoreNetworkManager);
@@ -22,10 +26,19 @@ void initialize(ModuleInitializationLevel pLevel)
 
     GDREGISTER_CLASS(console);
         if (!pConsole) { pConsole = memnew(console); }
-        Engine::get_singleton()->register_singleton(console_CLASS, pConsole);
+        pEngine->register_singleton(console_CLASS, pConsole);
     GDREGISTER_CLASS(CCryptography);
         if (!pCryptography) { pCryptography = memnew(CCryptography); }
-        Engine::get_singleton()->register_singleton(CCryptography_CLASS, pCryptography);
+        pEngine->register_singleton(CCryptography_CLASS, pCryptography);
+
+    // create libprge res directory tmp
+    for (auto dir : LIBPRGE_IMPORTANT_DIRS)
+    {
+        if (!DirAccess::dir_exists_absolute(dir))
+        {
+            DirAccess::make_dir_absolute(dir);
+        }
+    }
 
     console::log("libprge initialized");
 }
@@ -34,10 +47,12 @@ void terminateAndExit(ModuleInitializationLevel pLevel)
 {
     if (pLevel != MODULE_INITIALIZATION_LEVEL_SCENE) { return; }
 
+    auto pEngine = Engine::get_singleton();
+
     if (pConsole) { memdelete(pConsole); }
-        Engine::get_singleton()->unregister_singleton(console_CLASS);
+        pEngine->unregister_singleton(console_CLASS);
     if (pCryptography) { memdelete(pCryptography); }
-        Engine::get_singleton()->unregister_singleton(CCryptography_CLASS);
+        pEngine->unregister_singleton(CCryptography_CLASS);
 
     console::log("libprge terminated");
 }
