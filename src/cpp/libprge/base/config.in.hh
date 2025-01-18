@@ -100,4 +100,12 @@ inline static const double __DOUBLE_ZERO_MIN__ =   -0.00000000000000000;
 inline static const double __DOUBLE_360__      =  360.00000000000000000;
 inline static const double __DOUBLE_359__      =  359.99999999999999999;
 
+inline static const char *LIBPRGE_DIR_OF_RES = "res://.libprge"; // "res://.libprge"
+inline static const char *LIBPRGE_DIR_OF_USER = "user://.libprge"; // "user://.libprge"
+
+inline static const std::vector<const char *> LIBPRGE_IMPORTANT_DIRS = {
+    "res://.libprge",
+    "user://.libprge"
+};
+
 #endif // LIBPRGE_CONFIG_HH

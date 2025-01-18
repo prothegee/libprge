@@ -61,12 +61,13 @@ inline static cchar *CORE_ACTIVE_SCENE_DIMENSION_TYPE_MIX_HINT = "MIX"; // hint 
  * 
  * @note use for current active scene/level only
  * @note there should be only one node under "/root" node
+ * 
+ * @todo - get editor camera position & rotation then store it
+ * @todo - later on, user can debug their player controller from current camera position
  */
 class CCoreActiveScene : public Node
 {
     GDCLASS(CCoreActiveScene, Node);
-
-    EditorInterface *m_pEditorInterface; // private: editor interface data pointer
 private:
     ECoreActiveSceneType m_sceneType; // private: current scene type
 
@@ -74,13 +75,7 @@ private:
 
     ECoreActiveSceneDimensionType m_sceneDimension; // private: scene dimension, mostly for gameplay info
 
-    Array m_rootNodesToAdd; // private: array object node scene to add under "/root"
-
-    f64 m_deltaProcess; // private: delta value from _process, doesn't exists if _process override, so you may set it on somwhere where it process
-
-    Transform2D m_editorCamera2dTransform; // private: editor camera 2d transform value, doesn't exists if _process override, so you may set it on somwhere where it process
-
-    Transform3D m_editorCamera3dTransform; // private: editor camera 2d transform value, doesn't exists if _process override, so you may set it on somwhere where it process
+    Array m_rootNodesToAdd; // private: array object node scene to add under "/root", there's no sanity check, duplicated node may exists
 
 protected:
     static void _bind_methods();
@@ -88,10 +83,6 @@ protected:
 public:
     CCoreActiveScene(/* args */);
     ~CCoreActiveScene();
-
-    //////////////////////////////////////////////////////
-
-    void _process(f64 delta);
 
     //////////////////////////////////////////////////////
 
@@ -164,88 +155,6 @@ public:
      * @note apply if m_rootNodesToAdd not empty
      */
     void  initRootNodesToAddInGame();
-
-    //////////////////////////////////////////////////////
-
-    /**
-     * @brief set delta process
-     * 
-     * @note use to set under _process, even if it's overrided
-     * 
-     * @param deltaProcess 
-     */
-    void setDeltaProcess(f64 deltaProcess);
-    /**
-     * @brief get delta process
-     * 
-     * @note use to set under _process, even if it's overrided
-     * 
-     * @return f64 
-     */
-    f64  getDeltaProcess();
-    /**
-     * @brief process delta process
-     * 
-     * @note ignore editor or in-game hint
-     * @note this should be inside _process function
-     * 
-     * @param delta 
-     */
-    void processDeltaProcess(f64 delta);
-
-    //////////////////////////////////////////////////////
-
-    /**
-     * @brief set editor camera 2d transform
-     * 
-     * @note use to set under _process, even if it's overrided
-     * 
-     * @param editorCamera2dTransform 
-     */
-    void        setEditorCamera2dTransform(Transform2D editorCamera2dTransform);
-    /**
-     * @brief get editor camera 2d transform
-     * 
-     * @note use to set under _process, even if it's overrided
-     * @note expecting to use editor camera data to apply in-game
-     * 
-     * @return Transform2D 
-     */
-    Transform2D getEditorCamera2dTransform();
-    /**
-     * @brief process editor camera 2d transform
-     * 
-     * @note ignore editor or in-game hint (for now)
-     * @note this should be inside _process function
-     */
-    void        processEditorCamera2dTransform();
-
-    //////////////////////////////////////////////////////
-
-    /**
-     * @brief set editor camera 3d transform
-     * 
-     * @note use to set under _process, even if it's overrided
-     * 
-     * @param editorCamera2dTransform 
-     */
-    void        setEditorCamera3dTransform(Transform3D editorCamera3dTransform);
-    /**
-     * @brief get editor camera 3d transform
-     * 
-     * @note use to set under _process, even if it's overrided
-     * @note expecting to use editor camera data to apply in-game
-     * 
-     * @return Transform3D 
-     */
-    Transform3D getEditorCamera3dTransform();
-    /**
-     * @brief process editor camera 3d transform
-     * 
-     * @note ignore editor or in-game hint (for now)
-     * @note this should be inside _process function
-     */
-    void        processEditorCamera3dTransform();
 
     //////////////////////////////////////////////////////
 

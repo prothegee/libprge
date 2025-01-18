@@ -79,25 +79,7 @@ xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/god
         <!-- ////////////////////////////////////////////////////// -->
 
         <member name="m_rootNodesToAdd" type="Array" setter="setRootNodesToAdd" getter="getRootNodesToAdd">
-			private: array object node scene to add under "/root"
-		</member>
-
-        <!-- ////////////////////////////////////////////////////// -->
-
-        <member name="m_deltaProcess" type="f64" setter="setDeltaProcess" getter="getDeltaProcess">
-			private: delta value from _process, doesn't exists if _process override, so you may set it on somwhere where it process
-		</member>
-
-        <!-- ////////////////////////////////////////////////////// -->
-
-        <member name="m_editorCamera2dTransform" type="Transform2D" setter="setEditorCamera2dTransform" getter="getEditorCamera2dTransform">
-			private: editor camera 2d transform value, doesn't exists if _process override, so you may set it on somwhere where it process
-		</member>
-
-        <!-- ////////////////////////////////////////////////////// -->
-
-        <member name="m_editorCamera3dTransform" type="Transform3D" setter="setEditorCamera3dTransform" getter="getEditorCamera3dTransform">
-			private: editor camera 3d transform value, doesn't exists if _process override, so you may set it on somwhere where it process
+			private: array object node scene to add under "/root", there's no sanity check, duplicated node may exists
 		</member>
 
         <!-- ////////////////////////////////////////////////////// -->
@@ -177,87 +159,6 @@ xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/god
                 in-game only
 				init root nodes to add
                 apply if m_rootNodesToAdd not empty
-			</description>
-			<return type="void" />
-		</method>
-
-        <!-- ////////////////////////////////////////////////////// -->
-
-        <method name="setDeltaProcess">
-			<description>
-				set delta process
-                - use to set under _process, even if it's overrided
-			</description>
-			<param index="0" name="deltaProcess" type="f64" />
-			<return type="void" />
-		</method>
-        <method name="getDeltaProcess">
-			<description>
-				get delta process
-                - use to set under _process, even if it's overrided
-			</description>
-			<return type="f64>" />
-		</method>
-        <method name="processDeltaProcess">
-			<description>
-				process delta process
-                - ignore editor or in-game hint
-                - this should be inside _process function
-			</description>
-			<param index="0" name="delta" type="f64" />
-			<return type="void" />
-		</method>
-
-        <!-- ////////////////////////////////////////////////////// -->
-
-        <method name="setEditorCamera2dTransform">
-			<description>
-				set editor camera 2d transform
-                - use to set under _process, even if it's overrided
-			</description>
-			<param index="0" name="editorCamera2dTransform" type="Transform2D" />
-			<return type="void" />
-		</method>
-        <method name="getEditorCamera2dTransform">
-			<description>
-				get editor camera 2d transform
-                - use to set under _process, even if it's overrided
-                - expecting to use editor camera data to apply in-game
-			</description>
-			<return type="Transform2D>" />
-		</method>
-        <method name="processEditorCamera2dTransform">
-			<description>
-				process editor camera 2d transform
-                - ignore editor or in-game hint (for now)
-                - this should be inside _process function
-			</description>
-			<return type="void" />
-		</method>
-
-        <!-- ////////////////////////////////////////////////////// -->
-
-        <method name="setEditorCamera3dTransform">
-			<description>
-				set editor camera 3d transform
-                - use to set under _process, even if it's overrided
-			</description>
-			<param index="0" name="editorCamera3dTransform" type="Transform3D" />
-			<return type="void" />
-		</method>
-        <method name="getEditorCamera3dTransform">
-			<description>
-				get editor camera 3d transform
-                - use to set under _process, even if it's overrided
-                - expecting to use editor camera data to apply in-game
-			</description>
-			<return type="Transform3D>" />
-		</method>
-        <method name="processEditorCamera3dTransform">
-			<description>
-				process editor camera 3d transform
-                - ignore editor or in-game hint (for now)
-                - this should be inside _process function
 			</description>
 			<return type="void" />
 		</method>

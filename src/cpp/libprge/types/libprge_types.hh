@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <string>
 #include <array>
+#include <vector>
 
 #include <thread>
 #include <memory>
