@@ -1,3 +1,0 @@
-[submodule "vendors/godot-cpp"]
-	path = vendors/godot-cpp
-	url = git@github.com:prothegee/godot-cpp.git

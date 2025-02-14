@@ -1,4 +1,4 @@
-#include <libprge/config.hh>
+#include <libprge/libprge.hh>
 
 
 namespace libprge
@@ -25,6 +25,7 @@ void initialize(ModuleInitializationLevel pLevel)
     ///////////////////////////////////////////////////////////////
 
     // CConsoleObj::log("libprge initialized");
+    gdufunc::print("--- libprge: initialized");
 }
 
 void terminateAndExit(ModuleInitializationLevel pLevel)
@@ -43,6 +44,7 @@ void terminateAndExit(ModuleInitializationLevel pLevel)
     ///////////////////////////////////////////////////////////////
 
     // CConsoleObj::log("libprge terminated");
+    gdufunc::print("--- libprge: terminated");
 }
 
 } // namespace libprge

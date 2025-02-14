@@ -1,5 +1,6 @@
 #ifndef LIBPRGE_HH
 #define LIBPRGE_HH
+#include "config.hh"
 
 namespace libprge
 {

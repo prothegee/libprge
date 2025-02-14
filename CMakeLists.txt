@@ -36,6 +36,11 @@ if(NOT DEFINED LIBPRGE_SYSTEM_BUILD_TYPE)
     set(LIBPRGE_SYSTEM_BUILD_TYPE "")
 endif()
 
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE "Debug")
+endif()
+
+
 string(TOLOWER "${CMAKE_SYSTEM_NAME}"      LIBPRGE_SYSTEM_NAME)
 string(TOLOWER "${CMAKE_SYSTEM_PROCESSOR}" LIBPRGE_SYSTEM_PROCESSOR)
 string(TOLOWER "${CMAKE_BUILD_TYPE}"       LIBPRGE_SYSTEM_BUILD_TYPE)
@@ -70,6 +75,8 @@ if(${LIBPRGE_SYSTEM_NAME} STREQUAL "darwin")
     set(LIBPRGE_SYSTEM_NAME "macos")
 endif()
 
+# RESERVED: android, ios, & etc.
+
 
 # 0:undefined 1:debug 2:staging 3:demo 4:release
 set(LIBPRGE_BUILD_STATUS 0)
@@ -101,15 +108,20 @@ endif()
 set(LIBPRGE_OUTPUT_DIR)
 
 if(LIBPRGE_IS_DEBUG)
-    set(LIBPRGE_OUTPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/addons/libprge/bin/${LIBPRGE_SYSTEM_NAME}_${LIBPRGE_SYSTEM_PROCESSOR}/debug")
+    set(LIBPRGE_OUTPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/addons/libprge/bin/${LIBPRGE_SYSTEM_NAME}/debug")
+    # set(LIBPRGE_OUTPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/addons/libprge/bin/${LIBPRGE_SYSTEM_NAME}_${LIBPRGE_SYSTEM_PROCESSOR}/debug") # tmp: don't remove
 else()
-    set(LIBPRGE_OUTPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/addons/libprge/bin/${LIBPRGE_SYSTEM_NAME}_${LIBPRGE_SYSTEM_PROCESSOR}/release")
+    set(LIBPRGE_OUTPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/addons/libprge/bin/${LIBPRGE_SYSTEM_NAME}/release")
+    # set(LIBPRGE_OUTPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/addons/libprge/bin/${LIBPRGE_SYSTEM_NAME}_${LIBPRGE_SYSTEM_PROCESSOR}/release") # tmp: don't remove
 endif()
 
 ## addons dir
 if(NOT EXISTS "${LIBPRGE_OUTPUT_DIR}")
     file(MAKE_DIRECTORY "${LIBPRGE_OUTPUT_DIR}")
 endif()
+
+
+# MAYBE: pre-configuration
 
 
 # include base
@@ -119,6 +131,22 @@ include(FindPackageHandleStandardArgs)
 
 
 # subdirs vendors
+## jsoncpp
+set(JSONCPP_WITH_TESTS false)
+set(JSONCPP_WITH_EXAMPLE false)
+add_subdirectory(vendors/jsoncpp LIBPRGE_JSONCPP)
+link_directories(${CMAKE_BINARY_DIR}/LIBPRGE_JSONCPP/src/lib_json)
+include_directories(vendors/jsoncpp/include)
+
+## cryptopp-cmake
+set(CRYPTOPP_BUILD_TESTING false)
+add_subdirectory(vendors/cryptopp-cmake LIBPRGE_CRYPTOPP_CMAKE)
+
+## sdl
+set(SDL_TESTS false)
+set(SDL_EXAMPLES false)
+add_subdirectory(vendors/sdl LIBPRGE_SDL)
+
 ## godot-cpp
 add_subdirectory(vendors/godot-cpp LIBPRGE_GODOT_CPP)
 
@@ -246,6 +274,15 @@ endif()
 
 
 # target link libs
+## jsoncpp
+target_link_libraries(${PROJECT_NAME} PRIVATE jsoncpp)
+
+## cryptopp-cmake
+target_link_libraries(${PROJECT_NAME} PRIVATE cryptopp::cryptopp)
+
+## sdl
+target_link_libraries(${PROJECT_NAME} PRIVATE SDL_uclibc)
+
 ## godot-cpp
 if(LIBPRGE_IS_DEBUG)
     target_link_libraries(${PROJECT_NAME} PRIVATE godot-cpp::template_debug)
@@ -296,12 +333,52 @@ target_include_directories(${PROJECT_NAME}
 )
 
 
-# POST BUILD
+# post build
 ## libprge lib files
+file(GLOB LIBPRGE_BUILD_FILES "${CMAKE_BINARY_DIR}/libprge.*")
 
-## example
-if(LIBPRGE_BUILD_EXAMPLE)
-    # TODO
+foreach(file ${LIBPRGE_BUILD_FILES})
+    add_custom_command(
+        TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy
+            ${file}
+            ${LIBPRGE_OUTPUT_DIR}
+            COMMENT "copying ${file} to addons of libprge"
+    )
+endforeach()
+
+add_custom_command(
+    TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy
+        ${PROJECT_SOURCE_DIR}/.gitignore
+        ${PROJECT_SOURCE_DIR}/addons/.gitignore
+    COMMENT "copying .gitignore to addons of libprge"
+)
+add_custom_command(
+    TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy
+        ${PROJECT_SOURCE_DIR}/README.md
+        ${PROJECT_SOURCE_DIR}/addons/README.md
+    COMMENT "copying readme to addons of libprge"
+)
+add_custom_command(
+    TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${PROJECT_SOURCE_DIR}/docs
+        ${PROJECT_SOURCE_DIR}/addons/libprge/docs
+    COMMENT "copying docs to addons of libprge"
+)
+
+# apporgame/example
+if(LIBPRGE_EXAMPLE)
+    message(NOTICE "-- configuring post build for approgame/example")
+    add_custom_command(
+        TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+            ${PROJECT_SOURCE_DIR}/addons
+            ${PROJECT_SOURCE_DIR}/apporgame/addons
+            COMMENT "copy addons to apporgame/example dir"
+    )
 endif()
 
 
