@@ -7,10 +7,10 @@ reloadable              = true
 # CCoreGameManager     = "assets/icons/nodes/CCoreGameManager.svg"
 
 [libraries]
-linux.debug.x86_64      = "bin/linux/debug/libprge.so"
-linux.release.x86_64    = "bin/linux/release/libprge.so"
-windows.debug.x86_64    = "bin/windows/debug/libprge.dll"
-windows.release.x86_64  = "bin/windows/release/libprge.dll"
+linux.debug.x86_64      = "bin/linux/debug/libprge.x86_64.so"
+linux.release.x86_64    = "bin/linux/release/libprge.x86_64.so"
+windows.debug.x86_64    = "bin/windows/debug/libprge.x86_64.dll"
+windows.release.x86_64  = "bin/windows/release/libprge.x86_64.dll"
 # macos.debug             = "bin/macos/debug/libprge.framework"       # NOT SUPPORTED
 # macos.release           = "bin/macos/release/libprge.framework"     # NOT SUPPORTED
 # android.debug.arm64     = "bin/anroid/debug/libprge.so"             # NOT SUPPORTED

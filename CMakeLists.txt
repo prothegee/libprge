@@ -40,7 +40,12 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Debug")
 endif()
 
+if(NOT DEFINED LIBPRGE_OUTPUT_PROCESSOR)
+    set(LIBPRGE_OUTPUT_PROCESSOR "")
+endif()
 
+
+# system & build info
 string(TOLOWER "${CMAKE_SYSTEM_NAME}"      LIBPRGE_SYSTEM_NAME)
 string(TOLOWER "${CMAKE_SYSTEM_PROCESSOR}" LIBPRGE_SYSTEM_PROCESSOR)
 string(TOLOWER "${CMAKE_BUILD_TYPE}"       LIBPRGE_SYSTEM_BUILD_TYPE)
@@ -77,6 +82,26 @@ endif()
 
 # RESERVED: android, ios, & etc.
 
+# processor specifier
+#[=[
+supported:
+- amd64
+- x86_64
+- arm64
+- aarch64
+#]=]
+if(LIBPRGE_SYSTEM_PROCESSOR STREQUAL "x86_64")
+    set(LIBPRGE_OUTPUT_PROCESSOR "x86_64")
+elseif(LIBPRGE_SYSTEM_PROCESSOR STREQUAL "amd64")
+    set(LIBPRGE_OUTPUT_PROCESSOR "x86_64")
+elseif(LIBPRGE_SYSTEM_PROCESSOR STREQUAL "aarch64")
+    set(LIBPRGE_OUTPUT_PROCESSOR "arm64")
+elseif(LIBPRGE_SYSTEM_PROCESSOR STREQUAL "arm64")
+    set(LIBPRGE_OUTPUT_PROCESSOR "arm64")
+else()
+    message(FATAL_ERROR "-- processor type is not supported `${LIBPRGE_SYSTEM_PROCESSOR}`")
+endif()
+
 
 # 0:undefined 1:debug 2:staging 3:demo 4:release
 set(LIBPRGE_BUILD_STATUS 0)
@@ -109,10 +134,8 @@ set(LIBPRGE_OUTPUT_DIR)
 
 if(LIBPRGE_IS_DEBUG)
     set(LIBPRGE_OUTPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/addons/libprge/bin/${LIBPRGE_SYSTEM_NAME}/debug")
-    # set(LIBPRGE_OUTPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/addons/libprge/bin/${LIBPRGE_SYSTEM_NAME}_${LIBPRGE_SYSTEM_PROCESSOR}/debug") # tmp: don't remove
 else()
     set(LIBPRGE_OUTPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/addons/libprge/bin/${LIBPRGE_SYSTEM_NAME}/release")
-    # set(LIBPRGE_OUTPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/addons/libprge/bin/${LIBPRGE_SYSTEM_NAME}_${LIBPRGE_SYSTEM_PROCESSOR}/release") # tmp: don't remove
 endif()
 
 ## addons dir
@@ -161,9 +184,14 @@ else()
 endif()
 
 
-# static lib
+# shared lib
 add_library(${PROJECT_NAME} SHARED
     library/inc/libprge/libprge.hh library/src/libprge/libprge.cc
+)
+
+# force output name
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    OUTPUT_NAME "libprge.${LIBPRGE_OUTPUT_PROCESSOR}"
 )
 
 
@@ -335,7 +363,7 @@ target_include_directories(${PROJECT_NAME}
 
 # post build
 ## libprge lib files
-file(GLOB LIBPRGE_BUILD_FILES "${CMAKE_BINARY_DIR}/libprge.*")
+file(GLOB LIBPRGE_BUILD_FILES "${CMAKE_BINARY_DIR}/libprge.${LIBPRGE_OUTPUT_PROCESSOR}.*")
 
 foreach(file ${LIBPRGE_BUILD_FILES})
     add_custom_command(

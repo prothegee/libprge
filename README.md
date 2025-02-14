@@ -3,18 +3,22 @@
 libprge, an godot engine addon extension
 
 <!--
-will never reach v1.x.x if linux, windows, macos, android, & ios is not fixed
+will never reach v1.x.x if not cross compiled on linux, windows, macos, android, & ios
 -->
 
 <br>
 
 ---
 
-<!--
-RESERVED
 ## tested & supported platform
-- [X] linux   x86_64
-- [X] windows x86_64
--->
+
+| supported | tested | platform & processor type  |
+| :-        | :-     | :-                         |
+| [X]       | [X]    | MS Windows 11 x86_64       |
+| [?]       | [?]    | GNU/Linux Debian 12 x86_64 |
+
+<br>
+
+---
 
 ###### end of libprge

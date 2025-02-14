@@ -67,6 +67,8 @@ node_modules
 
 /.tmp.md
 
+/apporgame/addons
+
 ~libprge*
 
 project-build-debug*.sh
@@ -86,6 +88,4 @@ project-cleanup.sh
 ##
 ## exception
 ##
-!/../libprge/bin/*
-!/bin/**/*/libprge.*
 !/vendors/jsoncpp/include/json/config.h
