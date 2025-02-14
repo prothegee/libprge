@@ -2,9 +2,8 @@
     "cmake.generator": "Ninja",
     "cmake.buildDirectory": "${workspaceFolder}/.build/${buildType}",
     "cmake.configureSettings": {
-        "BUILD_SHARED_LIBS": true,
-
-        "LIBPRGE_EXAMPLE": true,
+        // default is false
+        "LIBPRGE_EXAMPLE": false,
 
         "_": "don't use me"
     }
