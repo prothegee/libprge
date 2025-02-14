@@ -3,23 +3,32 @@
 ##
 .vs
 
+.android
+.godot
+.ios
+.windows
+.linux
+.macos
+.osx
+.cache
+.tmp
+.prthgge
+
 .[Bb][Ii][Nn]
 .[Bb][Uu][Ii][Ll][Dd]
+.[Bb][Uu][Ii][Ll][Dd].*
 .[Dd][Ii][Ss][Tt]
 .[Ll][Oo][Gg]
 .[Ll][Oo][Gg][Ss]
 .[Pp][Uu][Bb][Ll][Ii][Cc]
-.[Ss][Ee][Cc][Rr][Ee][Tt]
-.[Ss][Ee][Cc][Rr][Ee][Tt][Ss]
 
 [Bb][Ii][Nn]
 [Bb][Uu][Ii][Ll][Dd]
+[Bb][Uu][Ii][Ll][Dd].*
 [Dd][Ii][Ss][Tt]
 [Ll][Oo][Gg]
 [Ll][Oo][Gg][Ss]
 [Pp][Uu][Bb][Ll][Ii][Cc]
-[Ss][Ee][Cc][Rr][Ee][Tt]
-[Ss][Ee][Cc][Rr][Ee][Tt][Ss]
 
 node_modules
 
@@ -46,10 +55,6 @@ node_modules
 *export.h
 *export.hh
 *export.hpp
-*version.h
-*version.hh
-*version.hp
-*version.js
 
 *Zone.Identifier
 
@@ -57,28 +62,28 @@ node_modules
 ##
 ## file
 ##
-/.vscode/tasks.json
-/.vscode/launch.json
 /.vscode/settings.json
+/.vscode/launch.json
 
 /.tmp.md
 
-/*.code-workspace
+~libprge*
 
-/project-build-staging.sh
-/project-build-demo.sh
-/project-build-release.sh
+project-build-debug*.sh
+project-build-staging*.sh
+project-build-demo*.sh
+project-build-release*.sh
 
-/deno.lock
+project-cleanup.sh
+
 /package-lock.json
 
-##
-## libprge exclude
-##
-# tba
+/vendors/*.zip
+/vendors/*.tar
+/vendors/*.tar.gz
 
 
 ##
-## libprge include
+## exception
 ##
-/src/cpp/libprge/tools*
+!/vendors/jsoncpp/include/json/config.h

@@ -1,9 +1,9 @@
 # libprge
 
-an addons/extension for godot game engine
+libprge, an godot engine addon extension
 
 <br>
 
 ---
 
-###### end of readme
+###### end of libprge

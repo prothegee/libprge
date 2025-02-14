@@ -1,2 +1,0 @@
-this directory is not mean to use as modular implementation
-but as game seperate logic with cpp, since some implementation may use gdscript

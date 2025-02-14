@@ -2,14 +2,14 @@
     "configurations":
     [
         {
-            "name": "EDITOR: libprge example",
+            "name": "EDITOR: libprge apporgame/example",
             "type": "cppvsdbg", // windows=cppvsdbg else=cppdbg
             "request": "launch",
             "cwd": "${fileDirname}",
-            "program": "/path/to/your_godot_executeable",
+            "program": "path/to/godot_executeable",
             "stopAtEntry": false,
             "args": [
-                "-e", "--path", "${workspaceFolder}/example"
+                "-e", "--path", "${workspaceFolder}/apporgame"
             ],
             "environment": []
         }

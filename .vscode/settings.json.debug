@@ -1,18 +1,10 @@
 {
     "cmake.generator": "Ninja",
-    "cmake.buildDirectory": "${workspaceFolder}/build/${buildType}", // for debug in vscode only
+    "cmake.buildDirectory": "${workspaceFolder}/.build/${buildType}",
     "cmake.configureSettings": {
-        "CMAKE_CXX_FLAGS": "/std:c++17 /EHsc", // windows:"/std:c++20 /EHsc" linux:"-std=c++20 -fcoroutines"
-        "CMAKE_TOOLCHAIN_FILE": "",
+        "BUILD_SHARED_LIBS": true,
 
-        "LIBPRGE_GODOTCPP_DIR": "/path/to/godot-cpp",
-        "LIBPRGE_STEAMWORKS_SDK_DIR": "/path/to/steamworks-sdk",
-
-        "LIBPRGE_USE_VCPKG": true,
-        "LIBPRGE_BUILD_AS_STATIC": false,
-        "LIBPRGE_CONF_GODOTCPP_FOR_EDITOR": false,
-        "LIBPRGE_COPY_GODOTCPP_STATICLIBS": false,
-        "LIBPRGE_OUTPUT_EXAMPLE_DIR_IS": true,
+        "LIBPRGE_EXAMPLE": true,
 
         "_": "don't use me"
     }

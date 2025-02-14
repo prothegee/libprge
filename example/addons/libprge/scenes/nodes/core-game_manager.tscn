@@ -1,4 +1,0 @@
-[gd_scene format=3 uid="uid://bcftbddb6csda"]
-
-[node name="core-game_manager" type="CCoreGameManager"]
-m_distributionTarget = 1
